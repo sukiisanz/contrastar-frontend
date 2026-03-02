@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contrastar — Vista de Evento</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+  <style>
+    :root {
+      --negro: #0f0e0d;
+      --gris-oscuro: #3a3835;
+      --gris-medio: #8c8880;
+      --gris-claro: #e8e5e0;
+      --crema: #f7f4ef;
+      --blanco: #ffffff;
+      --izquierda: #c0392b;
+      --izquierda-suave: #f9eceb;
+      --centro: #c8b89a;
+      --centro-suave: #faf7f3;
+      --derecha: #2c3e7a;
+      --derecha-suave: #eaecf4;
+      --acento: #d4500a;
+      --fuente-display: 'Fraunces', Georgia, serif;
+      --fuente-cuerpo: 'DM Sans', sans-serif;
+      --radio: 3px;
+      --sombra: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--fuente-cuerpo);
+      background-color: var(--crema);
+      color: var(--negro);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--blanco);
+      border-bottom: 1px solid var(--gris-claro);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 2rem;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 0.2rem;
+      text-decoration: none;
+    }
+    .logo-principal {
+      font-family: var(--fuente-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--negro);
+      letter-spacing: -0.02em;
+    }
+    .logo-punto { color: var(--acento); font-family: var(--fuente-display); font-size: 1.5rem; font-weight: 700; }
+    .logo-cl {
+      font-family: var(--fuente-cuerpo);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--gris-medio);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    nav { display: flex; align-items: center; gap: 2rem; }
+    nav a {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--gris-oscuro);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--acento); }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.25rem 2rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--gris-medio);
+    }
+    .breadcrumb a {
+      color: var(--gris-medio);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .breadcrumb a:hover { color: var(--acento); }
+    .breadcrumb-sep { color: var(--gris-claro); }
+
+    /* HERO DEL EVENTO */
+    .evento-hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 2rem 0;
+    }
+    .evento-etiqueta {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--acento);
+      margin-bottom: 0.75rem;
+    }
+    .evento-titular {
+      font-family: var(--fuente-display);
+      font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--negro);
+      letter-spacing: -0.03em;
+      max-width: 800px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* MÉTRICAS RESUMEN */
+    .metricas {
+      display: flex;
+      gap: 2rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid var(--gris-claro);
+      border-bottom: 1px solid var(--gris-claro);
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .metrica {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .metrica-valor {
+      font-family: var(--fuente-display);
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--negro);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .metrica-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+    }
+    .metrica-sep {
+      width: 1px;
+      background: var(--gris-claro);
+      align-self: stretch;
+    }
+
+    /* BARRA DE SESGO GRANDE */
+    .sesgo-grande {
+      margin-bottom: 2.5rem;
+    }
+    .sesgo-grande-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-bottom: 0.6rem;
+    }
+    .sesgo-grande-barra {
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      background: var(--gris-claro);
+      margin-bottom: 0.5rem;
+    }
+    .sesgo-segmento { height: 100%; transition: width 0.6s ease; }
+    .sesgo-izquierda { background: var(--izquierda); }
+    .sesgo-centro { background: var(--centro); }
+    .sesgo-derecha { background: var(--derecha); }
+    .sesgo-nums {
+      display: flex;
+      justify-content: space-between;
+    }
+    .sesgo-num { font-size: 0.72rem; color: var(--gris-medio); }
+    .sesgo-num.izq { color: var(--izquierda); font-weight: 500; }
+    .sesgo-num.der { color: var(--derecha); font-weight: 500; }
+
+    /* COLUMNAS DE COBERTURA */
+    .cobertura-titulo {
+      font-family: var(--fuente-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--negro);
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .columnas {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .columna {
+      border-radius: var(--radio);
+      overflow: hidden;
+    }
+
+    .columna-header {
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .columna-izquierda .columna-header { background: var(--izquierda); }
+    .columna-centro .columna-header { background: var(--centro); }
+    .columna-derecha .columna-header { background: var(--derecha); }
+
+    .columna-nombre {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blanco);
+    }
+
+    .columna-centro .columna-nombre { color: var(--negro); }
+
+    .columna-count {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.8);
+      font-weight: 300;
+    }
+
+    .columna-centro .columna-count { color: rgba(0,0,0,0.5); }
+
+    .columna-noticias {
+      background: var(--blanco);
+      border: 1px solid var(--gris-claro);
+      border-top: none;
+    }
+
+    .columna-izquierda .columna-noticias { border-top: 2px solid var(--izquierda); }
+    .columna-centro .columna-noticias { border-top: 2px solid var(--centro); }
+    .columna-derecha .columna-noticias { border-top: 2px solid var(--derecha); }
+
+    /* NOTICIA INDIVIDUAL */
+    .noticia-item {
+      padding: 1rem;
+      border-bottom: 1px solid var(--gris-claro);
+      transition: background 0.15s;
+      opacity: 0;
+      animation: aparecer 0.3s ease forwards;
+    }
+
+    @keyframes aparecer {
+      to { opacity: 1; }
+    }
+
+    .noticia-item:last-child { border-bottom: none; }
+
+    .noticia-medio {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .medio-punto {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .columna-izquierda .medio-punto { background: var(--izquierda); }
+    .columna-centro .medio-punto { background: var(--centro); }
+    .columna-derecha .medio-punto { background: var(--derecha); }
+
+    .noticia-titular {
+      font-family: var(--fuente-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--negro);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.6rem;
+      display: block;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .noticia-titular:hover { color: var(--acento); }
+
+    .noticia-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .noticia-tiempo {
+      font-size: 0.68rem;
+      color: var(--gris-medio);
+    }
+
+    .noticia-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--gris-medio);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.15s;
+      padding: 0.25rem 0.5rem;
+      border: 1px solid var(--gris-claro);
+      border-radius: 2px;
+    }
+
+    .noticia-link:hover {
+      color: var(--acento);
+      border-color: var(--acento);
+    }
+
+    .noticia-link svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    /* COLUMNA VACÍA */
+    .columna-vacia {
+      padding: 2rem 1rem;
+      text-align: center;
+      color: var(--gris-medio);
+      font-size: 0.8rem;
+      font-style: italic;
+    }
+
+    /* ESTADO CARGA */
+    .estado-carga {
+      text-align: center;
+      padding: 4rem 2rem;
+      grid-column: span 3;
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--gris-claro);
+      border-top-color: var(--negro);
+      border-radius: 50%;
+      animation: girar 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes girar { to { transform: rotate(360deg); } }
+    .estado-texto { font-size: 0.85rem; color: var(--gris-medio); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--gris-claro);
+      background: var(--blanco);
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo { font-family: var(--fuente-display); font-size: 1rem; font-weight: 600; color: var(--negro); }
+    .footer-texto { font-size: 0.78rem; color: var(--gris-medio); max-width: 400px; text-align: center; }
+    .footer-link { font-size: 0.78rem; color: var(--gris-medio); text-decoration: none; }
+    .footer-link:hover { color: var(--acento); }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .columnas { grid-template-columns: 1fr; }
+      .metricas { gap: 1rem; }
+      .metrica-sep { display: none; }
+      .evento-hero { padding: 1.5rem 1rem 0; }
+      .breadcrumb { padding: 1rem 1rem 0; }
+      header { padding: 0 1rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-principal">Contrastar</span>
+        <span class="logo-punto">.</span>
+        <span class="logo-cl">cl</span>
+      </a>
+      <nav>
+        <a href="index.html">← Volver al feed</a>
+        <a href="#">Metodología</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="index.html">Inicio</a>
+    <span class="breadcrumb-sep">/</span>
+    <span id="breadcrumb-titular">Cargando...</span>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <div class="evento-hero">
+
+    <p class="evento-etiqueta">Análisis de cobertura · <span id="evento-fuentes">—</span> fuentes</p>
+    <h1 class="evento-titular" id="evento-titular">Cargando evento...</h1>
+
+    <!-- MÉTRICAS -->
+    <div class="metricas">
+      <div class="metrica">
+        <span class="metrica-valor" id="met-fuentes">—</span>
+        <span class="metrica-label">Fuentes totales</span>
+      </div>
+      <div class="metrica-sep"></div>
+      <div class="metrica">
+        <span class="metrica-valor" id="met-izq" style="color:var(--izquierda)">—</span>
+        <span class="metrica-label">Izquierda</span>
+      </div>
+      <div class="metrica-sep"></div>
+      <div class="metrica">
+        <span class="metrica-valor" id="met-centro" style="color:var(--gris-oscuro)">—</span>
+        <span class="metrica-label">Centro</span>
+      </div>
+      <div class="metrica-sep"></div>
+      <div class="metrica">
+        <span class="metrica-valor" id="met-der" style="color:var(--derecha)">—</span>
+        <span class="metrica-label">Derecha</span>
+      </div>
+    </div>
+
+    <!-- BARRA DE SESGO GRANDE -->
+    <div class="sesgo-grande">
+      <p class="sesgo-grande-label">Distribución de cobertura por tendencia editorial</p>
+      <div class="sesgo-grande-barra">
+        <div class="sesgo-segmento sesgo-izquierda" id="barra-izq" style="width:0%"></div>
+        <div class="sesgo-segmento sesgo-centro" id="barra-centro" style="width:0%"></div>
+        <div class="sesgo-segmento sesgo-derecha" id="barra-der" style="width:0%"></div>
+      </div>
+      <div class="sesgo-nums">
+        <span class="sesgo-num izq" id="num-izq"></span>
+        <span class="sesgo-num" id="num-centro"></span>
+        <span class="sesgo-num der" id="num-der"></span>
+      </div>
+    </div>
+
+    <!-- COBERTURA POR ESPECTRO -->
+    <p class="cobertura-titulo">Cobertura por espectro político</p>
+
+    <div class="columnas" id="columnas">
+      <div class="estado-carga">
+        <div class="spinner"></div>
+        <p class="estado-texto">Cargando noticias...</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-logo">Contrastar.cl</span>
+      <p class="footer-texto">Plataforma independiente de contraste de medios. No generamos noticias, solo mostramos cómo otros las cubren.</p>
+      <a href="#" class="footer-link">Metodología →</a>
+    </div>
+  </footer>
+
+  <script>
+    // =============================================
+    // CONFIGURACIÓN
+    // =============================================
+    const CSV_CLUSTERS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=415099479&single=true&output=csv';
+    const CSV_NOTICIAS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=356275760&single=true&output=csv';
+
+    // =============================================
+    // LEER ID DEL CLUSTER DESDE LA URL
+    // Ejemplo: evento.html?id=C_17724802950
+    // =============================================
+    function obtenerIdCluster() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    // =============================================
+    // INICIO
+    // =============================================
+    const idCluster = obtenerIdCluster();
+
+    if (!idCluster) {
+      document.getElementById('evento-titular').textContent = 'Evento no encontrado.';
+      document.getElementById('columnas').innerHTML = '<p style="color:var(--gris-medio);padding:2rem;">No se especificó un evento. <a href="index.html">Volver al feed →</a></p>';
+    } else {
+      cargarEvento(idCluster);
+    }
+
+    function cargarEvento(idCluster) {
+      // Cargar ambos CSVs en paralelo
+      let clustersData = null;
+      let noticiasData = null;
+
+      Papa.parse(CSV_CLUSTERS, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(res) {
+          clustersData = res.data;
+          if (noticiasData) renderizarEvento(idCluster, clustersData, noticiasData);
+        }
+      });
+
+      Papa.parse(CSV_NOTICIAS, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(res) {
+          noticiasData = res.data;
+          if (clustersData) renderizarEvento(idCluster, clustersData, noticiasData);
+        }
+      });
+    }
+
+    // =============================================
+    // RENDERIZAR EVENTO COMPLETO
+    // =============================================
+    function renderizarEvento(idCluster, clusters, noticias) {
+      // Encontrar el cluster
+      const cluster = clusters.find(c => c.id_cluster === idCluster);
+      if (!cluster) {
+        document.getElementById('evento-titular').textContent = 'Evento no encontrado.';
+        return;
+      }
+
+      // Filtrar noticias de este cluster
+      const noticiasCluster = noticias.filter(n => n.id_cluster === idCluster);
+
+      // Parsear distribución de tendencia
+      let distTendencia = {};
+      try { distTendencia = JSON.parse(cluster.dist_tendencia || '{}'); } catch(e) {}
+
+      const scores = Object.keys(distTendencia).map(Number);
+      const conteos = Object.values(distTendencia).map(Number);
+      const total = conteos.reduce((a, b) => a + b, 0);
+
+      let pctIzq = 0, pctCentro = 0, pctDer = 0;
+      let cntIzq = 0, cntCentro = 0, cntDer = 0;
+      scores.forEach((score, i) => {
+        const pct = total > 0 ? (conteos[i] / total) * 100 : 0;
+        if (score < -0.3) { pctIzq += pct; cntIzq += conteos[i]; }
+        else if (score > 0.3) { pctDer += pct; cntDer += conteos[i]; }
+        else { pctCentro += pct; cntCentro += conteos[i]; }
+      });
+
+      pctIzq = Math.round(pctIzq);
+      pctCentro = Math.round(pctCentro);
+      pctDer = Math.round(pctDer);
+
+      // Titular limpio
+      const titular = limpiarTitular(cluster.titular_representativo || 'Sin titular');
+
+      // Actualizar UI — encabezado
+      document.title = `Contrastar — ${titular}`;
+      document.getElementById('breadcrumb-titular').textContent = titular.substring(0, 50) + (titular.length > 50 ? '…' : '');
+      document.getElementById('evento-titular').textContent = titular;
+      document.getElementById('evento-fuentes').textContent = cluster.total_noticias || noticiasCluster.length;
+
+      // Métricas
+      document.getElementById('met-fuentes').textContent = cluster.total_noticias || noticiasCluster.length;
+      document.getElementById('met-izq').textContent = cntIzq;
+      document.getElementById('met-centro').textContent = cntCentro;
+      document.getElementById('met-der').textContent = cntDer;
+
+      // Barra de sesgo
+      document.getElementById('barra-izq').style.width = pctIzq + '%';
+      document.getElementById('barra-centro').style.width = pctCentro + '%';
+      document.getElementById('barra-der').style.width = pctDer + '%';
+      document.getElementById('num-izq').textContent = pctIzq > 0 ? pctIzq + '% Izquierda' : '';
+      document.getElementById('num-centro').textContent = pctCentro > 0 ? pctCentro + '% Centro' : '';
+      document.getElementById('num-der').textContent = pctDer > 0 ? pctDer + '% Derecha' : '';
+
+      // Separar noticias por tendencia
+      const noticiasIzq = noticiasCluster.filter(n => parseFloat(n.tendencia_score_medio) < -0.3);
+      const noticiasCentro = noticiasCluster.filter(n => {
+        const s = parseFloat(n.tendencia_score_medio);
+        return s >= -0.3 && s <= 0.3;
+      });
+      const noticiasDer = noticiasCluster.filter(n => parseFloat(n.tendencia_score_medio) > 0.3);
+
+      // Renderizar columnas
+      document.getElementById('columnas').innerHTML = `
+        <div class="columna columna-izquierda">
+          <div class="columna-header">
+            <span class="columna-nombre">Izquierda</span>
+            <span class="columna-count">${noticiasIzq.length} fuente${noticiasIzq.length !== 1 ? 's' : ''}</span>
+          </div>
+          <div class="columna-noticias">
+            ${noticiasIzq.length > 0
+              ? noticiasIzq.map((n, i) => renderizarNoticia(n, i, 'izquierda')).join('')
+              : '<p class="columna-vacia">Sin cobertura de medios de izquierda</p>'
+            }
+          </div>
+        </div>
+
+        <div class="columna columna-centro">
+          <div class="columna-header">
+            <span class="columna-nombre">Centro</span>
+            <span class="columna-count">${noticiasCentro.length} fuente${noticiasCentro.length !== 1 ? 's' : ''}</span>
+          </div>
+          <div class="columna-noticias">
+            ${noticiasCentro.length > 0
+              ? noticiasCentro.map((n, i) => renderizarNoticia(n, i, 'centro')).join('')
+              : '<p class="columna-vacia">Sin cobertura de medios de centro</p>'
+            }
+          </div>
+        </div>
+
+        <div class="columna columna-derecha">
+          <div class="columna-header">
+            <span class="columna-nombre">Derecha</span>
+            <span class="columna-count">${noticiasDer.length} fuente${noticiasDer.length !== 1 ? 's' : ''}</span>
+          </div>
+          <div class="columna-noticias">
+            ${noticiasDer.length > 0
+              ? noticiasDer.map((n, i) => renderizarNoticia(n, i, 'derecha')).join('')
+              : '<p class="columna-vacia">Sin cobertura de medios de derecha</p>'
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    // =============================================
+    // RENDERIZAR NOTICIA INDIVIDUAL
+    // =============================================
+    function renderizarNoticia(noticia, index, tendencia) {
+      const delay = index * 60;
+      const titular = limpiarTitular(noticia.titular || 'Sin titular');
+      const url = noticia.url || '#';
+      const medio = obtenerNombreMedio(noticia.id_medio || '');
+      const tiempo = formatearFecha(noticia.fecha_ingesta || '');
+
+      return `
+        <div class="noticia-item" style="animation-delay:${delay}ms">
+          <div class="noticia-medio">
+            <div class="medio-punto"></div>
+            ${medio}
+          </div>
+          <a href="${url}" target="_blank" rel="noopener noreferrer" class="noticia-titular">
+            ${titular}
+          </a>
+          <div class="noticia-footer">
+            <span class="noticia-tiempo">${tiempo}</span>
+            <a href="${url}" target="_blank" rel="noopener noreferrer" class="noticia-link">
+              Leer noticia
+              <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M2 10L10 2M5 2h5v5"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    // =============================================
+    // UTILIDADES
+    // =============================================
+    function limpiarTitular(titular) {
+      if (!titular) return 'Sin titular';
+      const limpio = titular.replace(/\s[-–|]\s.{3,40}$/i, '').trim();
+      const capitalizado = limpio.charAt(0).toUpperCase() + limpio.slice(1);
+      return capitalizado.length > 150 ? capitalizado.substring(0, 150) + '…' : capitalizado;
+    }
+
+    function obtenerNombreMedio(idMedio) {
+      const nombres = {
+        'elmostrador': 'El Mostrador',
+        'ciper': 'CIPER Chile',
+        'cooperativa': 'Radio Cooperativa',
+        'uchile': 'Radio UChile',
+        'theclinic': 'The Clinic',
+        'desconcierto': 'El Desconcierto',
+        'ciudadano': 'El Ciudadano',
+        'interferencia': 'Interferencia',
+        'lemonde': 'Le Monde Diplomatique',
+        'izqdiario': 'La Izquierda Diario',
+        'tvn': 'TVN / 24Horas',
+        'biobio': 'Radio Bío-Bío',
+        'cnnchile': 'CNN Chile',
+        'fastcheck': 'Fast Check CL',
+        'latercera': 'La Tercera',
+        'canal13': 'Canal 13',
+        'exante': 'Ex-Ante',
+        'ellibero': 'El Líbero',
+        'emol': 'El Mercurio / Emol',
+        'agricultura': 'Radio Agricultura'
+      };
+      return nombres[idMedio] || idMedio;
+    }
+
+    function formatearFecha(fechaStr) {
+      if (!fechaStr) return '';
+      try {
+        const fecha = new Date(fechaStr);
+        const ahora = new Date();
+        const diff = ahora - fecha;
+        const horas = Math.floor(diff / 3600000);
+        const minutos = Math.floor(diff / 60000);
+        if (minutos < 60) return 'Hace ' + minutos + ' min';
+        if (horas < 24) return 'Hace ' + horas + 'h';
+        return 'Hoy';
+      } catch(e) { return ''; }
+    }
+  </script>
+
+</body>
+</html>
