@@ -888,9 +888,12 @@
     // =============================================
     function limpiarTitular(titular) {
       if (!titular) return 'Sin titular';
-      // Capitalizar primera letra y truncar si es muy largo
-      const limpio = titular.charAt(0).toUpperCase() + titular.slice(1);
-      return limpio.length > 120 ? limpio.substring(0, 120) + '…' : limpio;
+      // Eliminar sufijos de medios al final del titular
+      const limpio = titular
+        .replace(/\s[-–|]\s.{3,40}$/i, '')  // Elimina " - Nombre Medio" al final
+        .trim();
+      const capitalizado = limpio.charAt(0).toUpperCase() + limpio.slice(1);
+      return capitalizado.length > 120 ? capitalizado.substring(0, 120) + '…' : capitalizado;
     }
 
     function formatearFecha(fechaStr) {
