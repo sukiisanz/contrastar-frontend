@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contrastar — El mismo hecho, todas las miradas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+  <style>
+    /* =============================================
+       TOKENS DE DISEÑO
+    ============================================= */
+    :root {
+      --negro: #0f0e0d;
+      --gris-oscuro: #3a3835;
+      --gris-medio: #8c8880;
+      --gris-claro: #e8e5e0;
+      --crema: #f7f4ef;
+      --blanco: #ffffff;
+
+      --izquierda: #c0392b;
+      --centro: #c8b89a;
+      --derecha: #2c3e7a;
+
+      --acento: #d4500a;
+
+      --fuente-display: 'Fraunces', Georgia, serif;
+      --fuente-cuerpo: 'DM Sans', sans-serif;
+
+      --radio: 3px;
+      --sombra: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+      --sombra-hover: 0 4px 12px rgba(0,0,0,0.10), 0 12px 40px rgba(0,0,0,0.08);
+    }
+
+    /* =============================================
+       RESET Y BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--fuente-cuerpo);
+      background-color: var(--crema);
+      color: var(--negro);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =============================================
+       HEADER
+    ============================================= */
+    header {
+      background: var(--blanco);
+      border-bottom: 1px solid var(--gris-claro);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 2rem;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 0.2rem;
+      text-decoration: none;
+    }
+
+    .logo-principal {
+      font-family: var(--fuente-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--negro);
+      letter-spacing: -0.02em;
+    }
+
+    .logo-punto {
+      color: var(--acento);
+      font-family: var(--fuente-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .logo-cl {
+      font-family: var(--fuente-cuerpo);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--gris-medio);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    nav a {
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--gris-oscuro);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--acento); }
+
+    .nav-actualizacion {
+      font-size: 0.75rem;
+      color: var(--gris-medio);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .pulso {
+      width: 6px;
+      height: 6px;
+      background: #27ae60;
+      border-radius: 50%;
+      animation: pulso 2s infinite;
+    }
+
+    @keyframes pulso {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* =============================================
+       HERO EDITORIAL
+    ============================================= */
+    .hero {
+      background: var(--blanco);
+      border-bottom: 1px solid var(--gris-claro);
+      padding: 3rem 2rem 2.5rem;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hero-etiqueta {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--acento);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-titulo {
+      font-family: var(--fuente-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--negro);
+      letter-spacing: -0.03em;
+      max-width: 700px;
+      margin-bottom: 1rem;
+    }
+
+    .hero-titulo em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--acento);
+    }
+
+    .hero-bajada {
+      font-size: 0.9rem;
+      color: var(--gris-medio);
+      max-width: 500px;
+      font-weight: 300;
+    }
+
+    /* =============================================
+       LEYENDA DE SESGO (GLOBAL)
+    ============================================= */
+    .leyenda-sesgo {
+      background: var(--blanco);
+      border-bottom: 1px solid var(--gris-claro);
+      padding: 0.75rem 2rem;
+    }
+
+    .leyenda-sesgo-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .leyenda-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      white-space: nowrap;
+    }
+
+    .leyenda-items {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .leyenda-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      color: var(--gris-oscuro);
+    }
+
+    .leyenda-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* =============================================
+       LAYOUT PRINCIPAL
+    ============================================= */
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* =============================================
+       SIDEBAR DE FILTROS
+    ============================================= */
+    .sidebar {
+      position: sticky;
+      top: 80px;
+    }
+
+    .sidebar-seccion {
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-titulo {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-bottom: 0.75rem;
+    }
+
+    .filtro-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid transparent;
+      border-radius: var(--radio);
+      background: transparent;
+      font-family: var(--fuente-cuerpo);
+      font-size: 0.85rem;
+      color: var(--gris-oscuro);
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-bottom: 0.25rem;
+    }
+
+    .filtro-btn:hover {
+      background: var(--gris-claro);
+      color: var(--negro);
+    }
+
+    .filtro-btn.activo {
+      background: var(--negro);
+      color: var(--blanco);
+      border-color: var(--negro);
+    }
+
+    .contador-badge {
+      float: right;
+      font-size: 0.7rem;
+      color: var(--gris-medio);
+      font-weight: 300;
+    }
+
+    .filtro-btn.activo .contador-badge {
+      color: var(--gris-claro);
+    }
+
+    /* =============================================
+       FEED DE CLUSTERS
+    ============================================= */
+    .feed {
+      min-height: 60vh;
+    }
+
+    .feed-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--gris-claro);
+    }
+
+    .feed-titulo {
+      font-family: var(--fuente-display);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--negro);
+      letter-spacing: -0.02em;
+    }
+
+    .feed-meta {
+      font-size: 0.8rem;
+      color: var(--gris-medio);
+    }
+
+    /* =============================================
+       TARJETA DE CLUSTER
+    ============================================= */
+    .grid-clusters {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .cluster-card {
+      background: var(--blanco);
+      border: 1px solid var(--gris-claro);
+      border-radius: var(--radio);
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--sombra);
+      opacity: 0;
+      transform: translateY(8px);
+      animation: aparecer 0.3s ease forwards;
+    }
+
+    @keyframes aparecer {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .cluster-card:hover {
+      box-shadow: var(--sombra-hover);
+      border-color: #d0ccc6;
+      transform: translateY(-1px);
+    }
+
+    .cluster-card.destacada {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .card-fuentes {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+    }
+
+    .card-separador {
+      color: var(--gris-claro);
+      font-size: 0.7rem;
+    }
+
+    .card-tiempo {
+      font-size: 0.7rem;
+      color: var(--gris-medio);
+    }
+
+    .card-titular {
+      font-family: var(--fuente-display);
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--negro);
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+    }
+
+    .cluster-card.destacada .card-titular {
+      font-size: 1.25rem;
+    }
+
+    /* =============================================
+       BARRA DE SESGO
+    ============================================= */
+    .sesgo-contenedor {
+      margin-top: auto;
+    }
+
+    .sesgo-label {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gris-medio);
+      margin-bottom: 0.4rem;
+    }
+
+    .sesgo-barra {
+      height: 4px;
+      border-radius: 2px;
+      overflow: hidden;
+      display: flex;
+      background: var(--gris-claro);
+    }
+
+    .sesgo-segmento {
+      height: 100%;
+      transition: width 0.5s ease;
+    }
+
+    .sesgo-izquierda { background: var(--izquierda); }
+    .sesgo-centro { background: var(--centro); }
+    .sesgo-derecha { background: var(--derecha); }
+
+    .sesgo-nums {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.35rem;
+    }
+
+    .sesgo-num {
+      font-size: 0.65rem;
+      color: var(--gris-medio);
+    }
+
+    .sesgo-num.izq { color: var(--izquierda); font-weight: 500; }
+    .sesgo-num.der { color: var(--derecha); font-weight: 500; }
+
+    /* Sesgo visual para la card destacada */
+    .sesgo-visual-grande {
+      min-width: 160px;
+    }
+
+    .sesgo-visual-grande .sesgo-barra {
+      height: 80px;
+      flex-direction: column;
+      border-radius: 4px;
+    }
+
+    .sesgo-visual-grande .sesgo-segmento {
+      width: 100% !important;
+    }
+
+    /* =============================================
+       ESTADO DE CARGA Y ERROR
+    ============================================= */
+    .estado-carga {
+      grid-column: span 2;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--gris-claro);
+      border-top-color: var(--negro);
+      border-radius: 50%;
+      animation: girar 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes girar {
+      to { transform: rotate(360deg); }
+    }
+
+    .estado-texto {
+      font-size: 0.85rem;
+      color: var(--gris-medio);
+    }
+
+    .estado-error {
+      font-size: 0.85rem;
+      color: var(--izquierda);
+    }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      border-top: 1px solid var(--gris-claro);
+      background: var(--blanco);
+      padding: 2rem;
+      margin-top: 4rem;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: var(--fuente-display);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--negro);
+    }
+
+    .footer-texto {
+      font-size: 0.78rem;
+      color: var(--gris-medio);
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .footer-link {
+      font-size: 0.78rem;
+      color: var(--gris-medio);
+      text-decoration: none;
+    }
+
+    .footer-link:hover { color: var(--acento); }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 768px) {
+      main {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+
+      .sidebar {
+        position: static;
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .sidebar-seccion { margin-bottom: 0; }
+      .sidebar-titulo { display: none; }
+
+      .filtro-btn {
+        display: inline-block;
+        width: auto;
+        padding: 0.3rem 0.75rem;
+        font-size: 0.8rem;
+      }
+
+      .grid-clusters { grid-template-columns: 1fr; }
+
+      .cluster-card.destacada {
+        grid-column: span 1;
+        grid-template-columns: 1fr;
+      }
+
+      .sesgo-visual-grande { display: none; }
+
+      .header-inner { padding: 0; }
+      nav { gap: 1rem; }
+
+      .hero { padding: 2rem 1rem 1.5rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <span class="logo-principal">Contrastar</span>
+        <span class="logo-punto">.</span>
+        <span class="logo-cl">cl</span>
+      </a>
+      <nav>
+        <a href="#">Medios</a>
+        <a href="#">Metodología</a>
+        <div class="nav-actualizacion">
+          <div class="pulso"></div>
+          <span id="hora-actualizacion">Actualizando...</span>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-etiqueta">Agregador de medios · Chile</p>
+      <h1 class="hero-titulo">El mismo hecho,<br><em>todas las miradas.</em></h1>
+      <p class="hero-bajada">Comparamos cómo los medios chilenos cubren los mismos eventos según su tendencia editorial.</p>
+    </div>
+  </section>
+
+  <!-- LEYENDA -->
+  <div class="leyenda-sesgo">
+    <div class="leyenda-sesgo-inner">
+      <span class="leyenda-label">Sesgo de cobertura</span>
+      <div class="leyenda-items">
+        <div class="leyenda-item">
+          <div class="leyenda-dot" style="background:var(--izquierda)"></div>
+          <span>Izquierda</span>
+        </div>
+        <div class="leyenda-item">
+          <div class="leyenda-dot" style="background:var(--centro)"></div>
+          <span>Centro</span>
+        </div>
+        <div class="leyenda-item">
+          <div class="leyenda-dot" style="background:var(--derecha)"></div>
+          <span>Derecha</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYOUT PRINCIPAL -->
+  <main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-seccion">
+        <p class="sidebar-titulo">Filtrar por</p>
+        <button class="filtro-btn activo" data-filtro="todos" onclick="filtrarClusters('todos', this)">
+          Todos <span class="contador-badge" id="cnt-todos">—</span>
+        </button>
+        <button class="filtro-btn" data-filtro="izquierda" onclick="filtrarClusters('izquierda', this)">
+          Predomina izquierda <span class="contador-badge" id="cnt-izquierda">—</span>
+        </button>
+        <button class="filtro-btn" data-filtro="centro" onclick="filtrarClusters('centro', this)">
+          Predomina centro <span class="contador-badge" id="cnt-centro">—</span>
+        </button>
+        <button class="filtro-btn" data-filtro="derecha" onclick="filtrarClusters('derecha', this)">
+          Predomina derecha <span class="contador-badge" id="cnt-derecha">—</span>
+        </button>
+        <button class="filtro-btn" data-filtro="plural" onclick="filtrarClusters('plural', this)">
+          Cobertura plural <span class="contador-badge" id="cnt-plural">—</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- FEED -->
+    <section class="feed">
+      <div class="feed-header">
+        <h2 class="feed-titulo">Noticias de hoy</h2>
+        <span class="feed-meta" id="feed-meta">Cargando...</span>
+      </div>
+      <div class="grid-clusters" id="grid-clusters">
+        <div class="estado-carga" style="grid-column:span 2">
+          <div class="spinner"></div>
+          <p class="estado-texto">Cargando noticias...</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-logo">Contrastar.cl</span>
+      <p class="footer-texto">Plataforma independiente de contraste de medios. No generamos noticias, solo mostramos cómo otros las cubren.</p>
+      <a href="#" class="footer-link">Metodología →</a>
+    </div>
+  </footer>
+
+  <script>
+    // =============================================
+    // CONFIGURACIÓN
+    // =============================================
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=415099479&single=true&output=csv';
+
+    let todosClusters = [];
+    let filtroActual = 'todos';
+
+    // =============================================
+    // CARGA DE DATOS
+    // =============================================
+    function cargarDatos() {
+      Papa.parse(CSV_URL, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(resultado) {
+          todosClusters = procesarClusters(resultado.data);
+          renderizarFeed(todosClusters);
+          actualizarContadores(todosClusters);
+          actualizarHora();
+        },
+        error: function(error) {
+          mostrarError('No se pudo cargar el feed. Intenta recargar la página.');
+          console.error('Error CSV:', error);
+        }
+      });
+    }
+
+    // =============================================
+    // PROCESAR CLUSTERS DESDE CSV
+    // =============================================
+    function procesarClusters(filas) {
+      return filas
+        .filter(f => f.id_cluster && f.id_cluster !== '')
+        .map(fila => {
+          let distTendencia = {};
+          try { distTendencia = JSON.parse(fila.dist_tendencia || '{}'); } catch(e) {}
+
+          const scores = Object.keys(distTendencia).map(Number);
+          const conteos = Object.values(distTendencia).map(Number);
+          const total = conteos.reduce((a, b) => a + b, 0);
+
+          // Calcular porcentajes por bloque ideológico
+          let pctIzq = 0, pctCentro = 0, pctDer = 0;
+          scores.forEach((score, i) => {
+            const pct = total > 0 ? (conteos[i] / total) * 100 : 0;
+            if (score < -0.3) pctIzq += pct;
+            else if (score > 0.3) pctDer += pct;
+            else pctCentro += pct;
+          });
+
+          // Tendencia dominante
+          let tendenciaDominante = 'plural';
+          if (pctIzq > 60) tendenciaDominante = 'izquierda';
+          else if (pctDer > 60) tendenciaDominante = 'derecha';
+          else if (pctCentro > 50) tendenciaDominante = 'centro';
+
+          return {
+            id: fila.id_cluster,
+            titular: fila.titular_representativo || 'Sin titular',
+            palabrasClave: fila.palabras_clave || '',
+            fechaCreacion: fila.fecha_creacion || '',
+            totalNoticias: parseInt(fila.total_noticias) || 1,
+            pctIzq: Math.round(pctIzq),
+            pctCentro: Math.round(pctCentro),
+            pctDer: Math.round(pctDer),
+            tendenciaDominante
+          };
+        })
+        .sort((a, b) => b.totalNoticias - a.totalNoticias);
+    }
+
+    // =============================================
+    // RENDERIZAR FEED
+    // =============================================
+    function renderizarFeed(clusters) {
+      const grid = document.getElementById('grid-clusters');
+      const meta = document.getElementById('feed-meta');
+
+      if (clusters.length === 0) {
+        grid.innerHTML = '<div class="estado-carga" style="grid-column:span 2"><p class="estado-texto">No hay eventos para mostrar con este filtro.</p></div>';
+        meta.textContent = '0 eventos';
+        return;
+      }
+
+      meta.textContent = clusters.length + ' eventos · últimas 24 horas';
+
+      grid.innerHTML = clusters.map((cluster, index) => {
+        const esDestacada = index === 0;
+        const delay = Math.min(index * 40, 400);
+
+        if (esDestacada) {
+          return `
+            <article class="cluster-card destacada" style="animation-delay:${delay}ms">
+              <div>
+                <div class="card-meta">
+                  <span class="card-fuentes">${cluster.totalNoticias} ${cluster.totalNoticias === 1 ? 'fuente' : 'fuentes'}</span>
+                  <span class="card-separador">·</span>
+                  <span class="card-tiempo">${formatearFecha(cluster.fechaCreacion)}</span>
+                </div>
+                <h3 class="card-titular">${limpiarTitular(cluster.titular)}</h3>
+                <div class="sesgo-contenedor">
+                  <p class="sesgo-label">Sesgo de cobertura</p>
+                  ${renderizarBarra(cluster)}
+                </div>
+              </div>
+              <div class="sesgo-visual-grande">
+                ${renderizarBarraVertical(cluster)}
+              </div>
+            </article>
+          `;
+        }
+
+        return `
+          <article class="cluster-card" style="animation-delay:${delay}ms">
+            <div class="card-meta">
+              <span class="card-fuentes">${cluster.totalNoticias} ${cluster.totalNoticias === 1 ? 'fuente' : 'fuentes'}</span>
+              <span class="card-separador">·</span>
+              <span class="card-tiempo">${formatearFecha(cluster.fechaCreacion)}</span>
+            </div>
+            <h3 class="card-titular">${limpiarTitular(cluster.titular)}</h3>
+            <div class="sesgo-contenedor">
+              <p class="sesgo-label">Sesgo de cobertura</p>
+              ${renderizarBarra(cluster)}
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // =============================================
+    // RENDERIZAR BARRA DE SESGO HORIZONTAL
+    // =============================================
+    function renderizarBarra(cluster) {
+      const { pctIzq, pctCentro, pctDer } = cluster;
+      return `
+        <div class="sesgo-barra">
+          <div class="sesgo-segmento sesgo-izquierda" style="width:${pctIzq}%"></div>
+          <div class="sesgo-segmento sesgo-centro" style="width:${pctCentro}%"></div>
+          <div class="sesgo-segmento sesgo-derecha" style="width:${pctDer}%"></div>
+        </div>
+        <div class="sesgo-nums">
+          <span class="sesgo-num izq">${pctIzq > 0 ? pctIzq + '% Izq' : ''}</span>
+          <span class="sesgo-num">${pctCentro > 0 ? pctCentro + '% Centro' : ''}</span>
+          <span class="sesgo-num der">${pctDer > 0 ? pctDer + '% Der' : ''}</span>
+        </div>
+      `;
+    }
+
+    // =============================================
+    // RENDERIZAR BARRA VERTICAL (CARD DESTACADA)
+    // =============================================
+    function renderizarBarraVertical(cluster) {
+      const { pctIzq, pctCentro, pctDer } = cluster;
+      return `
+        <div class="sesgo-barra" style="height:90px;flex-direction:column;border-radius:4px;overflow:hidden;">
+          <div class="sesgo-segmento sesgo-izquierda" style="width:100%;height:${pctIzq}%"></div>
+          <div class="sesgo-segmento sesgo-centro" style="width:100%;height:${pctCentro}%"></div>
+          <div class="sesgo-segmento sesgo-derecha" style="width:100%;height:${pctDer}%"></div>
+        </div>
+      `;
+    }
+
+    // =============================================
+    // FILTROS
+    // =============================================
+    function filtrarClusters(filtro, boton) {
+      filtroActual = filtro;
+
+      document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
+      boton.classList.add('activo');
+
+      let resultado = todosClusters;
+      if (filtro !== 'todos') {
+        resultado = todosClusters.filter(c => c.tendenciaDominante === filtro);
+      }
+
+      renderizarFeed(resultado);
+    }
+
+    function actualizarContadores(clusters) {
+      const conteos = { todos: clusters.length, izquierda: 0, centro: 0, derecha: 0, plural: 0 };
+      clusters.forEach(c => { if (conteos[c.tendenciaDominante] !== undefined) conteos[c.tendenciaDominante]++; });
+
+      Object.entries(conteos).forEach(([key, val]) => {
+        const el = document.getElementById('cnt-' + key);
+        if (el) el.textContent = val;
+      });
+    }
+
+    // =============================================
+    // UTILIDADES
+    // =============================================
+    function limpiarTitular(titular) {
+      if (!titular) return 'Sin titular';
+      // Capitalizar primera letra y truncar si es muy largo
+      const limpio = titular.charAt(0).toUpperCase() + titular.slice(1);
+      return limpio.length > 120 ? limpio.substring(0, 120) + '…' : limpio;
+    }
+
+    function formatearFecha(fechaStr) {
+      if (!fechaStr) return '';
+      try {
+        const fecha = new Date(fechaStr);
+        const ahora = new Date();
+        const diff = ahora - fecha;
+        const horas = Math.floor(diff / 3600000);
+        const minutos = Math.floor(diff / 60000);
+
+        if (minutos < 60) return 'Hace ' + minutos + ' min';
+        if (horas < 24) return 'Hace ' + horas + 'h';
+        return 'Hoy';
+      } catch(e) { return ''; }
+    }
+
+    function actualizarHora() {
+      const ahora = new Date();
+      const hora = ahora.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('hora-actualizacion').textContent = 'Actualizado ' + hora;
+    }
+
+    function mostrarError(mensaje) {
+      document.getElementById('grid-clusters').innerHTML =
+        '<div class="estado-carga" style="grid-column:span 2"><p class="estado-error">' + mensaje + '</p></div>';
+      document.getElementById('feed-meta').textContent = 'Error al cargar';
+    }
+
+    // =============================================
+    // INICIO
+    // =============================================
+    cargarDatos();
+
+    // Recargar datos cada 15 minutos
+    setInterval(cargarDatos, 15 * 60 * 1000);
+  </script>
+
+</body>
+</html>
