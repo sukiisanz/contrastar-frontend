@@ -786,7 +786,7 @@
 
         if (esDestacada) {
           return `
-            <article class="cluster-card destacada" style="animation-delay:${delay}ms">
+            <article class="cluster-card destacada" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${cluster.id}'" title="Ver cobertura completa">
               <div>
                 <div class="card-meta">
                   <span class="card-fuentes">${cluster.totalNoticias} ${cluster.totalNoticias === 1 ? 'fuente' : 'fuentes'}</span>
@@ -807,7 +807,7 @@
         }
 
         return `
-          <article class="cluster-card" style="animation-delay:${delay}ms">
+          <article class="cluster-card" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${cluster.id}'" title="Ver cobertura completa">
             <div class="card-meta">
               <span class="card-fuentes">${cluster.totalNoticias} ${cluster.totalNoticias === 1 ? 'fuente' : 'fuentes'}</span>
               <span class="card-separador">·</span>
