@@ -407,6 +407,7 @@
             tendenciaDominante
           };
         })
+        .filter(c => c.totalNoticias >= 2)
         .sort((a, b) => b.totalNoticias - a.totalNoticias);
     }
 
