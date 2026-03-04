@@ -437,19 +437,32 @@
           let distTendencia = {};
           try { distTendencia = JSON.parse(fila.dist_tendencia || '{}'); } catch(e) {}
 
-          const puntos = Object.entries(distTendencia)
-            .map(([k,v]) => ({ score: parseFloat(k), count: parseInt(v)||1 }))
-            .filter(p => !isNaN(p.score));
+          // Cada clave en dist_tendencia = 1 medio distinto (ignoramos el count).
+          // Esto evita que un medio que publica 9 noticias cuente como 9 medios.
+          const puntos = Object.keys(distTendencia)
+            .map(k => parseFloat(k))
+            .filter(s => !isNaN(s))
+            .map(s => ({ score: s, count: 1 }));
 
-          const total = puntos.reduce((a,b) => a+b.count, 0);
-          const scoreProm = total > 0 ? puntos.reduce((a,b) => a+b.score*b.count, 0)/total : 0;
+          const total = puntos.length;
+          const scoreProm = total > 0 ? puntos.reduce((a,b) => a+b.score, 0)/total : 0;
 
+          // Clasificación suave: centro-izq y centro-der contribuyen parcialmente
+          // a sus zonas vecinas en vez de caer bruscamente en una categoría.
           let cntIzq=0, cntCentro=0, cntDer=0;
           puntos.forEach(p => {
-            const c = clasificarScore(p.score);
-            if (c==='izquierda') cntIzq+=p.count;
-            else if (c==='derecha') cntDer+=p.count;
-            else cntCentro+=p.count;
+            const s = p.score;
+            if (s <= -1.0) {
+              cntIzq += 1;                          // izquierda pura
+            } else if (s < -0.5) {
+              cntIzq += 0.7; cntCentro += 0.3;     // centro-izquierda
+            } else if (s <= 0.5) {
+              cntCentro += 1;                       // centro puro
+            } else if (s < 1.0) {
+              cntCentro += 0.3; cntDer += 0.7;     // centro-derecha
+            } else {
+              cntDer += 1;                          // derecha pura
+            }
           });
 
           const pctIzq    = total>0 ? Math.round(cntIzq/total*100)    : 0;
