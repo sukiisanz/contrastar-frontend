@@ -223,18 +223,18 @@
       <div class="sidebar-seccion">
         <p class="sidebar-titulo">Tendencia</p>
         <button class="filtro-btn activo" onclick="setFiltro('tendencia','todos',this)">Todos <span class="contador-badge" id="cnt-todos">—</span></button>
-        <button class="filtro-btn" onclick="setFiltro('tendencia','izquierda',this)">Predomina izquierda <span class="contador-badge" id="cnt-izquierda">—</span></button>
-        <button class="filtro-btn" onclick="setFiltro('tendencia','centro',this)">Predomina centro <span class="contador-badge" id="cnt-centro">—</span></button>
-        <button class="filtro-btn" onclick="setFiltro('tendencia','derecha',this)">Predomina derecha <span class="contador-badge" id="cnt-derecha">—</span></button>
-        <button class="filtro-btn" onclick="setFiltro('tendencia','plural',this)">Cobertura plural <span class="contador-badge" id="cnt-plural">—</span></button>
+        <button class="filtro-btn" onclick="setFiltro('tendencia','izquierda',this)" style="display:flex;align-items:center;gap:0.4rem"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Predomina izquierda <span class="contador-badge" id="cnt-izquierda">—</span></button>
+        <button class="filtro-btn" onclick="setFiltro('tendencia','centro',this)" style="display:flex;align-items:center;gap:0.4rem"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8c8880" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M3 6l4 8a4 4 0 0 0 8 0l4-8"/><line x1="3" y1="6" x2="21" y2="6"/></svg> Predomina centro <span class="contador-badge" id="cnt-centro">—</span></button>
+        <button class="filtro-btn" onclick="setFiltro('tendencia','derecha',this)" style="display:flex;align-items:center;gap:0.4rem"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2c3e7a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> Predomina derecha <span class="contador-badge" id="cnt-derecha">—</span></button>
+        <button class="filtro-btn" onclick="setFiltro('tendencia','plural',this)" style="display:flex;align-items:center;gap:0.4rem"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8c8880" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="4" cy="12" r="2"/><circle cx="20" cy="12" r="2"/></svg> Cobertura plural <span class="contador-badge" id="cnt-plural">—</span></button>
       </div>
 
       <div class="sidebar-seccion">
         <p class="sidebar-titulo">Alcance</p>
         <button class="filtro-btn activo" onclick="setFiltro('alcance','todos',this)">Todos</button>
-        <button class="filtro-btn" onclick="setFiltro('alcance','Internacional',this)">Internacional</button>
-        <button class="filtro-btn" onclick="setFiltro('alcance','Nacional',this)">Nacional</button>
-        <button class="filtro-btn" onclick="setFiltro('alcance','Regional',this)">Regional</button>
+        <button class="filtro-btn" onclick="setFiltro('alcance','Internacional',this)" style="display:flex;align-items:center;gap:0.4rem"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Internacional</button>
+        <button class="filtro-btn" onclick="setFiltro('alcance','Nacional',this)" style="display:flex;align-items:center;gap:0.4rem"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg> Nacional</button>
+        <button class="filtro-btn" onclick="setFiltro('alcance','Regional',this)" style="display:flex;align-items:center;gap:0.4rem"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Regional</button>
       </div>
 
       <div class="sidebar-seccion">
@@ -365,46 +365,56 @@
         return a.map((v, i) => Math.round(v + (b[i] - v) * t));
       }
 
-      // Zona de transición suave: 8% del ancho total en cada corte
-      const blend = 0.08;
+      // Transición suave entre zonas, proporcional al tamaño de cada zona.
+      // Si una zona es 0% no hay transición hacia ella.
+      const blend = 0.06;
+      const hasIzq    = pctIzq    > 0.01;
+      const hasCentro = pctCentro > 0.01;
+      const hasDer    = pctDer    > 0.01;
 
-      const imgData = ctx.createImageData(W, H);
-      for (let x = 0; x < W; x++) {
-        const t = x / (W - 1); // posición 0..1
-        let color;
+      // Usar canvas gradient — maneja 100% de un color correctamente
+      const grad = ctx.createLinearGradient(0, 0, W, 0);
+      const C_IZQ_CSS    = 'rgb(192,57,43)';
+      const C_CENTRO_CSS = 'rgb(200,184,154)';
+      const C_DER_CSS    = 'rgb(44,62,122)';
+      const BL = 0.07; // zona de transición
 
-        // Zona izquierda pura
-        if (t < corte1 - blend) {
-          color = COLOR_IZQ;
-        }
-        // Transición izq→centro
-        else if (t < corte1 + blend) {
-          const f = (t - (corte1 - blend)) / (blend * 2);
-          color = lerpColor(COLOR_IZQ, COLOR_CENTRO, f);
-        }
-        // Zona centro pura
-        else if (t < corte2 - blend) {
-          color = COLOR_CENTRO;
-        }
-        // Transición centro→der
-        else if (t < corte2 + blend) {
-          const f = (t - (corte2 - blend)) / (blend * 2);
-          color = lerpColor(COLOR_CENTRO, COLOR_DER, f);
-        }
-        // Zona derecha pura
-        else {
-          color = COLOR_DER;
-        }
-
-        for (let y = 0; y < H; y++) {
-          const idx = (y * W + x) * 4;
-          imgData.data[idx]   = color[0];
-          imgData.data[idx+1] = color[1];
-          imgData.data[idx+2] = color[2];
-          imgData.data[idx+3] = 255;
-        }
+      if (!hasCentro && !hasDer) {
+        grad.addColorStop(0, C_IZQ_CSS); grad.addColorStop(1, C_IZQ_CSS);
+      } else if (!hasIzq && !hasDer) {
+        grad.addColorStop(0, C_CENTRO_CSS); grad.addColorStop(1, C_CENTRO_CSS);
+      } else if (!hasIzq && !hasCentro) {
+        grad.addColorStop(0, C_DER_CSS); grad.addColorStop(1, C_DER_CSS);
+      } else if (!hasCentro) {
+        // Izq + Der directo
+        grad.addColorStop(0, C_IZQ_CSS);
+        grad.addColorStop(Math.max(0.01, corte1 - BL), C_IZQ_CSS);
+        grad.addColorStop(Math.min(0.99, corte1 + BL), C_DER_CSS);
+        grad.addColorStop(1, C_DER_CSS);
+      } else if (!hasIzq) {
+        // Centro + Der
+        grad.addColorStop(0, C_CENTRO_CSS);
+        grad.addColorStop(Math.max(0.01, corte2 - BL), C_CENTRO_CSS);
+        grad.addColorStop(Math.min(0.99, corte2 + BL), C_DER_CSS);
+        grad.addColorStop(1, C_DER_CSS);
+      } else if (!hasDer) {
+        // Izq + Centro
+        grad.addColorStop(0, C_IZQ_CSS);
+        grad.addColorStop(Math.max(0.01, corte1 - BL), C_IZQ_CSS);
+        grad.addColorStop(Math.min(0.99, corte1 + BL), C_CENTRO_CSS);
+        grad.addColorStop(1, C_CENTRO_CSS);
+      } else {
+        // Los tres
+        grad.addColorStop(0, C_IZQ_CSS);
+        grad.addColorStop(Math.max(0.01, corte1 - BL), C_IZQ_CSS);
+        grad.addColorStop(Math.min(0.49, corte1 + BL), C_CENTRO_CSS);
+        grad.addColorStop(Math.max(0.51, corte2 - BL), C_CENTRO_CSS);
+        grad.addColorStop(Math.min(0.99, corte2 + BL), C_DER_CSS);
+        grad.addColorStop(1, C_DER_CSS);
       }
-      ctx.putImageData(imgData, 0, 0);
+
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, H);
     }
 
     function cargarDatos() {
@@ -546,7 +556,13 @@
           ? resaltarBusqueda(limpiarTitular(c.titular), busquedaActual)
           : limpiarTitular(c.titular);
         const badgeAlcance = renderBadgeAlcance(c.alcance);
-        const badgeCat = c.categoria ? `<span class="badge badge-categoria">${c.categoria}</span>` : '';
+        const svgTendencia = {
+          izquierda: `<svg width="11" height="9" viewBox="0 0 14 10" fill="none" stroke="#c0392b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 5H1M1 5l4-3M1 5l4 3"/></svg>`,
+          derecha:   `<svg width="11" height="9" viewBox="0 0 14 10" fill="none" stroke="#2c3e7a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h12M13 5l-4-3M13 5l-4 3"/></svg>`,
+          centro:    `<svg width="11" height="9" viewBox="0 0 14 10" fill="none" stroke="#8c8880" stroke-width="1.5" stroke-linecap="round"><path d="M3 2h8M2 5h10M3 8h8"/></svg>`,
+          plural:    `<svg width="11" height="9" viewBox="0 0 14 10" fill="none" stroke="#8c8880" stroke-width="1.5" stroke-linecap="round"><path d="M2 5h10M5 2l-3 3 3 3M9 2l3 3-3 3"/></svg>`
+        }[c.tendenciaDominante] || '';
+        const badgeCat = c.categoria ? `<span class="badge badge-categoria" style="display:inline-flex;align-items:center;gap:0.3rem">${svgTendencia}${c.categoria}</span>` : '';
 
         if (esDestacada) {
           return `
@@ -609,14 +625,18 @@
       });
     }
 
+    const SVG_MUNDO    = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`;
+    const SVG_ESTRELLA = `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>`;
+    const SVG_PIN      = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+
     function renderBadgeAlcance(alcance) {
       const cfg = {
-        'Internacional': 'badge-internacional',
-        'Nacional':      'badge-nacional',
-        'Regional':      'badge-regional'
+        'Internacional': { cls: 'badge-internacional', svg: SVG_MUNDO    },
+        'Nacional':      { cls: 'badge-nacional',      svg: SVG_ESTRELLA  },
+        'Regional':      { cls: 'badge-regional',      svg: SVG_PIN       }
       };
-      const cls = cfg[alcance] || 'badge-nacional';
-      return `<span class="badge ${cls}">${alcance}</span>`;
+      const c = cfg[alcance] || cfg['Nacional'];
+      return `<span class="badge ${c.cls}" style="display:inline-flex;align-items:center;gap:0.3rem">${c.svg}${alcance}</span>`;
     }
 
     function renderBarraVertical(c) {
@@ -656,10 +676,15 @@
       if (!str) return '';
       try {
         const f = new Date(str), ahora = new Date();
-        const diff = ahora-f, h = Math.floor(diff/3600000), m = Math.floor(diff/60000);
-        if (m<60) return 'Hace '+m+' min';
-        if (h<24) return 'Hace '+h+'h';
-        return 'Hoy';
+        const diff = ahora - f;
+        if (diff < 0) return 'Hoy'; // fecha futura o mal parseada
+        const h = Math.floor(diff/3600000), m = Math.floor(diff/60000);
+        if (m < 60) return 'Hace ' + m + ' min';
+        if (h < 24) return 'Hace ' + h + 'h';
+        const dias = Math.floor(h/24);
+        if (dias === 1) return 'Ayer';
+        if (dias < 7) return 'Hace ' + dias + ' días';
+        return f.toLocaleDateString('es-CL', {day:'numeric', month:'short'});
       } catch(e) { return ''; }
     }
 
