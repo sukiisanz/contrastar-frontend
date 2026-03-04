@@ -45,7 +45,6 @@
       z-index: 100;
       padding: 0 2rem;
     }
-
     .header-inner {
       max-width: 1200px;
       margin: 0 auto;
@@ -54,29 +53,13 @@
       justify-content: space-between;
       height: 64px;
     }
-
-    .logo {
-      display: flex;
-      align-items: baseline;
-      gap: 0.2rem;
-      text-decoration: none;
-    }
-
-    .logo-principal {
-      font-family: var(--fuente-display);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--negro);
-      letter-spacing: -0.02em;
-    }
-
+    .logo { display: flex; align-items: baseline; gap: 0.2rem; text-decoration: none; }
+    .logo-principal { font-family: var(--fuente-display); font-size: 1.5rem; font-weight: 700; color: var(--negro); letter-spacing: -0.02em; }
     .logo-punto { color: var(--acento); font-family: var(--fuente-display); font-size: 1.5rem; font-weight: 700; }
     .logo-cl { font-family: var(--fuente-cuerpo); font-size: 0.75rem; font-weight: 500; color: var(--gris-medio); letter-spacing: 0.05em; text-transform: uppercase; }
-
     nav { display: flex; align-items: center; gap: 2rem; }
     nav a { font-size: 0.85rem; font-weight: 400; color: var(--gris-oscuro); text-decoration: none; letter-spacing: 0.02em; transition: color 0.2s; }
     nav a:hover { color: var(--acento); }
-
     .nav-actualizacion { font-size: 0.75rem; color: var(--gris-medio); display: flex; align-items: center; gap: 0.4rem; }
     .pulso { width: 6px; height: 6px; background: #27ae60; border-radius: 50%; animation: pulso 2s infinite; }
     @keyframes pulso { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
@@ -89,91 +72,33 @@
     .hero-bajada { font-size: 0.9rem; color: var(--gris-medio); max-width: 500px; font-weight: 300; }
 
     /* BUSCADOR */
-    .buscador-contenedor {
-      background: var(--blanco);
-      border-bottom: 1px solid var(--gris-claro);
-      padding: 0.75rem 2rem;
-    }
-
-    .buscador-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      position: relative;
-    }
-
-    .buscador-input {
-      width: 100%;
-      padding: 0.6rem 1rem 0.6rem 2.5rem;
-      border: 1px solid var(--gris-claro);
-      border-radius: 20px;
-      background: var(--crema);
-      font-family: var(--fuente-cuerpo);
-      font-size: 0.85rem;
-      color: var(--negro);
-      outline: none;
-      transition: all 0.2s;
-    }
-
-    .buscador-input:focus {
-      border-color: var(--gris-medio);
-      background: var(--blanco);
-    }
-
+    .buscador-contenedor { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); padding: 0.75rem 2rem; }
+    .buscador-inner { max-width: 1200px; margin: 0 auto; position: relative; }
+    .buscador-input { width: 100%; padding: 0.6rem 1rem 0.6rem 2.5rem; border: 1px solid var(--gris-claro); border-radius: 20px; background: var(--crema); font-family: var(--fuente-cuerpo); font-size: 0.85rem; color: var(--negro); outline: none; transition: all 0.2s; }
+    .buscador-input:focus { border-color: var(--gris-medio); background: var(--blanco); }
     .buscador-input::placeholder { color: var(--gris-medio); }
-
-    .buscador-icono {
-      position: absolute;
-      left: 0.85rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gris-medio);
-      font-size: 0.85rem;
-      pointer-events: none;
-    }
-
-    .buscador-limpiar {
-      position: absolute;
-      right: 0.85rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: var(--gris-medio);
-      cursor: pointer;
-      font-size: 0.85rem;
-      display: none;
-      padding: 0;
-      line-height: 1;
-    }
-
+    .buscador-icono { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--gris-medio); font-size: 0.85rem; pointer-events: none; }
+    .buscador-limpiar { position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--gris-medio); cursor: pointer; font-size: 0.85rem; display: none; padding: 0; line-height: 1; }
     .buscador-limpiar.visible { display: block; }
     .buscador-limpiar:hover { color: var(--negro); }
+    .buscador-resultados { font-size: 0.75rem; color: var(--gris-medio); margin-top: 0.4rem; padding-left: 0.5rem; min-height: 1em; }
+    .buscador-highlight { background: #fff3cd; border-radius: 2px; padding: 0 1px; }
 
-    .buscador-resultados {
-      font-size: 0.75rem;
-      color: var(--gris-medio);
-      margin-top: 0.4rem;
-      padding-left: 0.5rem;
-      min-height: 1em;
-    }
-
-    .buscador-highlight {
-      background: #fff3cd;
-      border-radius: 2px;
-      padding: 0 1px;
-    }
-
+    /* LEYENDA ESPECTRO GRADIENTE */
     .leyenda-sesgo { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); padding: 0.75rem 2rem; }
     .leyenda-sesgo-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 1.5rem; }
     .leyenda-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-medio); white-space: nowrap; }
-    .leyenda-items { display: flex; gap: 1.5rem; }
-    .leyenda-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--gris-oscuro); }
-    .leyenda-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .espectro-barra {
+      flex: 1; height: 8px; border-radius: 4px;
+      background: linear-gradient(to right, #c0392b 0%, #d4826a 30%, #c8b89a 50%, #7a8fc4 70%, #2c3e7a 100%);
+    }
+    .espectro-labels { display: flex; justify-content: space-between; margin-top: 0.3rem; }
+    .espectro-label-item { font-size: 0.62rem; color: var(--gris-medio); }
 
     main { max-width: 1200px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 220px 1fr; gap: 2rem; align-items: start; }
 
     .sidebar { position: sticky; top: 80px; }
-    .sidebar-seccion { margin-bottom: 2rem; }
+    .sidebar-seccion { margin-bottom: 1.75rem; }
     .sidebar-titulo { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gris-medio); margin-bottom: 0.75rem; }
 
     .filtro-btn { display: block; width: 100%; text-align: left; padding: 0.4rem 0.75rem; border: 1px solid transparent; border-radius: var(--radio); background: transparent; font-family: var(--fuente-cuerpo); font-size: 0.85rem; color: var(--gris-oscuro); cursor: pointer; transition: all 0.15s; margin-bottom: 0.25rem; }
@@ -182,6 +107,17 @@
     .contador-badge { float: right; font-size: 0.7rem; color: var(--gris-medio); font-weight: 300; }
     .filtro-btn.activo .contador-badge { color: var(--gris-claro); }
 
+    .filtro-select {
+      display: block; width: 100%; padding: 0.4rem 2rem 0.4rem 0.75rem;
+      border: 1px solid var(--gris-claro); border-radius: var(--radio);
+      background: var(--blanco); font-family: var(--fuente-cuerpo);
+      font-size: 0.82rem; color: var(--gris-oscuro); cursor: pointer;
+      outline: none; margin-bottom: 0.5rem; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238c8880'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 0.75rem center;
+    }
+    .filtro-select:focus { border-color: var(--gris-medio); }
+
     .feed { min-height: 60vh; }
     .feed-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--gris-claro); }
     .feed-titulo { font-family: var(--fuente-display); font-size: 1.3rem; font-weight: 600; color: var(--negro); letter-spacing: -0.02em; }
@@ -189,32 +125,64 @@
 
     .grid-clusters { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-    .cluster-card { background: var(--blanco); border: 1px solid var(--gris-claro); border-radius: var(--radio); padding: 1.25rem; cursor: pointer; transition: all 0.2s ease; box-shadow: var(--sombra); opacity: 0; transform: translateY(8px); animation: aparecer 0.3s ease forwards; }
+    .cluster-card { background: var(--blanco); border: 1px solid var(--gris-claro); border-radius: var(--radio); padding: 1.25rem; cursor: pointer; transition: all 0.2s ease; box-shadow: var(--sombra); opacity: 0; transform: translateY(8px); animation: aparecer 0.3s ease forwards; display: flex; flex-direction: column; }
     @keyframes aparecer { to { opacity: 1; transform: translateY(0); } }
     .cluster-card:hover { box-shadow: var(--sombra-hover); border-color: #d0ccc6; transform: translateY(-1px); }
     .cluster-card.destacada { grid-column: span 2; display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center; }
 
-    .card-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; }
+    .card-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
     .card-fuentes { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gris-medio); }
     .card-separador { color: var(--gris-claro); font-size: 0.7rem; }
     .card-tiempo { font-size: 0.7rem; color: var(--gris-medio); }
-    .card-titular { font-family: var(--fuente-display); font-size: 1rem; font-weight: 600; line-height: 1.3; color: var(--negro); letter-spacing: -0.01em; margin-bottom: 1rem; }
+
+    /* BADGE ALCANCE */
+    .badge-alcance { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 10px; border: 1px solid; }
+    .badge-nacional { color: #5a6e2a; border-color: #c5d99a; background: #f0f5e4; }
+    .badge-internacional { color: #2a4e6e; border-color: #9ab8d9; background: #e4eef5; }
+    .badge-regional { color: #6e4e2a; border-color: #d9c09a; background: #f5ede4; }
+
+    .card-titular { font-family: var(--fuente-display); font-size: 1rem; font-weight: 600; line-height: 1.3; color: var(--negro); letter-spacing: -0.01em; margin-bottom: 1rem; flex: 1; }
     .cluster-card.destacada .card-titular { font-size: 1.25rem; }
 
     .sesgo-contenedor { margin-top: auto; }
-    .sesgo-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-medio); margin-bottom: 0.4rem; }
-    .sesgo-barra { height: 4px; border-radius: 2px; overflow: hidden; display: flex; background: var(--gris-claro); }
-    .sesgo-segmento { height: 100%; transition: width 0.5s ease; }
-    .sesgo-izquierda { background: var(--izquierda); }
-    .sesgo-centro { background: var(--centro); }
-    .sesgo-derecha { background: var(--derecha); }
+    .sesgo-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-medio); margin-bottom: 0.5rem; }
+
+    /* BARRA GRADIENTE */
+    .sesgo-barra-wrap { position: relative; height: 8px; border-radius: 4px; background: var(--gris-claro); overflow: visible; margin-bottom: 4px; }
+    .sesgo-barra-fondo {
+      position: absolute; inset: 0; border-radius: 4px;
+      background: linear-gradient(to right, #c0392b 0%, #d4826a 30%, #c8b89a 50%, #7a8fc4 70%, #2c3e7a 100%);
+      opacity: 0.18;
+    }
+    .sesgo-marcadores { position: absolute; inset: 0; }
+    .sesgo-marcador {
+      position: absolute; width: 10px; height: 10px; border-radius: 50%;
+      top: 50%; transform: translate(-50%, -50%);
+      border: 1.5px solid var(--blanco);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+      transition: transform 0.2s;
+      cursor: default;
+    }
+    .sesgo-marcador:hover { transform: translate(-50%, -50%) scale(1.5); z-index: 2; }
     .sesgo-nums { display: flex; justify-content: space-between; margin-top: 0.35rem; }
     .sesgo-num { font-size: 0.65rem; color: var(--gris-medio); }
     .sesgo-num.izq { color: var(--izquierda); font-weight: 500; }
     .sesgo-num.der { color: var(--derecha); font-weight: 500; }
-    .sesgo-visual-grande { min-width: 160px; }
-    .sesgo-visual-grande .sesgo-barra { height: 80px; flex-direction: column; border-radius: 4px; }
-    .sesgo-visual-grande .sesgo-segmento { width: 100% !important; }
+
+    /* BARRA VERTICAL DESTACADA */
+    .sesgo-visual-grande { min-width: 60px; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+    .sesgo-visual-grande-barra {
+      width: 14px; height: 100px; border-radius: 7px; position: relative;
+      background: linear-gradient(to bottom, #c0392b 0%, #d4826a 25%, #c8b89a 50%, #7a8fc4 75%, #2c3e7a 100%);
+      opacity: 0.3;
+    }
+    .sesgo-visual-grande-marker {
+      position: absolute; left: 50%; transform: translateX(-50%);
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid var(--blanco);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+    .sesgo-visual-grande-score { font-size: 0.7rem; font-weight: 500; color: var(--gris-oscuro); }
 
     .estado-carga { grid-column: span 2; text-align: center; padding: 4rem 2rem; }
     .spinner { width: 32px; height: 32px; border: 2px solid var(--gris-claro); border-top-color: var(--negro); border-radius: 50%; animation: girar 0.8s linear infinite; margin: 0 auto 1rem; }
@@ -235,6 +203,7 @@
       .sidebar-seccion { margin-bottom: 0; }
       .sidebar-titulo { display: none; }
       .filtro-btn { display: inline-block; width: auto; padding: 0.3rem 0.75rem; font-size: 0.8rem; }
+      .filtro-select { width: auto; }
       .grid-clusters { grid-template-columns: 1fr; }
       .cluster-card.destacada { grid-column: span 1; grid-template-columns: 1fr; }
       .sesgo-visual-grande { display: none; }
@@ -244,7 +213,6 @@
     }
   </style>
 </head>
-
 <body>
 
   <header>
@@ -273,18 +241,10 @@
     </div>
   </section>
 
-  <!-- BUSCADOR -->
   <div class="buscador-contenedor">
     <div class="buscador-inner">
       <span class="buscador-icono">🔍</span>
-      <input
-        type="text"
-        class="buscador-input"
-        id="buscador-input"
-        placeholder="Buscar evento, tema o palabra clave..."
-        oninput="buscarClusters(this.value)"
-        autocomplete="off"
-      />
+      <input type="text" class="buscador-input" id="buscador-input" placeholder="Buscar evento, tema o palabra clave..." oninput="buscarClusters(this.value)" autocomplete="off" />
       <button class="buscador-limpiar" id="buscador-limpiar" onclick="limpiarBusqueda()">✕</button>
     </div>
     <div class="buscador-inner">
@@ -294,35 +254,74 @@
 
   <div class="leyenda-sesgo">
     <div class="leyenda-sesgo-inner">
-      <span class="leyenda-label">Sesgo de cobertura</span>
-      <div class="leyenda-items">
-        <div class="leyenda-item"><div class="leyenda-dot" style="background:var(--izquierda)"></div><span>Izquierda</span></div>
-        <div class="leyenda-item"><div class="leyenda-dot" style="background:var(--centro)"></div><span>Centro</span></div>
-        <div class="leyenda-item"><div class="leyenda-dot" style="background:var(--derecha)"></div><span>Derecha</span></div>
+      <span class="leyenda-label">Espectro editorial</span>
+      <div style="flex:1">
+        <div class="espectro-barra"></div>
+        <div class="espectro-labels">
+          <span class="espectro-label-item" style="color:var(--izquierda)">Izquierda</span>
+          <span class="espectro-label-item">Centro-izq.</span>
+          <span class="espectro-label-item">Centro</span>
+          <span class="espectro-label-item">Centro-der.</span>
+          <span class="espectro-label-item" style="color:var(--derecha)">Derecha</span>
+        </div>
       </div>
+      <div style="font-size:0.65rem;color:var(--gris-medio);white-space:nowrap">Escala −2 a +2</div>
     </div>
   </div>
 
   <main>
     <aside class="sidebar">
+
       <div class="sidebar-seccion">
-        <p class="sidebar-titulo">Filtrar por</p>
-        <button class="filtro-btn activo" data-filtro="todos" onclick="filtrarClusters('todos', this)">
+        <p class="sidebar-titulo">Tendencia</p>
+        <button class="filtro-btn activo" onclick="setFiltro('tendencia','todos',this)">
           Todos <span class="contador-badge" id="cnt-todos">—</span>
         </button>
-        <button class="filtro-btn" data-filtro="izquierda" onclick="filtrarClusters('izquierda', this)">
+        <button class="filtro-btn" onclick="setFiltro('tendencia','izquierda',this)">
           Predomina izquierda <span class="contador-badge" id="cnt-izquierda">—</span>
         </button>
-        <button class="filtro-btn" data-filtro="centro" onclick="filtrarClusters('centro', this)">
+        <button class="filtro-btn" onclick="setFiltro('tendencia','centro',this)">
           Predomina centro <span class="contador-badge" id="cnt-centro">—</span>
         </button>
-        <button class="filtro-btn" data-filtro="derecha" onclick="filtrarClusters('derecha', this)">
+        <button class="filtro-btn" onclick="setFiltro('tendencia','derecha',this)">
           Predomina derecha <span class="contador-badge" id="cnt-derecha">—</span>
         </button>
-        <button class="filtro-btn" data-filtro="plural" onclick="filtrarClusters('plural', this)">
+        <button class="filtro-btn" onclick="setFiltro('tendencia','plural',this)">
           Cobertura plural <span class="contador-badge" id="cnt-plural">—</span>
         </button>
       </div>
+
+      <div class="sidebar-seccion">
+        <p class="sidebar-titulo">Alcance</p>
+        <button class="filtro-btn activo" onclick="setFiltro('alcance','todos',this)">Todos</button>
+        <button class="filtro-btn" onclick="setFiltro('alcance','Internacional',this)">🌐 Internacional</button>
+        <button class="filtro-btn" onclick="setFiltro('alcance','Nacional',this)">🇨🇱 Nacional</button>
+        <button class="filtro-btn" onclick="setFiltro('alcance','Regional',this)">📍 Regional</button>
+      </div>
+
+      <div class="sidebar-seccion">
+        <p class="sidebar-titulo">Región</p>
+        <select class="filtro-select" id="select-region" onchange="setFiltroSelect('region', this.value)">
+          <option value="todos">Todas las regiones</option>
+          <option value="Arica y Parinacota">Arica y Parinacota</option>
+          <option value="Tarapacá">Tarapacá</option>
+          <option value="Antofagasta">Antofagasta</option>
+          <option value="Atacama">Atacama</option>
+          <option value="Coquimbo">Coquimbo</option>
+          <option value="Valparaíso">Valparaíso</option>
+          <option value="Metropolitana">Región Metropolitana</option>
+          <option value="O'Higgins">O'Higgins</option>
+          <option value="Maule">Maule</option>
+          <option value="Ñuble">Ñuble</option>
+          <option value="Biobío">Biobío</option>
+          <option value="La Araucanía">La Araucanía</option>
+          <option value="Los Ríos">Los Ríos</option>
+          <option value="Los Lagos">Los Lagos</option>
+          <option value="Aysén">Aysén</option>
+          <option value="Magallanes">Magallanes</option>
+        </select>
+      </div>
+
     </aside>
 
     <section class="feed">
@@ -351,8 +350,37 @@
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=415099479&single=true&output=csv';
 
     let todosClusters = [];
-    let filtroActual = 'todos';
+    let filtros = { tendencia: 'todos', alcance: 'todos', region: 'todos' };
     let busquedaActual = '';
+
+    // =============================================
+    // UMBRALES DE TENDENCIA (escala -2 a +2)
+    // Izquierda:  score < -0.5
+    // Centro:     -0.5 <= score <= +0.5
+    // Derecha:    score > +0.5
+    // =============================================
+    const UMBRAL_IZQ = -0.5;
+    const UMBRAL_DER = +0.5;
+
+    function clasificarScore(score) {
+      if (score < UMBRAL_IZQ) return 'izquierda';
+      if (score > UMBRAL_DER) return 'derecha';
+      return 'centro';
+    }
+
+    // Score -2..+2 → posición 0..100% en la barra
+    function scorePct(score) {
+      return ((score + 2) / 4) * 100;
+    }
+
+    // Color continuo según posición en espectro
+    function colorScore(score) {
+      if (score <= -1.5) return '#c0392b';
+      if (score <= -0.5) return '#d4826a';
+      if (score <=  0.5) return '#b8a98a';
+      if (score <=  1.5) return '#7a8fc4';
+      return '#2c3e7a';
+    }
 
     function cargarDatos() {
       Papa.parse(CSV_URL, {
@@ -361,11 +389,11 @@
         skipEmptyLines: true,
         complete: function(resultado) {
           todosClusters = procesarClusters(resultado.data);
-          aplicarFiltrosYBusqueda();
+          aplicarFiltros();
           actualizarContadores(todosClusters);
           actualizarHora();
         },
-        error: function(error) {
+        error: function() {
           mostrarError('No se pudo cargar el feed. Intenta recargar la página.');
         }
       });
@@ -378,22 +406,35 @@
           let distTendencia = {};
           try { distTendencia = JSON.parse(fila.dist_tendencia || '{}'); } catch(e) {}
 
-          const scores = Object.keys(distTendencia).map(Number);
-          const conteos = Object.values(distTendencia).map(Number);
-          const total = conteos.reduce((a, b) => a + b, 0);
+          const puntos = Object.entries(distTendencia).map(([k, v]) => ({
+            score: parseFloat(k),
+            count: parseInt(v) || 1
+          })).filter(p => !isNaN(p.score));
 
-          let pctIzq = 0, pctCentro = 0, pctDer = 0;
-          scores.forEach((score, i) => {
-            const pct = total > 0 ? (conteos[i] / total) * 100 : 0;
-            if (score < -0.3) pctIzq += pct;
-            else if (score > 0.3) pctDer += pct;
-            else pctCentro += pct;
+          const total = puntos.reduce((a, b) => a + b.count, 0);
+
+          const scoreProm = total > 0
+            ? puntos.reduce((a, b) => a + b.score * b.count, 0) / total
+            : 0;
+
+          let cntIzq = 0, cntCentro = 0, cntDer = 0;
+          puntos.forEach(p => {
+            const cat = clasificarScore(p.score);
+            if (cat === 'izquierda') cntIzq += p.count;
+            else if (cat === 'derecha') cntDer += p.count;
+            else cntCentro += p.count;
           });
 
+          const pctIzq    = total > 0 ? Math.round((cntIzq    / total) * 100) : 0;
+          const pctCentro = total > 0 ? Math.round((cntCentro  / total) * 100) : 0;
+          const pctDer    = total > 0 ? Math.round((cntDer     / total) * 100) : 0;
+
           let tendenciaDominante = 'plural';
-          if (pctIzq > 60) tendenciaDominante = 'izquierda';
-          else if (pctDer > 60) tendenciaDominante = 'derecha';
+          if (pctIzq > 60)         tendenciaDominante = 'izquierda';
+          else if (pctDer > 60)    tendenciaDominante = 'derecha';
           else if (pctCentro > 50) tendenciaDominante = 'centro';
+
+          const alcance = (fila.alcance || 'Nacional').trim();
 
           return {
             id: fila.id_cluster,
@@ -401,50 +442,58 @@
             palabrasClave: fila.palabras_clave || '',
             fechaCreacion: fila.fecha_creacion || '',
             totalNoticias: parseInt(fila.total_noticias) || 1,
-            pctIzq: Math.round(pctIzq),
-            pctCentro: Math.round(pctCentro),
-            pctDer: Math.round(pctDer),
-            tendenciaDominante
+            puntos,
+            scoreProm,
+            pctIzq, pctCentro, pctDer,
+            tendenciaDominante,
+            alcance,
+            region: extraerRegionPrincipal(fila.dist_region || '{}')
           };
         })
         .filter(c => c.totalNoticias >= 2)
         .sort((a, b) => b.totalNoticias - a.totalNoticias);
     }
 
-    // =============================================
-    // BUSCADOR
-    // =============================================
-    function buscarClusters(query) {
-      busquedaActual = query.trim();
-      const btnLimpiar = document.getElementById('buscador-limpiar');
-      btnLimpiar.classList.toggle('visible', busquedaActual.length > 0);
-      aplicarFiltrosYBusqueda();
+    function extraerRegionPrincipal(distRegionStr) {
+      try {
+        const dist = JSON.parse(distRegionStr);
+        const entries = Object.entries(dist).sort((a,b) => b[1]-a[1]);
+        return entries[0]?.[0] || '';
+      } catch(e) { return ''; }
     }
 
-    function limpiarBusqueda() {
-      document.getElementById('buscador-input').value = '';
-      busquedaActual = '';
-      document.getElementById('buscador-limpiar').classList.remove('visible');
-      document.getElementById('buscador-resultados').textContent = '';
-      aplicarFiltrosYBusqueda();
+    // =============================================
+    // FILTROS
+    // =============================================
+    function setFiltro(tipo, valor, boton) {
+      filtros[tipo] = valor;
+      const grupo = boton.closest('.sidebar-seccion');
+      grupo.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
+      boton.classList.add('activo');
+      aplicarFiltros();
     }
 
-    function aplicarFiltrosYBusqueda() {
+    function setFiltroSelect(tipo, valor) {
+      filtros[tipo] = valor;
+      aplicarFiltros();
+    }
+
+    function aplicarFiltros() {
       let resultado = todosClusters;
 
-      // Aplicar filtro de tendencia
-      if (filtroActual !== 'todos') {
-        resultado = resultado.filter(c => c.tendenciaDominante === filtroActual);
-      }
+      if (filtros.tendencia !== 'todos')
+        resultado = resultado.filter(c => c.tendenciaDominante === filtros.tendencia);
+      if (filtros.alcance !== 'todos')
+        resultado = resultado.filter(c => c.alcance === filtros.alcance);
+      if (filtros.region !== 'todos')
+        resultado = resultado.filter(c => c.region === filtros.region);
 
-      // Aplicar búsqueda
       if (busquedaActual.length > 0) {
-        const terminos = busquedaActual.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(/\s+/);
+        const terminos = normalizar(busquedaActual).split(/\s+/);
         resultado = resultado.filter(c => {
-          const texto = (c.titular + ' ' + c.palabrasClave).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          const texto = normalizar(c.titular + ' ' + c.palabrasClave);
           return terminos.every(t => texto.includes(t));
         });
-
         const res = document.getElementById('buscador-resultados');
         res.textContent = resultado.length > 0
           ? resultado.length + ' resultado' + (resultado.length !== 1 ? 's' : '') + ' para "' + busquedaActual + '"'
@@ -456,8 +505,29 @@
       renderizarFeed(resultado);
     }
 
+    function normalizar(str) {
+      return (str || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
     // =============================================
-    // RENDERIZAR FEED
+    // BUSCADOR
+    // =============================================
+    function buscarClusters(query) {
+      busquedaActual = query.trim();
+      document.getElementById('buscador-limpiar').classList.toggle('visible', busquedaActual.length > 0);
+      aplicarFiltros();
+    }
+
+    function limpiarBusqueda() {
+      document.getElementById('buscador-input').value = '';
+      busquedaActual = '';
+      document.getElementById('buscador-limpiar').classList.remove('visible');
+      document.getElementById('buscador-resultados').textContent = '';
+      aplicarFiltros();
+    }
+
+    // =============================================
+    // RENDER
     // =============================================
     function renderizarFeed(clusters) {
       const grid = document.getElementById('grid-clusters');
@@ -469,7 +539,7 @@
         return;
       }
 
-      meta.textContent = clusters.length + ' eventos · últimas 24 horas';
+      meta.textContent = clusters.length + ' eventos · últimas 24h';
 
       grid.innerHTML = clusters.map((cluster, index) => {
         const esDestacada = index === 0 && !busquedaActual;
@@ -477,44 +547,89 @@
         const titularMostrar = busquedaActual
           ? resaltarBusqueda(limpiarTitular(cluster.titular), busquedaActual)
           : limpiarTitular(cluster.titular);
+        const badge = renderizarBadgeAlcance(cluster.alcance);
 
         if (esDestacada) {
           return `
-            <article class="cluster-card destacada" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${cluster.id}'" title="Ver cobertura completa">
-              <div>
+            <article class="cluster-card destacada" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${cluster.id}'">
+              <div style="display:flex;flex-direction:column;height:100%">
                 <div class="card-meta">
                   <span class="card-fuentes">${cluster.totalNoticias} ${cluster.totalNoticias === 1 ? 'fuente' : 'fuentes'}</span>
                   <span class="card-separador">·</span>
                   <span class="card-tiempo">${formatearFecha(cluster.fechaCreacion)}</span>
+                  <span class="card-separador">·</span>
+                  ${badge}
                 </div>
                 <h3 class="card-titular">${titularMostrar}</h3>
                 <div class="sesgo-contenedor">
-                  <p class="sesgo-label">Sesgo de cobertura</p>
-                  ${renderizarBarra(cluster)}
+                  <p class="sesgo-label">Espectro de cobertura</p>
+                  ${renderizarBarraGradiente(cluster)}
                 </div>
               </div>
               <div class="sesgo-visual-grande">
                 ${renderizarBarraVertical(cluster)}
               </div>
-            </article>
-          `;
+            </article>`;
         }
 
         return `
-          <article class="cluster-card" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${cluster.id}'" title="Ver cobertura completa">
+          <article class="cluster-card" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${cluster.id}'">
             <div class="card-meta">
               <span class="card-fuentes">${cluster.totalNoticias} ${cluster.totalNoticias === 1 ? 'fuente' : 'fuentes'}</span>
               <span class="card-separador">·</span>
               <span class="card-tiempo">${formatearFecha(cluster.fechaCreacion)}</span>
+              <span class="card-separador">·</span>
+              ${badge}
             </div>
             <h3 class="card-titular">${titularMostrar}</h3>
             <div class="sesgo-contenedor">
-              <p class="sesgo-label">Sesgo de cobertura</p>
-              ${renderizarBarra(cluster)}
+              <p class="sesgo-label">Espectro de cobertura</p>
+              ${renderizarBarraGradiente(cluster)}
             </div>
-          </article>
-        `;
+          </article>`;
       }).join('');
+    }
+
+    function renderizarBadgeAlcance(alcance) {
+      const config = {
+        'Internacional': { cls: 'badge-internacional', icon: '🌐' },
+        'Nacional':      { cls: 'badge-nacional',      icon: '🇨🇱' },
+        'Regional':      { cls: 'badge-regional',      icon: '📍' }
+      };
+      const c = config[alcance] || config['Nacional'];
+      return `<span class="badge-alcance ${c.cls}">${c.icon} ${alcance}</span>`;
+    }
+
+    function renderizarBarraGradiente(cluster) {
+      const marcadores = cluster.puntos.map(p => {
+        const pct = scorePct(p.score);
+        const color = colorScore(p.score);
+        const cat = clasificarScore(p.score);
+        const label = `${cat} (${p.score > 0 ? '+' : ''}${p.score.toFixed(1)}): ${p.count} medio${p.count !== 1 ? 's' : ''}`;
+        return `<div class="sesgo-marcador" style="left:${pct}%;background:${color}" title="${label}"></div>`;
+      }).join('');
+
+      return `
+        <div class="sesgo-barra-wrap">
+          <div class="sesgo-barra-fondo"></div>
+          <div class="sesgo-marcadores">${marcadores}</div>
+        </div>
+        <div class="sesgo-nums">
+          <span class="sesgo-num izq">${cluster.pctIzq > 0 ? cluster.pctIzq + '% Izq' : ''}</span>
+          <span class="sesgo-num">${cluster.pctCentro > 0 ? cluster.pctCentro + '% Centro' : ''}</span>
+          <span class="sesgo-num der">${cluster.pctDer > 0 ? cluster.pctDer + '% Der' : ''}</span>
+        </div>`;
+    }
+
+    function renderizarBarraVertical(cluster) {
+      const topPct = 100 - scorePct(cluster.scoreProm);
+      const color = colorScore(cluster.scoreProm);
+      const signo = cluster.scoreProm > 0 ? '+' : '';
+      return `
+        <div class="sesgo-visual-grande-barra">
+          <div class="sesgo-visual-grande-marker" style="top:${topPct}%;background:${color}"></div>
+        </div>
+        <span class="sesgo-visual-grande-score">${signo}${cluster.scoreProm.toFixed(1)}</span>`;
     }
 
     function resaltarBusqueda(texto, query) {
@@ -526,40 +641,6 @@
         resultado = resultado.replace(regex, '<mark class="buscador-highlight">$1</mark>');
       });
       return resultado;
-    }
-
-    function renderizarBarra(cluster) {
-      const { pctIzq, pctCentro, pctDer } = cluster;
-      return `
-        <div class="sesgo-barra">
-          <div class="sesgo-segmento sesgo-izquierda" style="width:${pctIzq}%"></div>
-          <div class="sesgo-segmento sesgo-centro" style="width:${pctCentro}%"></div>
-          <div class="sesgo-segmento sesgo-derecha" style="width:${pctDer}%"></div>
-        </div>
-        <div class="sesgo-nums">
-          <span class="sesgo-num izq">${pctIzq > 0 ? pctIzq + '% Izq' : ''}</span>
-          <span class="sesgo-num">${pctCentro > 0 ? pctCentro + '% Centro' : ''}</span>
-          <span class="sesgo-num der">${pctDer > 0 ? pctDer + '% Der' : ''}</span>
-        </div>
-      `;
-    }
-
-    function renderizarBarraVertical(cluster) {
-      const { pctIzq, pctCentro, pctDer } = cluster;
-      return `
-        <div class="sesgo-barra" style="height:90px;flex-direction:column;border-radius:4px;overflow:hidden;">
-          <div class="sesgo-segmento sesgo-izquierda" style="width:100%;height:${pctIzq}%"></div>
-          <div class="sesgo-segmento sesgo-centro" style="width:100%;height:${pctCentro}%"></div>
-          <div class="sesgo-segmento sesgo-derecha" style="width:100%;height:${pctDer}%"></div>
-        </div>
-      `;
-    }
-
-    function filtrarClusters(filtro, boton) {
-      filtroActual = filtro;
-      document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
-      boton.classList.add('activo');
-      aplicarFiltrosYBusqueda();
     }
 
     function actualizarContadores(clusters) {
@@ -607,6 +688,5 @@
     cargarDatos();
     setInterval(cargarDatos, 15 * 60 * 1000);
   </script>
-
 </body>
 </html>
