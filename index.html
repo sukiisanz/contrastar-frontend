@@ -29,30 +29,10 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 16px; scroll-behavior: smooth; }
-    body {
-      font-family: var(--fuente-cuerpo);
-      background-color: var(--crema);
-      color: var(--negro);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
+    body { font-family: var(--fuente-cuerpo); background-color: var(--crema); color: var(--negro); line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
-    header {
-      background: var(--blanco);
-      border-bottom: 1px solid var(--gris-claro);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      padding: 0 2rem;
-    }
-    .header-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-    }
+    header { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); position: sticky; top: 0; z-index: 100; padding: 0 2rem; }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
     .logo { display: flex; align-items: baseline; gap: 0.2rem; text-decoration: none; }
     .logo-principal { font-family: var(--fuente-display); font-size: 1.5rem; font-weight: 700; color: var(--negro); letter-spacing: -0.02em; }
     .logo-punto { color: var(--acento); font-family: var(--fuente-display); font-size: 1.5rem; font-weight: 700; }
@@ -62,60 +42,47 @@
     nav a:hover { color: var(--acento); }
     .nav-actualizacion { font-size: 0.75rem; color: var(--gris-medio); display: flex; align-items: center; gap: 0.4rem; }
     .pulso { width: 6px; height: 6px; background: #27ae60; border-radius: 50%; animation: pulso 2s infinite; }
-    @keyframes pulso { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+    @keyframes pulso { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)} }
 
     .hero { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); padding: 3rem 2rem 2.5rem; }
     .hero-inner { max-width: 1200px; margin: 0 auto; }
     .hero-etiqueta { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--acento); margin-bottom: 0.75rem; }
-    .hero-titulo { font-family: var(--fuente-display); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300; line-height: 1.15; color: var(--negro); letter-spacing: -0.03em; max-width: 700px; margin-bottom: 1rem; }
+    .hero-titulo { font-family: var(--fuente-display); font-size: clamp(2rem,4vw,3.2rem); font-weight: 300; line-height: 1.15; color: var(--negro); letter-spacing: -0.03em; max-width: 700px; margin-bottom: 1rem; }
     .hero-titulo em { font-style: italic; font-weight: 300; color: var(--acento); }
     .hero-bajada { font-size: 0.9rem; color: var(--gris-medio); max-width: 500px; font-weight: 300; }
 
-    /* BUSCADOR */
     .buscador-contenedor { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); padding: 0.75rem 2rem; }
     .buscador-inner { max-width: 1200px; margin: 0 auto; position: relative; }
     .buscador-input { width: 100%; padding: 0.6rem 1rem 0.6rem 2.5rem; border: 1px solid var(--gris-claro); border-radius: 20px; background: var(--crema); font-family: var(--fuente-cuerpo); font-size: 0.85rem; color: var(--negro); outline: none; transition: all 0.2s; }
     .buscador-input:focus { border-color: var(--gris-medio); background: var(--blanco); }
     .buscador-input::placeholder { color: var(--gris-medio); }
     .buscador-icono { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--gris-medio); font-size: 0.85rem; pointer-events: none; }
-    .buscador-limpiar { position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--gris-medio); cursor: pointer; font-size: 0.85rem; display: none; padding: 0; line-height: 1; }
+    .buscador-limpiar { position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--gris-medio); cursor: pointer; font-size: 0.85rem; display: none; padding: 0; }
     .buscador-limpiar.visible { display: block; }
-    .buscador-limpiar:hover { color: var(--negro); }
     .buscador-resultados { font-size: 0.75rem; color: var(--gris-medio); margin-top: 0.4rem; padding-left: 0.5rem; min-height: 1em; }
     .buscador-highlight { background: #fff3cd; border-radius: 2px; padding: 0 1px; }
 
-    /* LEYENDA ESPECTRO GRADIENTE */
+    /* LEYENDA */
     .leyenda-sesgo { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); padding: 0.75rem 2rem; }
     .leyenda-sesgo-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 1.5rem; }
     .leyenda-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-medio); white-space: nowrap; }
-    .espectro-barra {
-      flex: 1; height: 8px; border-radius: 4px;
-      background: linear-gradient(to right, #c0392b 0%, #d4826a 30%, #c8b89a 50%, #7a8fc4 70%, #2c3e7a 100%);
-    }
+    .espectro-wrap { flex: 1; }
+    .espectro-barra { height: 8px; border-radius: 4px; background: linear-gradient(to right, #c0392b 0%, #d4826a 30%, #c8b89a 50%, #7a8fc4 70%, #2c3e7a 100%); }
     .espectro-labels { display: flex; justify-content: space-between; margin-top: 0.3rem; }
     .espectro-label-item { font-size: 0.62rem; color: var(--gris-medio); }
+    .escala-label { font-size: 0.65rem; color: var(--gris-medio); white-space: nowrap; }
 
     main { max-width: 1200px; margin: 0 auto; padding: 2rem; display: grid; grid-template-columns: 220px 1fr; gap: 2rem; align-items: start; }
 
     .sidebar { position: sticky; top: 80px; }
     .sidebar-seccion { margin-bottom: 1.75rem; }
     .sidebar-titulo { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gris-medio); margin-bottom: 0.75rem; }
-
     .filtro-btn { display: block; width: 100%; text-align: left; padding: 0.4rem 0.75rem; border: 1px solid transparent; border-radius: var(--radio); background: transparent; font-family: var(--fuente-cuerpo); font-size: 0.85rem; color: var(--gris-oscuro); cursor: pointer; transition: all 0.15s; margin-bottom: 0.25rem; }
     .filtro-btn:hover { background: var(--gris-claro); color: var(--negro); }
     .filtro-btn.activo { background: var(--negro); color: var(--blanco); border-color: var(--negro); }
     .contador-badge { float: right; font-size: 0.7rem; color: var(--gris-medio); font-weight: 300; }
     .filtro-btn.activo .contador-badge { color: var(--gris-claro); }
-
-    .filtro-select {
-      display: block; width: 100%; padding: 0.4rem 2rem 0.4rem 0.75rem;
-      border: 1px solid var(--gris-claro); border-radius: var(--radio);
-      background: var(--blanco); font-family: var(--fuente-cuerpo);
-      font-size: 0.82rem; color: var(--gris-oscuro); cursor: pointer;
-      outline: none; margin-bottom: 0.5rem; appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238c8880'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 0.75rem center;
-    }
+    .filtro-select { display: block; width: 100%; padding: 0.4rem 2rem 0.4rem 0.75rem; border: 1px solid var(--gris-claro); border-radius: var(--radio); background: var(--blanco); font-family: var(--fuente-cuerpo); font-size: 0.82rem; color: var(--gris-oscuro); cursor: pointer; outline: none; margin-bottom: 0.5rem; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238c8880'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; }
     .filtro-select:focus { border-color: var(--gris-medio); }
 
     .feed { min-height: 60vh; }
@@ -126,7 +93,7 @@
     .grid-clusters { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
     .cluster-card { background: var(--blanco); border: 1px solid var(--gris-claro); border-radius: var(--radio); padding: 1.25rem; cursor: pointer; transition: all 0.2s ease; box-shadow: var(--sombra); opacity: 0; transform: translateY(8px); animation: aparecer 0.3s ease forwards; display: flex; flex-direction: column; }
-    @keyframes aparecer { to { opacity: 1; transform: translateY(0); } }
+    @keyframes aparecer { to { opacity:1; transform:translateY(0); } }
     .cluster-card:hover { box-shadow: var(--sombra-hover); border-color: #d0ccc6; transform: translateY(-1px); }
     .cluster-card.destacada { grid-column: span 2; display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center; }
 
@@ -135,11 +102,12 @@
     .card-separador { color: var(--gris-claro); font-size: 0.7rem; }
     .card-tiempo { font-size: 0.7rem; color: var(--gris-medio); }
 
-    /* BADGE ALCANCE */
-    .badge-alcance { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 10px; border: 1px solid; }
-    .badge-nacional { color: #5a6e2a; border-color: #c5d99a; background: #f0f5e4; }
+    /* BADGES SIN EMOJI */
+    .badge { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.15rem 0.55rem; border-radius: 10px; border: 1px solid; }
+    .badge-nacional      { color: #5a6e2a; border-color: #c5d99a; background: #f0f5e4; }
     .badge-internacional { color: #2a4e6e; border-color: #9ab8d9; background: #e4eef5; }
-    .badge-regional { color: #6e4e2a; border-color: #d9c09a; background: #f5ede4; }
+    .badge-regional      { color: #6e4e2a; border-color: #d9c09a; background: #f5ede4; }
+    .badge-categoria     { color: var(--gris-oscuro); border-color: var(--gris-claro); background: var(--crema); }
 
     .card-titular { font-family: var(--fuente-display); font-size: 1rem; font-weight: 600; line-height: 1.3; color: var(--negro); letter-spacing: -0.01em; margin-bottom: 1rem; flex: 1; }
     .cluster-card.destacada .card-titular { font-size: 1.25rem; }
@@ -147,45 +115,22 @@
     .sesgo-contenedor { margin-top: auto; }
     .sesgo-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-medio); margin-bottom: 0.5rem; }
 
-    /* BARRA GRADIENTE */
-    .sesgo-barra-wrap { position: relative; height: 8px; border-radius: 4px; background: var(--gris-claro); overflow: visible; margin-bottom: 4px; }
-    .sesgo-barra-fondo {
-      position: absolute; inset: 0; border-radius: 4px;
-      background: linear-gradient(to right, #c0392b 0%, #d4826a 30%, #c8b89a 50%, #7a8fc4 70%, #2c3e7a 100%);
-      opacity: 0.18;
-    }
-    .sesgo-marcadores { position: absolute; inset: 0; }
-    .sesgo-marcador {
-      position: absolute; width: 10px; height: 10px; border-radius: 50%;
-      top: 50%; transform: translate(-50%, -50%);
-      border: 1.5px solid var(--blanco);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-      transition: transform 0.2s;
-      cursor: default;
-    }
-    .sesgo-marcador:hover { transform: translate(-50%, -50%) scale(1.5); z-index: 2; }
-    .sesgo-nums { display: flex; justify-content: space-between; margin-top: 0.35rem; }
+    /* BARRA DENSIDAD */
+    .densidad-wrap { position: relative; height: 10px; border-radius: 5px; overflow: hidden; background: var(--gris-claro); }
+    .densidad-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .sesgo-nums { display: flex; justify-content: space-between; margin-top: 0.4rem; }
     .sesgo-num { font-size: 0.65rem; color: var(--gris-medio); }
     .sesgo-num.izq { color: var(--izquierda); font-weight: 500; }
     .sesgo-num.der { color: var(--derecha); font-weight: 500; }
 
     /* BARRA VERTICAL DESTACADA */
-    .sesgo-visual-grande { min-width: 60px; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
-    .sesgo-visual-grande-barra {
-      width: 14px; height: 100px; border-radius: 7px; position: relative;
-      background: linear-gradient(to bottom, #c0392b 0%, #d4826a 25%, #c8b89a 50%, #7a8fc4 75%, #2c3e7a 100%);
-      opacity: 0.3;
-    }
-    .sesgo-visual-grande-marker {
-      position: absolute; left: 50%; transform: translateX(-50%);
-      width: 14px; height: 14px; border-radius: 50%;
-      border: 2px solid var(--blanco);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-    }
+    .sesgo-visual-grande { min-width: 56px; display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+    .sesgo-visual-grande-barra { width: 14px; height: 100px; border-radius: 7px; position: relative; background: linear-gradient(to bottom, #c0392b 0%, #d4826a 25%, #c8b89a 50%, #7a8fc4 75%, #2c3e7a 100%); opacity: 0.35; }
+    .sesgo-visual-grande-marker { position: absolute; left: 50%; transform: translateX(-50%); width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--blanco); box-shadow: 0 1px 4px rgba(0,0,0,.3); }
     .sesgo-visual-grande-score { font-size: 0.7rem; font-weight: 500; color: var(--gris-oscuro); }
 
     .estado-carga { grid-column: span 2; text-align: center; padding: 4rem 2rem; }
-    .spinner { width: 32px; height: 32px; border: 2px solid var(--gris-claro); border-top-color: var(--negro); border-radius: 50%; animation: girar 0.8s linear infinite; margin: 0 auto 1rem; }
+    .spinner { width: 32px; height: 32px; border: 2px solid var(--gris-claro); border-top-color: var(--negro); border-radius: 50%; animation: girar .8s linear infinite; margin: 0 auto 1rem; }
     @keyframes girar { to { transform: rotate(360deg); } }
     .estado-texto { font-size: 0.85rem; color: var(--gris-medio); }
     .estado-error { font-size: 0.85rem; color: var(--izquierda); }
@@ -255,7 +200,7 @@
   <div class="leyenda-sesgo">
     <div class="leyenda-sesgo-inner">
       <span class="leyenda-label">Espectro editorial</span>
-      <div style="flex:1">
+      <div class="espectro-wrap">
         <div class="espectro-barra"></div>
         <div class="espectro-labels">
           <span class="espectro-label-item" style="color:var(--izquierda)">Izquierda</span>
@@ -265,7 +210,7 @@
           <span class="espectro-label-item" style="color:var(--derecha)">Derecha</span>
         </div>
       </div>
-      <div style="font-size:0.65rem;color:var(--gris-medio);white-space:nowrap">Escala −2 a +2</div>
+      <span class="escala-label">Escala −2 a +2</span>
     </div>
   </div>
 
@@ -274,29 +219,36 @@
 
       <div class="sidebar-seccion">
         <p class="sidebar-titulo">Tendencia</p>
-        <button class="filtro-btn activo" onclick="setFiltro('tendencia','todos',this)">
-          Todos <span class="contador-badge" id="cnt-todos">—</span>
-        </button>
-        <button class="filtro-btn" onclick="setFiltro('tendencia','izquierda',this)">
-          Predomina izquierda <span class="contador-badge" id="cnt-izquierda">—</span>
-        </button>
-        <button class="filtro-btn" onclick="setFiltro('tendencia','centro',this)">
-          Predomina centro <span class="contador-badge" id="cnt-centro">—</span>
-        </button>
-        <button class="filtro-btn" onclick="setFiltro('tendencia','derecha',this)">
-          Predomina derecha <span class="contador-badge" id="cnt-derecha">—</span>
-        </button>
-        <button class="filtro-btn" onclick="setFiltro('tendencia','plural',this)">
-          Cobertura plural <span class="contador-badge" id="cnt-plural">—</span>
-        </button>
+        <button class="filtro-btn activo" onclick="setFiltro('tendencia','todos',this)">Todos <span class="contador-badge" id="cnt-todos">—</span></button>
+        <button class="filtro-btn" onclick="setFiltro('tendencia','izquierda',this)">Predomina izquierda <span class="contador-badge" id="cnt-izquierda">—</span></button>
+        <button class="filtro-btn" onclick="setFiltro('tendencia','centro',this)">Predomina centro <span class="contador-badge" id="cnt-centro">—</span></button>
+        <button class="filtro-btn" onclick="setFiltro('tendencia','derecha',this)">Predomina derecha <span class="contador-badge" id="cnt-derecha">—</span></button>
+        <button class="filtro-btn" onclick="setFiltro('tendencia','plural',this)">Cobertura plural <span class="contador-badge" id="cnt-plural">—</span></button>
       </div>
 
       <div class="sidebar-seccion">
         <p class="sidebar-titulo">Alcance</p>
         <button class="filtro-btn activo" onclick="setFiltro('alcance','todos',this)">Todos</button>
-        <button class="filtro-btn" onclick="setFiltro('alcance','Internacional',this)">🌐 Internacional</button>
-        <button class="filtro-btn" onclick="setFiltro('alcance','Nacional',this)">🇨🇱 Nacional</button>
-        <button class="filtro-btn" onclick="setFiltro('alcance','Regional',this)">📍 Regional</button>
+        <button class="filtro-btn" onclick="setFiltro('alcance','Internacional',this)">Internacional</button>
+        <button class="filtro-btn" onclick="setFiltro('alcance','Nacional',this)">Nacional</button>
+        <button class="filtro-btn" onclick="setFiltro('alcance','Regional',this)">Regional</button>
+      </div>
+
+      <div class="sidebar-seccion">
+        <p class="sidebar-titulo">Temática</p>
+        <select class="filtro-select" id="select-categoria" onchange="setFiltroSelect('categoria', this.value)">
+          <option value="todos">Todas las temáticas</option>
+          <option value="Política">Política</option>
+          <option value="Economía">Economía</option>
+          <option value="Seguridad">Seguridad</option>
+          <option value="Internacional">Internacional</option>
+          <option value="Deportes">Deportes</option>
+          <option value="Sociedad">Sociedad</option>
+          <option value="Medio Ambiente">Medio Ambiente</option>
+          <option value="Justicia">Justicia</option>
+          <option value="Tecnología">Tecnología</option>
+          <option value="Cultura">Cultura</option>
+        </select>
       </div>
 
       <div class="sidebar-seccion">
@@ -350,52 +302,95 @@
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=415099479&single=true&output=csv';
 
     let todosClusters = [];
-    let filtros = { tendencia: 'todos', alcance: 'todos', region: 'todos' };
+    let filtros = { tendencia: 'todos', alcance: 'todos', categoria: 'todos', region: 'todos' };
     let busquedaActual = '';
 
-    // =============================================
-    // UMBRALES DE TENDENCIA (escala -2 a +2)
-    // Izquierda:  score < -0.5
-    // Centro:     -0.5 <= score <= +0.5
-    // Derecha:    score > +0.5
-    // =============================================
+    // Umbrales escala -2 a +2
     const UMBRAL_IZQ = -0.5;
     const UMBRAL_DER = +0.5;
 
-    function clasificarScore(score) {
-      if (score < UMBRAL_IZQ) return 'izquierda';
-      if (score > UMBRAL_DER) return 'derecha';
+    function clasificarScore(s) {
+      if (s < UMBRAL_IZQ) return 'izquierda';
+      if (s > UMBRAL_DER) return 'derecha';
       return 'centro';
     }
 
-    // Score -2..+2 → posición 0..100% en la barra
-    function scorePct(score) {
-      return ((score + 2) / 4) * 100;
+    function scorePct(s) { return ((s + 2) / 4) * 100; }
+
+    function colorScore(s) {
+      if (s <= -1.5) return '#c0392b';
+      if (s <= -0.5) return '#d4826a';
+      if (s <=  0.5) return '#b8a98a';
+      if (s <=  1.5) return '#7a8fc4';
+      return '#2c3e7a';
     }
 
-    // Color continuo según posición en espectro
-    function colorScore(score) {
-      if (score <= -1.5) return '#c0392b';
-      if (score <= -0.5) return '#d4826a';
-      if (score <=  0.5) return '#b8a98a';
-      if (score <=  1.5) return '#7a8fc4';
-      return '#2c3e7a';
+    // =============================================
+    // BARRA DE DENSIDAD — renderiza con canvas 2d
+    // Cada medio contribuye una gaussiana suave en su posición del espectro.
+    // El resultado es una barra que se ilumina donde hay más concentración.
+    // =============================================
+    function renderizarDensidad(puntos, canvasEl) {
+      const W = canvasEl.offsetWidth || 300;
+      const H = canvasEl.offsetHeight || 10;
+      canvasEl.width = W;
+      canvasEl.height = H;
+      const ctx = canvasEl.getContext('2d');
+      ctx.clearRect(0, 0, W, H);
+
+      const total = puntos.reduce((a, b) => a + b.count, 0);
+      if (total === 0) return;
+
+      // Construir array de densidad normalizada
+      const bins = new Float32Array(W);
+      const sigma = W * 0.06; // ancho de cada gaussiana
+
+      puntos.forEach(p => {
+        const cx = (scorePct(p.score) / 100) * W;
+        const weight = p.count / total;
+        for (let x = 0; x < W; x++) {
+          const d = x - cx;
+          bins[x] += weight * Math.exp(-(d * d) / (2 * sigma * sigma));
+        }
+      });
+
+      // Normalizar al máximo
+      const maxVal = Math.max(...bins);
+      if (maxVal === 0) return;
+
+      // Dibujar píxel a píxel con color del espectro + opacidad según densidad
+      const imgData = ctx.createImageData(W, H);
+      for (let x = 0; x < W; x++) {
+        const t = x / (W - 1); // 0 = izq, 1 = der
+        // Color del espectro en esta posición
+        const score = t * 4 - 2; // mapear 0..1 a -2..+2
+        const hex = colorScore(score);
+        const r = parseInt(hex.slice(1,3),16);
+        const g = parseInt(hex.slice(3,5),16);
+        const b = parseInt(hex.slice(5,7),16);
+        const alpha = Math.min(1, (bins[x] / maxVal) * 1.8); // intensidad
+        const a = Math.round(alpha * 255);
+        for (let y = 0; y < H; y++) {
+          const idx = (y * W + x) * 4;
+          imgData.data[idx]   = r;
+          imgData.data[idx+1] = g;
+          imgData.data[idx+2] = b;
+          imgData.data[idx+3] = a;
+        }
+      }
+      ctx.putImageData(imgData, 0, 0);
     }
 
     function cargarDatos() {
       Papa.parse(CSV_URL, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: function(resultado) {
-          todosClusters = procesarClusters(resultado.data);
+        download: true, header: true, skipEmptyLines: true,
+        complete: function(res) {
+          todosClusters = procesarClusters(res.data);
           aplicarFiltros();
           actualizarContadores(todosClusters);
           actualizarHora();
         },
-        error: function() {
-          mostrarError('No se pudo cargar el feed. Intenta recargar la página.');
-        }
+        error: function() { mostrarError('No se pudo cargar el feed. Intenta recargar la página.'); }
       });
     }
 
@@ -406,35 +401,29 @@
           let distTendencia = {};
           try { distTendencia = JSON.parse(fila.dist_tendencia || '{}'); } catch(e) {}
 
-          const puntos = Object.entries(distTendencia).map(([k, v]) => ({
-            score: parseFloat(k),
-            count: parseInt(v) || 1
-          })).filter(p => !isNaN(p.score));
+          const puntos = Object.entries(distTendencia)
+            .map(([k,v]) => ({ score: parseFloat(k), count: parseInt(v)||1 }))
+            .filter(p => !isNaN(p.score));
 
-          const total = puntos.reduce((a, b) => a + b.count, 0);
+          const total = puntos.reduce((a,b) => a+b.count, 0);
+          const scoreProm = total > 0 ? puntos.reduce((a,b) => a+b.score*b.count, 0)/total : 0;
 
-          const scoreProm = total > 0
-            ? puntos.reduce((a, b) => a + b.score * b.count, 0) / total
-            : 0;
-
-          let cntIzq = 0, cntCentro = 0, cntDer = 0;
+          let cntIzq=0, cntCentro=0, cntDer=0;
           puntos.forEach(p => {
-            const cat = clasificarScore(p.score);
-            if (cat === 'izquierda') cntIzq += p.count;
-            else if (cat === 'derecha') cntDer += p.count;
-            else cntCentro += p.count;
+            const c = clasificarScore(p.score);
+            if (c==='izquierda') cntIzq+=p.count;
+            else if (c==='derecha') cntDer+=p.count;
+            else cntCentro+=p.count;
           });
 
-          const pctIzq    = total > 0 ? Math.round((cntIzq    / total) * 100) : 0;
-          const pctCentro = total > 0 ? Math.round((cntCentro  / total) * 100) : 0;
-          const pctDer    = total > 0 ? Math.round((cntDer     / total) * 100) : 0;
+          const pctIzq    = total>0 ? Math.round(cntIzq/total*100)    : 0;
+          const pctCentro = total>0 ? Math.round(cntCentro/total*100)  : 0;
+          const pctDer    = total>0 ? Math.round(cntDer/total*100)     : 0;
 
           let tendenciaDominante = 'plural';
-          if (pctIzq > 60)         tendenciaDominante = 'izquierda';
-          else if (pctDer > 60)    tendenciaDominante = 'derecha';
+          if      (pctIzq    > 60) tendenciaDominante = 'izquierda';
+          else if (pctDer    > 60) tendenciaDominante = 'derecha';
           else if (pctCentro > 50) tendenciaDominante = 'centro';
-
-          const alcance = (fila.alcance || 'Nacional').trim();
 
           return {
             id: fila.id_cluster,
@@ -442,33 +431,25 @@
             palabrasClave: fila.palabras_clave || '',
             fechaCreacion: fila.fecha_creacion || '',
             totalNoticias: parseInt(fila.total_noticias) || 1,
-            puntos,
-            scoreProm,
-            pctIzq, pctCentro, pctDer,
+            puntos, scoreProm, pctIzq, pctCentro, pctDer,
             tendenciaDominante,
-            alcance,
+            alcance: (fila.alcance || 'Nacional').trim(),
+            categoria: (fila.categoria || '').trim(),
             region: extraerRegionPrincipal(fila.dist_region || '{}')
           };
         })
         .filter(c => c.totalNoticias >= 2)
-        .sort((a, b) => b.totalNoticias - a.totalNoticias);
+        .sort((a,b) => b.totalNoticias - a.totalNoticias);
     }
 
-    function extraerRegionPrincipal(distRegionStr) {
-      try {
-        const dist = JSON.parse(distRegionStr);
-        const entries = Object.entries(dist).sort((a,b) => b[1]-a[1]);
-        return entries[0]?.[0] || '';
-      } catch(e) { return ''; }
+    function extraerRegionPrincipal(str) {
+      try { return Object.entries(JSON.parse(str)).sort((a,b)=>b[1]-a[1])[0]?.[0]||''; }
+      catch(e) { return ''; }
     }
 
-    // =============================================
-    // FILTROS
-    // =============================================
     function setFiltro(tipo, valor, boton) {
       filtros[tipo] = valor;
-      const grupo = boton.closest('.sidebar-seccion');
-      grupo.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
+      boton.closest('.sidebar-seccion').querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('activo'));
       boton.classList.add('activo');
       aplicarFiltros();
     }
@@ -479,42 +460,36 @@
     }
 
     function aplicarFiltros() {
-      let resultado = todosClusters;
-
-      if (filtros.tendencia !== 'todos')
-        resultado = resultado.filter(c => c.tendenciaDominante === filtros.tendencia);
-      if (filtros.alcance !== 'todos')
-        resultado = resultado.filter(c => c.alcance === filtros.alcance);
-      if (filtros.region !== 'todos')
-        resultado = resultado.filter(c => c.region === filtros.region);
+      let r = todosClusters;
+      if (filtros.tendencia  !== 'todos') r = r.filter(c => c.tendenciaDominante === filtros.tendencia);
+      if (filtros.alcance    !== 'todos') r = r.filter(c => c.alcance            === filtros.alcance);
+      if (filtros.categoria  !== 'todos') r = r.filter(c => c.categoria          === filtros.categoria);
+      if (filtros.region     !== 'todos') r = r.filter(c => c.region             === filtros.region);
 
       if (busquedaActual.length > 0) {
         const terminos = normalizar(busquedaActual).split(/\s+/);
-        resultado = resultado.filter(c => {
-          const texto = normalizar(c.titular + ' ' + c.palabrasClave);
-          return terminos.every(t => texto.includes(t));
+        r = r.filter(c => {
+          const txt = normalizar(c.titular+' '+c.palabrasClave);
+          return terminos.every(t => txt.includes(t));
         });
-        const res = document.getElementById('buscador-resultados');
-        res.textContent = resultado.length > 0
-          ? resultado.length + ' resultado' + (resultado.length !== 1 ? 's' : '') + ' para "' + busquedaActual + '"'
-          : 'Sin resultados para "' + busquedaActual + '"';
+        document.getElementById('buscador-resultados').textContent =
+          r.length > 0
+            ? r.length+' resultado'+(r.length!==1?'s':'')+' para "'+busquedaActual+'"'
+            : 'Sin resultados para "'+busquedaActual+'"';
       } else {
         document.getElementById('buscador-resultados').textContent = '';
       }
 
-      renderizarFeed(resultado);
+      renderizarFeed(r);
     }
 
-    function normalizar(str) {
-      return (str || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    function normalizar(s) {
+      return (s||'').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
     }
 
-    // =============================================
-    // BUSCADOR
-    // =============================================
-    function buscarClusters(query) {
-      busquedaActual = query.trim();
-      document.getElementById('buscador-limpiar').classList.toggle('visible', busquedaActual.length > 0);
+    function buscarClusters(q) {
+      busquedaActual = q.trim();
+      document.getElementById('buscador-limpiar').classList.toggle('visible', busquedaActual.length>0);
       aplicarFiltros();
     }
 
@@ -526,9 +501,6 @@
       aplicarFiltros();
     }
 
-    // =============================================
-    // RENDER
-    // =============================================
     function renderizarFeed(clusters) {
       const grid = document.getElementById('grid-clusters');
       const meta = document.getElementById('feed-meta');
@@ -539,154 +511,145 @@
         return;
       }
 
-      meta.textContent = clusters.length + ' eventos · últimas 24h';
+      meta.textContent = clusters.length+' eventos · últimas 24h';
 
-      grid.innerHTML = clusters.map((cluster, index) => {
-        const esDestacada = index === 0 && !busquedaActual;
-        const delay = Math.min(index * 40, 400);
-        const titularMostrar = busquedaActual
-          ? resaltarBusqueda(limpiarTitular(cluster.titular), busquedaActual)
-          : limpiarTitular(cluster.titular);
-        const badge = renderizarBadgeAlcance(cluster.alcance);
+      grid.innerHTML = clusters.map((c, i) => {
+        const esDestacada = i===0 && !busquedaActual;
+        const delay = Math.min(i*40, 400);
+        const titular = busquedaActual
+          ? resaltarBusqueda(limpiarTitular(c.titular), busquedaActual)
+          : limpiarTitular(c.titular);
+        const badgeAlcance = renderBadgeAlcance(c.alcance);
+        const badgeCat = c.categoria ? `<span class="badge badge-categoria">${c.categoria}</span>` : '';
 
         if (esDestacada) {
           return `
-            <article class="cluster-card destacada" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${cluster.id}'">
+            <article class="cluster-card destacada" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${c.id}'">
               <div style="display:flex;flex-direction:column;height:100%">
                 <div class="card-meta">
-                  <span class="card-fuentes">${cluster.totalNoticias} ${cluster.totalNoticias === 1 ? 'fuente' : 'fuentes'}</span>
+                  <span class="card-fuentes">${c.totalNoticias} ${c.totalNoticias===1?'fuente':'fuentes'}</span>
                   <span class="card-separador">·</span>
-                  <span class="card-tiempo">${formatearFecha(cluster.fechaCreacion)}</span>
+                  <span class="card-tiempo">${formatearFecha(c.fechaCreacion)}</span>
                   <span class="card-separador">·</span>
-                  ${badge}
+                  ${badgeAlcance}
+                  ${badgeCat}
                 </div>
-                <h3 class="card-titular">${titularMostrar}</h3>
+                <h3 class="card-titular">${titular}</h3>
                 <div class="sesgo-contenedor">
                   <p class="sesgo-label">Espectro de cobertura</p>
-                  ${renderizarBarraGradiente(cluster)}
+                  <div class="densidad-wrap"><canvas class="densidad-canvas" data-id="${c.id}"></canvas></div>
+                  <div class="sesgo-nums">
+                    <span class="sesgo-num izq">${c.pctIzq>0?c.pctIzq+'% Izq':''}</span>
+                    <span class="sesgo-num">${c.pctCentro>0?c.pctCentro+'% Centro':''}</span>
+                    <span class="sesgo-num der">${c.pctDer>0?c.pctDer+'% Der':''}</span>
+                  </div>
                 </div>
               </div>
-              <div class="sesgo-visual-grande">
-                ${renderizarBarraVertical(cluster)}
-              </div>
+              <div class="sesgo-visual-grande">${renderBarraVertical(c)}</div>
             </article>`;
         }
 
         return `
-          <article class="cluster-card" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${cluster.id}'">
+          <article class="cluster-card" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${c.id}'">
             <div class="card-meta">
-              <span class="card-fuentes">${cluster.totalNoticias} ${cluster.totalNoticias === 1 ? 'fuente' : 'fuentes'}</span>
+              <span class="card-fuentes">${c.totalNoticias} ${c.totalNoticias===1?'fuente':'fuentes'}</span>
               <span class="card-separador">·</span>
-              <span class="card-tiempo">${formatearFecha(cluster.fechaCreacion)}</span>
+              <span class="card-tiempo">${formatearFecha(c.fechaCreacion)}</span>
               <span class="card-separador">·</span>
-              ${badge}
+              ${badgeAlcance}
+              ${badgeCat}
             </div>
-            <h3 class="card-titular">${titularMostrar}</h3>
+            <h3 class="card-titular">${titular}</h3>
             <div class="sesgo-contenedor">
               <p class="sesgo-label">Espectro de cobertura</p>
-              ${renderizarBarraGradiente(cluster)}
+              <div class="densidad-wrap"><canvas class="densidad-canvas" data-id="${c.id}"></canvas></div>
+              <div class="sesgo-nums">
+                <span class="sesgo-num izq">${c.pctIzq>0?c.pctIzq+'% Izq':''}</span>
+                <span class="sesgo-num">${c.pctCentro>0?c.pctCentro+'% Centro':''}</span>
+                <span class="sesgo-num der">${c.pctDer>0?c.pctDer+'% Der':''}</span>
+              </div>
             </div>
           </article>`;
       }).join('');
+
+      // Renderizar canvas de densidad tras insertar en DOM
+      requestAnimationFrame(() => {
+        const mapaCluster = {};
+        clusters.forEach(c => mapaCluster[c.id] = c);
+        document.querySelectorAll('.densidad-canvas').forEach(canvas => {
+          const cluster = mapaCluster[canvas.dataset.id];
+          if (cluster) renderizarDensidad(cluster.puntos, canvas);
+        });
+      });
     }
 
-    function renderizarBadgeAlcance(alcance) {
-      const config = {
-        'Internacional': { cls: 'badge-internacional', icon: '🌐' },
-        'Nacional':      { cls: 'badge-nacional',      icon: '🇨🇱' },
-        'Regional':      { cls: 'badge-regional',      icon: '📍' }
+    function renderBadgeAlcance(alcance) {
+      const cfg = {
+        'Internacional': 'badge-internacional',
+        'Nacional':      'badge-nacional',
+        'Regional':      'badge-regional'
       };
-      const c = config[alcance] || config['Nacional'];
-      return `<span class="badge-alcance ${c.cls}">${c.icon} ${alcance}</span>`;
+      const cls = cfg[alcance] || 'badge-nacional';
+      return `<span class="badge ${cls}">${alcance}</span>`;
     }
 
-    function renderizarBarraGradiente(cluster) {
-      const marcadores = cluster.puntos.map(p => {
-        const pct = scorePct(p.score);
-        const color = colorScore(p.score);
-        const cat = clasificarScore(p.score);
-        const label = `${cat} (${p.score > 0 ? '+' : ''}${p.score.toFixed(1)}): ${p.count} medio${p.count !== 1 ? 's' : ''}`;
-        return `<div class="sesgo-marcador" style="left:${pct}%;background:${color}" title="${label}"></div>`;
-      }).join('');
-
-      return `
-        <div class="sesgo-barra-wrap">
-          <div class="sesgo-barra-fondo"></div>
-          <div class="sesgo-marcadores">${marcadores}</div>
-        </div>
-        <div class="sesgo-nums">
-          <span class="sesgo-num izq">${cluster.pctIzq > 0 ? cluster.pctIzq + '% Izq' : ''}</span>
-          <span class="sesgo-num">${cluster.pctCentro > 0 ? cluster.pctCentro + '% Centro' : ''}</span>
-          <span class="sesgo-num der">${cluster.pctDer > 0 ? cluster.pctDer + '% Der' : ''}</span>
-        </div>`;
-    }
-
-    function renderizarBarraVertical(cluster) {
-      const topPct = 100 - scorePct(cluster.scoreProm);
-      const color = colorScore(cluster.scoreProm);
-      const signo = cluster.scoreProm > 0 ? '+' : '';
+    function renderBarraVertical(c) {
+      const topPct = 100 - scorePct(c.scoreProm);
+      const color = colorScore(c.scoreProm);
+      const signo = c.scoreProm > 0 ? '+' : '';
       return `
         <div class="sesgo-visual-grande-barra">
           <div class="sesgo-visual-grande-marker" style="top:${topPct}%;background:${color}"></div>
         </div>
-        <span class="sesgo-visual-grande-score">${signo}${cluster.scoreProm.toFixed(1)}</span>`;
+        <span class="sesgo-visual-grande-score">${signo}${c.scoreProm.toFixed(1)}</span>`;
     }
 
     function resaltarBusqueda(texto, query) {
-      if (!query) return texto;
-      const terminos = query.split(/\s+/).filter(t => t.length > 2);
-      let resultado = texto;
+      const terminos = query.split(/\s+/).filter(t=>t.length>2);
+      let r = texto;
       terminos.forEach(t => {
-        const regex = new RegExp('(' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
-        resultado = resultado.replace(regex, '<mark class="buscador-highlight">$1</mark>');
+        r = r.replace(new RegExp('('+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'), '<mark class="buscador-highlight">$1</mark>');
       });
-      return resultado;
+      return r;
     }
 
     function actualizarContadores(clusters) {
-      const conteos = { todos: clusters.length, izquierda: 0, centro: 0, derecha: 0, plural: 0 };
-      clusters.forEach(c => { if (conteos[c.tendenciaDominante] !== undefined) conteos[c.tendenciaDominante]++; });
-      Object.entries(conteos).forEach(([key, val]) => {
-        const el = document.getElementById('cnt-' + key);
-        if (el) el.textContent = val;
-      });
+      const c = { todos: clusters.length, izquierda:0, centro:0, derecha:0, plural:0 };
+      clusters.forEach(cl => { if (c[cl.tendenciaDominante]!==undefined) c[cl.tendenciaDominante]++; });
+      Object.entries(c).forEach(([k,v]) => { const el=document.getElementById('cnt-'+k); if(el) el.textContent=v; });
     }
 
-    function limpiarTitular(titular) {
-      if (!titular) return 'Sin titular';
-      const limpio = titular.replace(/\s[-–|]\s.{3,40}$/i, '').trim();
-      const capitalizado = limpio.charAt(0).toUpperCase() + limpio.slice(1);
-      return capitalizado.length > 120 ? capitalizado.substring(0, 120) + '…' : capitalizado;
+    function limpiarTitular(t) {
+      if (!t) return 'Sin titular';
+      const l = t.replace(/\s[-–|]\s.{3,40}$/i,'').trim();
+      const cap = l.charAt(0).toUpperCase()+l.slice(1);
+      return cap.length>120 ? cap.substring(0,120)+'…' : cap;
     }
 
-    function formatearFecha(fechaStr) {
-      if (!fechaStr) return '';
+    function formatearFecha(str) {
+      if (!str) return '';
       try {
-        const fecha = new Date(fechaStr);
-        const ahora = new Date();
-        const diff = ahora - fecha;
-        const horas = Math.floor(diff / 3600000);
-        const minutos = Math.floor(diff / 60000);
-        if (minutos < 60) return 'Hace ' + minutos + ' min';
-        if (horas < 24) return 'Hace ' + horas + 'h';
+        const f = new Date(str), ahora = new Date();
+        const diff = ahora-f, h = Math.floor(diff/3600000), m = Math.floor(diff/60000);
+        if (m<60) return 'Hace '+m+' min';
+        if (h<24) return 'Hace '+h+'h';
         return 'Hoy';
       } catch(e) { return ''; }
     }
 
     function actualizarHora() {
-      const ahora = new Date();
-      const hora = ahora.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
-      document.getElementById('hora-actualizacion').textContent = 'Actualizado ' + hora;
+      document.getElementById('hora-actualizacion').textContent =
+        'Actualizado '+new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
     }
 
-    function mostrarError(mensaje) {
+    function mostrarError(msg) {
       document.getElementById('grid-clusters').innerHTML =
-        '<div class="estado-carga" style="grid-column:span 2"><p class="estado-error">' + mensaje + '</p></div>';
+        '<div class="estado-carga" style="grid-column:span 2"><p class="estado-error">'+msg+'</p></div>';
       document.getElementById('feed-meta').textContent = 'Error al cargar';
     }
 
     cargarDatos();
-    setInterval(cargarDatos, 15 * 60 * 1000);
+    setInterval(cargarDatos, 15*60*1000);
   </script>
 </body>
 </html>
