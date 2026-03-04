@@ -95,7 +95,7 @@
     .cluster-card { background: var(--blanco); border: 1px solid var(--gris-claro); border-radius: var(--radio); padding: 1.25rem; cursor: pointer; transition: all 0.2s ease; box-shadow: var(--sombra); opacity: 0; transform: translateY(8px); animation: aparecer 0.3s ease forwards; display: flex; flex-direction: column; }
     @keyframes aparecer { to { opacity:1; transform:translateY(0); } }
     .cluster-card:hover { box-shadow: var(--sombra-hover); border-color: #d0ccc6; transform: translateY(-1px); }
-    .cluster-card.destacada { grid-column: span 2; display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center; }
+    .cluster-card.destacada { grid-column: span 2; }
 
     .card-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
     .card-fuentes { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gris-medio); }
@@ -244,13 +244,13 @@
           <option value="Política">Política</option>
           <option value="Economía">Economía</option>
           <option value="Seguridad">Seguridad</option>
+          <option value="Exterior">Exterior</option>
           <option value="Deportes">Deportes</option>
           <option value="Sociedad">Sociedad</option>
           <option value="Medio Ambiente">Medio Ambiente</option>
           <option value="Justicia">Justicia</option>
           <option value="Tecnología">Tecnología</option>
           <option value="Cultura">Cultura</option>
-          <option value="Otros">Otros</option>
         </select>
       </div>
 
@@ -556,38 +556,29 @@
           ? resaltarBusqueda(limpiarTitular(c.titular), busquedaActual)
           : limpiarTitular(c.titular);
         const badgeAlcance = renderBadgeAlcance(c.alcance);
-        const svgTendencia = {
-          izquierda: `<svg width="11" height="9" viewBox="0 0 14 10" fill="none" stroke="#c0392b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 5H1M1 5l4-3M1 5l4 3"/></svg>`,
-          derecha:   `<svg width="11" height="9" viewBox="0 0 14 10" fill="none" stroke="#2c3e7a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h12M13 5l-4-3M13 5l-4 3"/></svg>`,
-          centro:    `<svg width="11" height="9" viewBox="0 0 14 10" fill="none" stroke="#8c8880" stroke-width="1.5" stroke-linecap="round"><path d="M3 2h8M2 5h10M3 8h8"/></svg>`,
-          plural:    `<svg width="11" height="9" viewBox="0 0 14 10" fill="none" stroke="#8c8880" stroke-width="1.5" stroke-linecap="round"><path d="M2 5h10M5 2l-3 3 3 3M9 2l3 3-3 3"/></svg>`
-        }[c.tendenciaDominante] || '';
-        const badgeCat = c.categoria ? `<span class="badge badge-categoria" style="display:inline-flex;align-items:center;gap:0.3rem">${svgTendencia}${c.categoria}</span>` : '';
+        const badgeCat = c.categoria ? `<span class="badge badge-categoria">${c.categoria}</span>` : '';
 
         if (esDestacada) {
           return `
             <article class="cluster-card destacada" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${c.id}'">
-              <div style="display:flex;flex-direction:column;height:100%">
-                <div class="card-meta">
-                  <span class="card-fuentes">${c.totalNoticias} ${c.totalNoticias===1?'fuente':'fuentes'}</span>
-                  <span class="card-separador">·</span>
-                  <span class="card-tiempo">${formatearFecha(c.fechaCreacion)}</span>
-                  <span class="card-separador">·</span>
-                  ${badgeAlcance}
-                  ${badgeCat}
-                </div>
-                <h3 class="card-titular">${titular}</h3>
-                <div class="sesgo-contenedor">
-                  <p class="sesgo-label">Espectro de cobertura</p>
-                  <div class="densidad-wrap"><canvas class="densidad-canvas" data-id="${c.id}" data-izq="${c.pctIzq}" data-centro="${c.pctCentro}" data-der="${c.pctDer}"></canvas></div>
-                  <div class="sesgo-nums">
-                    <span class="sesgo-num izq">${c.pctIzq>0?c.pctIzq+'% Izq':''}</span>
-                    <span class="sesgo-num">${c.pctCentro>0?c.pctCentro+'% Centro':''}</span>
-                    <span class="sesgo-num der">${c.pctDer>0?c.pctDer+'% Der':''}</span>
-                  </div>
+              <div class="card-meta">
+                <span class="card-fuentes">${c.totalNoticias} ${c.totalNoticias===1?'fuente':'fuentes'}</span>
+                <span class="card-separador">·</span>
+                <span class="card-tiempo">${formatearFecha(c.fechaCreacion)}</span>
+                <span class="card-separador">·</span>
+                ${badgeAlcance}
+                ${badgeCat}
+              </div>
+              <h3 class="card-titular">${titular}</h3>
+              <div class="sesgo-contenedor">
+                <p class="sesgo-label">Espectro de cobertura</p>
+                <div class="densidad-wrap"><canvas class="densidad-canvas" data-id="${c.id}" data-izq="${c.pctIzq}" data-centro="${c.pctCentro}" data-der="${c.pctDer}"></canvas></div>
+                <div class="sesgo-nums">
+                  <span class="sesgo-num izq">${c.pctIzq>0?c.pctIzq+'% Izq':''}</span>
+                  <span class="sesgo-num">${c.pctCentro>0?c.pctCentro+'% Centro':''}</span>
+                  <span class="sesgo-num der">${c.pctDer>0?c.pctDer+'% Der':''}</span>
                 </div>
               </div>
-              <div class="sesgo-visual-grande">${renderBarraVertical(c)}</div>
             </article>`;
         }
 
