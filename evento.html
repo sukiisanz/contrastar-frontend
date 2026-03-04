@@ -347,18 +347,23 @@
       let distTendencia = {};
       try { distTendencia = JSON.parse(cluster.dist_tendencia || '{}'); } catch(e) {}
 
-      const puntos = Object.entries(distTendencia)
-        .map(([k,v]) => ({ score: parseFloat(k), count: parseInt(v)||1 }))
-        .filter(p => !isNaN(p.score));
+      // 1 clave = 1 medio (ignoramos count para no inflar medios repetidos)
+      const puntos = Object.keys(distTendencia)
+        .map(k => parseFloat(k))
+        .filter(s => !isNaN(s))
+        .map(s => ({ score: s, count: 1 }));
 
-      const total = puntos.reduce((a,b) => a+b.count, 0);
+      const total = puntos.length;
 
+      // Clasificación suave: centro-izq/der contribuyen parcialmente a zonas vecinas
       let cntIzq=0, cntCentro=0, cntDer=0;
       puntos.forEach(p => {
-        const cat = clasificarScore(p.score);
-        if (cat==='izquierda') cntIzq+=p.count;
-        else if (cat==='derecha') cntDer+=p.count;
-        else cntCentro+=p.count;
+        const s = p.score;
+        if (s <= -1.0)      { cntIzq += 1; }
+        else if (s < -0.5)  { cntIzq += 0.7; cntCentro += 0.3; }
+        else if (s <= 0.5)  { cntCentro += 1; }
+        else if (s < 1.0)   { cntCentro += 0.3; cntDer += 0.7; }
+        else                { cntDer += 1; }
       });
 
       const pctIzq    = total>0 ? Math.round(cntIzq/total*100)    : 0;
