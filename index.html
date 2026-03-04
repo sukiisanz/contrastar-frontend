@@ -118,9 +118,7 @@
     /* BARRA DENSIDAD */
     .densidad-wrap {
       position: relative; height: 10px; border-radius: 5px; overflow: hidden;
-      /* Fondo: gradiente completo siempre visible, tenue */
-      background: linear-gradient(to right, #c0392b 0%, #d4826a 30%, #c8b89a 50%, #7a8fc4 70%, #2c3e7a 100%);
-      opacity: 1;
+      background: var(--gris-claro);
     }
     .densidad-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
     .sesgo-nums { display: flex; justify-content: space-between; margin-top: 0.4rem; }
@@ -363,19 +361,39 @@
       const maxVal = Math.max(...bins);
       if (maxVal === 0) return;
 
-      // El canvas pinta color crema con opacidad invertida sobre el fondo gradiente.
-      // Donde hay densidad alta → canvas transparente (deja ver el gradiente vivo y saturado).
-      // Donde no hay densidad → canvas crema opaco (apaga el gradiente, queda tenue).
+      // Paleta del espectro: rojo fuerte izq → centro beige → azul fuerte der
+      // Cada columna del canvas recibe el color del espectro en esa posición,
+      // con opacidad proporcional a la densidad de medios en esa zona.
+      // Resultado: barra que brilla donde hay medios, apagada donde no hay.
+      const espectro = [
+        [192,  57,  43], // -2.0  rojo fuerte
+        [212, 130, 106], // -1.0  rojo suave
+        [200, 184, 154], //  0.0  centro beige
+        [122, 143, 196], // +1.0  azul suave
+        [ 44,  62, 122]  // +2.0  azul fuerte
+      ];
+
+      function interpolarColor(t) {
+        // t: 0..1 mapea a -2..+2
+        const seg = t * (espectro.length - 1);
+        const i = Math.min(Math.floor(seg), espectro.length - 2);
+        const f = seg - i;
+        return espectro[i].map((c, j) => Math.round(c + f * (espectro[i+1][j] - c)));
+      }
+
       const imgData = ctx.createImageData(W, H);
       for (let x = 0; x < W; x++) {
+        const t = x / (W - 1);
+        const [r, g, b] = interpolarColor(t);
         const densidad = bins[x] / maxVal; // 0..1
-        const alphaCrema = Math.round((1 - Math.min(1, densidad * 2.2)) * 210);
+        // Opacidad mínima 0.08 (siempre se ve algo) + proporcional a densidad
+        const alpha = Math.round((0.08 + densidad * 0.92) * 255);
         for (let y = 0; y < H; y++) {
           const idx = (y * W + x) * 4;
-          imgData.data[idx]   = 247; // crema --crema
-          imgData.data[idx+1] = 244;
-          imgData.data[idx+2] = 239;
-          imgData.data[idx+3] = alphaCrema;
+          imgData.data[idx]   = r;
+          imgData.data[idx+1] = g;
+          imgData.data[idx+2] = b;
+          imgData.data[idx+3] = alpha;
         }
       }
       ctx.putImageData(imgData, 0, 0);
