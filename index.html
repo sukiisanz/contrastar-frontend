@@ -116,7 +116,12 @@
     .sesgo-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-medio); margin-bottom: 0.5rem; }
 
     /* BARRA DENSIDAD */
-    .densidad-wrap { position: relative; height: 10px; border-radius: 5px; overflow: hidden; background: var(--gris-claro); }
+    .densidad-wrap {
+      position: relative; height: 10px; border-radius: 5px; overflow: hidden;
+      /* Fondo: gradiente completo siempre visible, tenue */
+      background: linear-gradient(to right, #c0392b 0%, #d4826a 30%, #c8b89a 50%, #7a8fc4 70%, #2c3e7a 100%);
+      opacity: 1;
+    }
     .densidad-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
     .sesgo-nums { display: flex; justify-content: space-between; margin-top: 0.4rem; }
     .sesgo-num { font-size: 0.65rem; color: var(--gris-medio); }
@@ -358,24 +363,19 @@
       const maxVal = Math.max(...bins);
       if (maxVal === 0) return;
 
-      // Dibujar píxel a píxel con color del espectro + opacidad según densidad
+      // El canvas pinta color crema con opacidad invertida sobre el fondo gradiente.
+      // Donde hay densidad alta → canvas transparente (deja ver el gradiente vivo y saturado).
+      // Donde no hay densidad → canvas crema opaco (apaga el gradiente, queda tenue).
       const imgData = ctx.createImageData(W, H);
       for (let x = 0; x < W; x++) {
-        const t = x / (W - 1); // 0 = izq, 1 = der
-        // Color del espectro en esta posición
-        const score = t * 4 - 2; // mapear 0..1 a -2..+2
-        const hex = colorScore(score);
-        const r = parseInt(hex.slice(1,3),16);
-        const g = parseInt(hex.slice(3,5),16);
-        const b = parseInt(hex.slice(5,7),16);
-        const alpha = Math.min(1, (bins[x] / maxVal) * 1.8); // intensidad
-        const a = Math.round(alpha * 255);
+        const densidad = bins[x] / maxVal; // 0..1
+        const alphaCrema = Math.round((1 - Math.min(1, densidad * 2.2)) * 210);
         for (let y = 0; y < H; y++) {
           const idx = (y * W + x) * 4;
-          imgData.data[idx]   = r;
-          imgData.data[idx+1] = g;
-          imgData.data[idx+2] = b;
-          imgData.data[idx+3] = a;
+          imgData.data[idx]   = 247; // crema --crema
+          imgData.data[idx+1] = 244;
+          imgData.data[idx+2] = 239;
+          imgData.data[idx+3] = alphaCrema;
         }
       }
       ctx.putImageData(imgData, 0, 0);
