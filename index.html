@@ -108,6 +108,8 @@
     .badge-internacional { color: #2a4e6e; border-color: #9ab8d9; background: #e4eef5; }
     .badge-regional      { color: #6e4e2a; border-color: #d9c09a; background: #f5ede4; }
     .badge-categoria     { color: var(--gris-oscuro); border-color: var(--gris-claro); background: var(--crema); }
+    .badge-sin-contraste { color: var(--gris-medio); border-color: var(--gris-claro); background: var(--crema); opacity: 0.7; }
+    .card-sin-contraste  { opacity: 0.75; }
 
     .card-titular { font-family: var(--fuente-display); font-size: 1rem; font-weight: 600; line-height: 1.3; color: var(--negro); letter-spacing: -0.01em; margin-bottom: 1rem; flex: 1; }
     .cluster-card.destacada .card-titular { font-size: 1.25rem; }
@@ -465,14 +467,22 @@
             }
           });
 
-          const pctIzq    = total>0 ? Math.round(cntIzq/total*100)    : 0;
-          const pctCentro = total>0 ? Math.round(cntCentro/total*100)  : 0;
-          const pctDer    = total>0 ? Math.round(cntDer/total*100)     : 0;
+          // Redondear a 2 decimales para evitar 1.9000000000000001 etc.
+          cntIzq    = Math.round(cntIzq    * 100) / 100;
+          cntCentro = Math.round(cntCentro * 100) / 100;
+          cntDer    = Math.round(cntDer    * 100) / 100;
+          const totalPct = cntIzq + cntCentro + cntDer || 1;
+          const pctIzq    = Math.round(cntIzq    / totalPct * 100);
+          const pctCentro = Math.round(cntCentro / totalPct * 100);
+          const pctDer    = Math.round(cntDer    / totalPct * 100);
 
           let tendenciaDominante = 'plural';
           if      (pctIzq    > 60) tendenciaDominante = 'izquierda';
           else if (pctDer    > 60) tendenciaDominante = 'derecha';
           else if (pctCentro > 50) tendenciaDominante = 'centro';
+
+          // Tiene contraste si al menos 2 zonas tienen presencia (>5%)
+          const tieneContraste = [pctIzq, pctCentro, pctDer].filter(p => p > 5).length >= 2;
 
           return {
             id: fila.id_cluster,
@@ -481,14 +491,18 @@
             fechaCreacion: fila.fecha_creacion || '',
             totalNoticias: parseInt(fila.total_noticias) || 1,
             puntos, scoreProm, pctIzq, pctCentro, pctDer,
-            tendenciaDominante,
+            tendenciaDominante, tieneContraste,
             alcance: (fila.alcance || 'Nacional').trim(),
             categoria: (fila.categoria || '').trim(),
             region: extraerRegionPrincipal(fila.dist_region || '{}')
           };
         })
         .filter(c => c.totalNoticias >= 2)
-        .sort((a,b) => b.totalNoticias - a.totalNoticias);
+        .sort((a,b) => {
+          // Con contraste primero; dentro de cada grupo, más fuentes primero
+          if (a.tieneContraste !== b.tieneContraste) return b.tieneContraste - a.tieneContraste;
+          return b.totalNoticias - a.totalNoticias;
+        });
     }
 
     function extraerRegionPrincipal(str) {
@@ -570,10 +584,12 @@
           : limpiarTitular(c.titular);
         const badgeAlcance = renderBadgeAlcance(c.alcance);
         const badgeCat = c.categoria ? `<span class="badge badge-categoria">${c.categoria}</span>` : '';
+        const badgeSinContraste = !c.tieneContraste ? `<span class="badge badge-sin-contraste">Sin contraste</span>` : '';
+        const claseContraste = !c.tieneContraste ? ' card-sin-contraste' : '';
 
         if (esDestacada) {
           return `
-            <article class="cluster-card destacada" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${c.id}'">
+            <article class="cluster-card destacada${claseContraste}" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${c.id}'">
               <div class="card-meta">
                 <span class="card-fuentes">${c.totalNoticias} ${c.totalNoticias===1?'fuente':'fuentes'}</span>
                 <span class="card-separador">·</span>
@@ -596,7 +612,7 @@
         }
 
         return `
-          <article class="cluster-card" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${c.id}'">
+          <article class="cluster-card${claseContraste}" style="animation-delay:${delay}ms" onclick="window.location.href='evento.html?id=${c.id}'">
             <div class="card-meta">
               <span class="card-fuentes">${c.totalNoticias} ${c.totalNoticias===1?'fuente':'fuentes'}</span>
               <span class="card-separador">·</span>
@@ -604,6 +620,7 @@
               <span class="card-separador">·</span>
               ${badgeAlcance}
               ${badgeCat}
+              ${badgeSinContraste}
             </div>
             <h3 class="card-titular">${titular}</h3>
             <div class="sesgo-contenedor">
