@@ -341,59 +341,67 @@
       const ctx = canvasEl.getContext('2d');
       ctx.clearRect(0, 0, W, H);
 
-      const total = puntos.reduce((a, b) => a + b.count, 0);
-      if (total === 0) return;
+      // Dibujamos 3 zonas proporcionales al porcentaje de cada tendencia,
+      // con colores del espectro y transiciones suaves entre zonas.
+      // pctIzq, pctCentro, pctDer vienen del cluster y suman ~100.
+      // La barra siempre va de rojo a azul en sus extremos.
 
-      // Construir array de densidad normalizada
-      const bins = new Float32Array(W);
-      const sigma = W * 0.06; // ancho de cada gaussiana
+      // Recuperar porcentajes del cluster desde el dataset
+      const pctIzq    = parseFloat(canvasEl.dataset.izq    || 0) / 100;
+      const pctCentro = parseFloat(canvasEl.dataset.centro || 0) / 100;
+      const pctDer    = parseFloat(canvasEl.dataset.der    || 0) / 100;
 
-      puntos.forEach(p => {
-        const cx = (scorePct(p.score) / 100) * W;
-        const weight = p.count / total;
-        for (let x = 0; x < W; x++) {
-          const d = x - cx;
-          bins[x] += weight * Math.exp(-(d * d) / (2 * sigma * sigma));
-        }
-      });
+      // Puntos de corte en la barra (0..1)
+      const corte1 = pctIzq;
+      const corte2 = pctIzq + pctCentro;
 
-      // Normalizar al máximo
-      const maxVal = Math.max(...bins);
-      if (maxVal === 0) return;
+      // Paleta: izq=rojo, centro=beige, der=azul
+      // Con degradado suave entre zonas (blur gaussiano al final)
+      const COLOR_IZQ    = [192,  57,  43];
+      const COLOR_CENTRO = [200, 184, 154];
+      const COLOR_DER    = [ 44,  62, 122];
 
-      // Paleta del espectro: rojo fuerte izq → centro beige → azul fuerte der
-      // Cada columna del canvas recibe el color del espectro en esa posición,
-      // con opacidad proporcional a la densidad de medios en esa zona.
-      // Resultado: barra que brilla donde hay medios, apagada donde no hay.
-      const espectro = [
-        [192,  57,  43], // -2.0  rojo fuerte
-        [212, 130, 106], // -1.0  rojo suave
-        [200, 184, 154], //  0.0  centro beige
-        [122, 143, 196], // +1.0  azul suave
-        [ 44,  62, 122]  // +2.0  azul fuerte
-      ];
-
-      function interpolarColor(t) {
-        // t: 0..1 mapea a -2..+2
-        const seg = t * (espectro.length - 1);
-        const i = Math.min(Math.floor(seg), espectro.length - 2);
-        const f = seg - i;
-        return espectro[i].map((c, j) => Math.round(c + f * (espectro[i+1][j] - c)));
+      function lerpColor(a, b, t) {
+        return a.map((v, i) => Math.round(v + (b[i] - v) * t));
       }
+
+      // Zona de transición suave: 8% del ancho total en cada corte
+      const blend = 0.08;
 
       const imgData = ctx.createImageData(W, H);
       for (let x = 0; x < W; x++) {
-        const t = x / (W - 1);
-        const [r, g, b] = interpolarColor(t);
-        const densidad = bins[x] / maxVal; // 0..1
-        // Opacidad mínima 0.08 (siempre se ve algo) + proporcional a densidad
-        const alpha = Math.round((0.08 + densidad * 0.92) * 255);
+        const t = x / (W - 1); // posición 0..1
+        let color;
+
+        // Zona izquierda pura
+        if (t < corte1 - blend) {
+          color = COLOR_IZQ;
+        }
+        // Transición izq→centro
+        else if (t < corte1 + blend) {
+          const f = (t - (corte1 - blend)) / (blend * 2);
+          color = lerpColor(COLOR_IZQ, COLOR_CENTRO, f);
+        }
+        // Zona centro pura
+        else if (t < corte2 - blend) {
+          color = COLOR_CENTRO;
+        }
+        // Transición centro→der
+        else if (t < corte2 + blend) {
+          const f = (t - (corte2 - blend)) / (blend * 2);
+          color = lerpColor(COLOR_CENTRO, COLOR_DER, f);
+        }
+        // Zona derecha pura
+        else {
+          color = COLOR_DER;
+        }
+
         for (let y = 0; y < H; y++) {
           const idx = (y * W + x) * 4;
-          imgData.data[idx]   = r;
-          imgData.data[idx+1] = g;
-          imgData.data[idx+2] = b;
-          imgData.data[idx+3] = alpha;
+          imgData.data[idx]   = color[0];
+          imgData.data[idx+1] = color[1];
+          imgData.data[idx+2] = color[2];
+          imgData.data[idx+3] = 255;
         }
       }
       ctx.putImageData(imgData, 0, 0);
@@ -555,7 +563,7 @@
                 <h3 class="card-titular">${titular}</h3>
                 <div class="sesgo-contenedor">
                   <p class="sesgo-label">Espectro de cobertura</p>
-                  <div class="densidad-wrap"><canvas class="densidad-canvas" data-id="${c.id}"></canvas></div>
+                  <div class="densidad-wrap"><canvas class="densidad-canvas" data-id="${c.id}" data-izq="${c.pctIzq}" data-centro="${c.pctCentro}" data-der="${c.pctDer}"></canvas></div>
                   <div class="sesgo-nums">
                     <span class="sesgo-num izq">${c.pctIzq>0?c.pctIzq+'% Izq':''}</span>
                     <span class="sesgo-num">${c.pctCentro>0?c.pctCentro+'% Centro':''}</span>
@@ -580,7 +588,7 @@
             <h3 class="card-titular">${titular}</h3>
             <div class="sesgo-contenedor">
               <p class="sesgo-label">Espectro de cobertura</p>
-              <div class="densidad-wrap"><canvas class="densidad-canvas" data-id="${c.id}"></canvas></div>
+              <div class="densidad-wrap"><canvas class="densidad-canvas" data-id="${c.id}" data-izq="${c.pctIzq}" data-centro="${c.pctCentro}" data-der="${c.pctDer}"></canvas></div>
               <div class="sesgo-nums">
                 <span class="sesgo-num izq">${c.pctIzq>0?c.pctIzq+'% Izq':''}</span>
                 <span class="sesgo-num">${c.pctCentro>0?c.pctCentro+'% Centro':''}</span>
