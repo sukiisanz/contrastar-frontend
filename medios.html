@@ -291,47 +291,93 @@ const MEDIOS = [
 ];
 
 // ─────────────────────────────────────────────
-// ESTADO: votos en memoria (shared = público)
-// Estructura: { [id]: { izq: N, der: N } }
+// FINGERPRINT — identidad estable sin login
+// Usamos @fingerprintjs/fingerprintjs (open source, sin API key)
+// Combina canvas, WebGL, fonts, timezone, screen, etc.
+// Difícil de evadir sin esfuerzo técnico deliberado.
 // ─────────────────────────────────────────────
-let VOTOS = {};       // cargado desde storage
-let MI_VOTO = {};     // { [id]: 'izq'|'der'|null } — solo este usuario
+let FP_ID = null; // se carga al inicio
 
-const STORAGE_KEY  = 'medios-votos-v1';
-const MI_VOTO_KEY  = 'medios-mi-voto-v1';
+async function obtenerFingerprint() {
+  try {
+    // Cargamos la librería dinámicamente desde CDN
+    const FingerprintJS = await import('https://openfpcdn.io/fingerprintjs/v4');
+    const fp = await FingerprintJS.load();
+    const result = await fp.get();
+    return result.visitorId; // hash estable ~32 chars
+  } catch(_) {
+    // Fallback: generamos un ID aleatorio y lo guardamos en personal storage
+    // Menos robusto pero mejor que nada si el CDN falla
+    try {
+      const r = await window.storage.get('fp-fallback-id', false);
+      if (r) return r.value;
+      const id = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      await window.storage.set('fp-fallback-id', id, false);
+      return id;
+    } catch(_) { return 'anon-' + Math.random().toString(36).slice(2); }
+  }
+}
+
+// ─────────────────────────────────────────────
+// ESTADO: votos
+// VOTOS (shared):  { [medioId]: { izq: N, der: N } }
+// VOTOS_FP (shared): { [medioId+fp]: 'izq'|'der' }
+//   → registra QUÉ fingerprint votó QUÉ dirección
+//   → impide que la misma huella vote dos veces aunque recargue
+// ─────────────────────────────────────────────
+let VOTOS    = {};
+let VOTOS_FP = {};
+let MI_VOTO  = {}; // caché local para render rápido sin consultar storage
+
+const KEY_VOTOS   = 'medios-votos-v2';
+const KEY_VFINGER = 'medios-votos-fp-v2';
+
+// Umbral mínimo para mostrar badge de presión (evita que 1 voto active la alarma)
+const UMBRAL_BADGE = 5;
 
 async function cargarVotos() {
-  try {
-    const r = await window.storage.get(STORAGE_KEY, true); // shared
-    VOTOS = r ? JSON.parse(r.value) : {};
-  } catch(_) { VOTOS = {}; }
-  try {
-    const r2 = await window.storage.get(MI_VOTO_KEY, false); // personal
-    MI_VOTO = r2 ? JSON.parse(r2.value) : {};
-  } catch(_) { MI_VOTO = {}; }
+  try { const r = await window.storage.get(KEY_VOTOS,   true);  VOTOS    = r ? JSON.parse(r.value) : {}; } catch(_) { VOTOS    = {}; }
+  try { const r = await window.storage.get(KEY_VFINGER, true);  VOTOS_FP = r ? JSON.parse(r.value) : {}; } catch(_) { VOTOS_FP = {}; }
+
+  // Reconstruir MI_VOTO local basado en fingerprint actual
+  if (FP_ID) {
+    MI_VOTO = {};
+    for (const medioId of Object.keys(VOTOS_FP)) {
+      const key = medioId + '::' + FP_ID;
+      if (VOTOS_FP[key]) MI_VOTO[medioId] = VOTOS_FP[key];
+    }
+  }
 }
 
 async function guardarVotos() {
-  try { await window.storage.set(STORAGE_KEY, JSON.stringify(VOTOS), true); } catch(_){}
-  try { await window.storage.set(MI_VOTO_KEY, JSON.stringify(MI_VOTO), false); } catch(_){}
+  try { await window.storage.set(KEY_VOTOS,   JSON.stringify(VOTOS),    true); } catch(_){}
+  try { await window.storage.set(KEY_VFINGER, JSON.stringify(VOTOS_FP), true); } catch(_){}
 }
 
 async function votar(id, dir) {
-  const actual = MI_VOTO[id];
+  if (!FP_ID) { toast('Cargando identificación del navegador…'); return; }
+
+  const fpKey = id + '::' + FP_ID;
+  const actual = VOTOS_FP[fpKey] || null;
+
   if (!VOTOS[id]) VOTOS[id] = { izq: 0, der: 0 };
 
   if (actual === dir) {
-    // deshacer voto
+    // ── DESHACER voto ──
     VOTOS[id][dir] = Math.max(0, (VOTOS[id][dir]||0) - 1);
+    delete VOTOS_FP[fpKey];
     MI_VOTO[id] = null;
     toast('Voto retirado');
   } else {
-    // cambiar o nuevo voto
+    // ── NUEVO o CAMBIO de voto ──
+    // Si ya votó en otra dirección, restar primero
     if (actual) VOTOS[id][actual] = Math.max(0, (VOTOS[id][actual]||0) - 1);
     VOTOS[id][dir] = (VOTOS[id][dir]||0) + 1;
+    VOTOS_FP[fpKey] = dir;
     MI_VOTO[id] = dir;
-    toast(dir === 'izq' ? '← Votado: más a la izquierda' : '→ Votado: más a la derecha');
+    toast(dir === 'izq' ? '← Votado: debería estar más a la izquierda' : '→ Votado: debería estar más a la derecha');
   }
+
   await guardarVotos();
   render();
 }
@@ -396,19 +442,21 @@ function cardHTML(m) {
   const mv  = MI_VOTO[m.id] || null;
   const total = (v.izq||0) + (v.der||0);
 
-  // Calcular presión dominante
+  // Calcular presión dominante — solo se muestra badge si hay ≥ UMBRAL_BADGE votos
   let presionHTML = '';
   if (total === 0) {
     presionHTML = `<span class="badge-ok">sin votos</span>`;
+  } else if (total < UMBRAL_BADGE) {
+    presionHTML = `<span class="badge-ok">${total} voto${total>1?'s':''}</span>`;
   } else {
     const pIzq = Math.round((v.izq/total)*100);
     const pDer = Math.round((v.der/total)*100);
     if (pIzq >= 60) {
-      presionHTML = `<span class="presion-badge badge-izq">← revisión izq (${v.izq})</span>`;
+      presionHTML = `<span class="presion-badge badge-izq">← revisar izq (${v.izq}/${total})</span>`;
     } else if (pDer >= 60) {
-      presionHTML = `<span class="presion-badge badge-der">revisión der → (${v.der})</span>`;
+      presionHTML = `<span class="presion-badge badge-der">revisar der → (${v.der}/${total})</span>`;
     } else {
-      presionHTML = `<span class="presion-badge" style="background:#f5f5f0;color:var(--gris-medio)">dividido (${total})</span>`;
+      presionHTML = `<span class="presion-badge" style="background:#f5f5f0;color:var(--gris-medio)">opinión dividida (${total})</span>`;
     }
   }
 
@@ -451,7 +499,16 @@ function toast(msg) {
 // ─────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────
-cargarVotos().then(() => render());
+(async () => {
+  // Mostrar página sin esperar fingerprint (render inmediato)
+  await cargarVotos();
+  render();
+
+  // Cargar fingerprint en paralelo — cuando esté listo, sincronizar MI_VOTO y re-render
+  FP_ID = await obtenerFingerprint();
+  await cargarVotos(); // re-sincronizar MI_VOTO con el FP real
+  render();
+})();
 </script>
 </body>
 </html>
