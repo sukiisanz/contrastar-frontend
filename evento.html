@@ -381,9 +381,13 @@
       document.getElementById('evento-titular').textContent = titular;
       document.getElementById('evento-fuentes').textContent = cluster.total_noticias || noticiasCluster.length;
       document.getElementById('met-fuentes').textContent = cluster.total_noticias || noticiasCluster.length;
-      document.getElementById('met-izq').textContent = Math.round(cntIzq);
-      document.getElementById('met-centro').textContent = Math.round(cntCentro);
-      document.getElementById('met-der').textContent = Math.round(cntDer);
+      // Métricas: conteo real de medios por zona (sin ponderación de clasificación suave)
+      const mediosIzq    = puntos.filter(p => p.score < UMBRAL_IZQ).length;
+      const mediosCentro = puntos.filter(p => p.score >= UMBRAL_IZQ && p.score <= UMBRAL_DER).length;
+      const mediosDer    = puntos.filter(p => p.score > UMBRAL_DER).length;
+      document.getElementById('met-izq').textContent = mediosIzq;
+      document.getElementById('met-centro').textContent = mediosCentro;
+      document.getElementById('met-der').textContent = mediosDer;
       document.getElementById('num-izq').textContent = pctIzq>0 ? pctIzq+'% Izquierda' : '';
       document.getElementById('num-centro').textContent = pctCentro>0 ? pctCentro+'% Centro' : '';
       document.getElementById('num-der').textContent = pctDer>0 ? pctDer+'% Derecha' : '';
