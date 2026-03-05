@@ -366,9 +366,13 @@
         else                { cntDer += 1; }
       });
 
-      const pctIzq    = total>0 ? Math.round(cntIzq/total*100)    : 0;
-      const pctCentro = total>0 ? Math.round(cntCentro/total*100)  : 0;
-      const pctDer    = total>0 ? Math.round(cntDer/total*100)     : 0;
+      cntIzq    = Math.round(cntIzq    * 100) / 100;
+      cntCentro = Math.round(cntCentro * 100) / 100;
+      cntDer    = Math.round(cntDer    * 100) / 100;
+      const totalPct = cntIzq + cntCentro + cntDer || 1;
+      const pctIzq    = Math.round(cntIzq    / totalPct * 100);
+      const pctCentro = Math.round(cntCentro / totalPct * 100);
+      const pctDer    = Math.round(cntDer    / totalPct * 100);
 
       const titular = limpiarTitular(cluster.titular_representativo || 'Sin titular');
 
@@ -377,9 +381,9 @@
       document.getElementById('evento-titular').textContent = titular;
       document.getElementById('evento-fuentes').textContent = cluster.total_noticias || noticiasCluster.length;
       document.getElementById('met-fuentes').textContent = cluster.total_noticias || noticiasCluster.length;
-      document.getElementById('met-izq').textContent = cntIzq;
-      document.getElementById('met-centro').textContent = cntCentro;
-      document.getElementById('met-der').textContent = cntDer;
+      document.getElementById('met-izq').textContent = Math.round(cntIzq);
+      document.getElementById('met-centro').textContent = Math.round(cntCentro);
+      document.getElementById('met-der').textContent = Math.round(cntDer);
       document.getElementById('num-izq').textContent = pctIzq>0 ? pctIzq+'% Izquierda' : '';
       document.getElementById('num-centro').textContent = pctCentro>0 ? pctCentro+'% Centro' : '';
       document.getElementById('num-der').textContent = pctDer>0 ? pctDer+'% Derecha' : '';
