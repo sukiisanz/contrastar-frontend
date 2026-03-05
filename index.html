@@ -147,6 +147,24 @@
     .footer-link { font-size: 0.78rem; color: var(--gris-medio); text-decoration: none; }
     .footer-link:hover { color: var(--acento); }
 
+
+    /* ── MODAL METODOLOGÍA ── */
+    .modal-overlay { position:fixed; inset:0; background:rgba(15,14,13,0.55); z-index:500; display:flex; align-items:center; justify-content:center; padding:1.5rem; opacity:0; pointer-events:none; transition:opacity 0.2s; }
+    .modal-overlay.visible { opacity:1; pointer-events:all; }
+    .modal { background:var(--blanco); border-radius:6px; max-width:600px; width:100%; max-height:85vh; overflow-y:auto; padding:2.5rem; position:relative; box-shadow:0 8px 40px rgba(0,0,0,0.18); transform:translateY(12px); transition:transform 0.2s; }
+    .modal-overlay.visible .modal { transform:translateY(0); }
+    .modal-cerrar { position:absolute; top:1.25rem; right:1.25rem; background:none; border:none; font-size:1.2rem; color:var(--gris-medio); cursor:pointer; line-height:1; padding:0.25rem; }
+    .modal-cerrar:hover { color:var(--negro); }
+    .modal h2 { font-family:var(--fuente-display); font-size:1.5rem; font-weight:600; margin-bottom:0.5rem; letter-spacing:-0.02em; }
+    .modal-subtitulo { font-size:0.85rem; color:var(--gris-medio); margin-bottom:1.75rem; }
+    .modal h3 { font-size:0.75rem; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; color:var(--acento); margin:1.5rem 0 0.5rem; }
+    .modal p { font-size:0.88rem; color:var(--gris-oscuro); line-height:1.7; margin-bottom:0.75rem; }
+    .modal ul { padding-left:1.25rem; margin-bottom:0.75rem; }
+    .modal ul li { font-size:0.88rem; color:var(--gris-oscuro); line-height:1.7; margin-bottom:0.3rem; }
+    .escala-visual { display:flex; align-items:center; gap:0.75rem; margin:0.75rem 0 1rem; }
+    .escala-barra-modal { flex:1; height:8px; border-radius:4px; background:linear-gradient(to right,#c0392b,#d4826a,#c8b89a,#7a8fc4,#2c3e7a); }
+    .escala-etiquetas { display:flex; justify-content:space-between; font-size:0.65rem; color:var(--gris-medio); margin-top:0.25rem; }
+
     @media (max-width: 768px) {
       main { grid-template-columns: 1fr; padding: 1rem; }
       .sidebar { position: static; display: flex; gap: 0.5rem; flex-wrap: wrap; }
@@ -173,8 +191,8 @@
         <span class="logo-cl">cl</span>
       </a>
       <nav>
-        <a href="#">Medios</a>
-        <a href="#">Metodología</a>
+        <a href="medios.html">Medios</a>
+        <a href="#" onclick="abrirModal();return false;">Metodología</a>
         <div class="nav-actualizacion">
           <div class="pulso"></div>
           <span id="hora-actualizacion">Actualizando...</span>
@@ -426,7 +444,7 @@
           todosClusters = procesarClusters(res.data);
           aplicarFiltros();
           actualizarContadores(todosClusters);
-          actualizarHora();
+
         },
         error: function() { mostrarError('No se pudo cargar el feed. Intenta recargar la página.'); }
       });
@@ -439,10 +457,10 @@
           let distTendencia = {};
           try { distTendencia = JSON.parse(fila.dist_tendencia || '{}'); } catch(e) {}
 
-          // Cada clave en dist_tendencia = 1 medio distinto (ignoramos el count).
-          // Esto evita que un medio que publica 9 noticias cuente como 9 medios.
-          const puntos = Object.keys(distTendencia)
-            .map(k => parseFloat(k))
+          // distTendencia = {idMedio: score} — cada clave es un medio único.
+          // Los valores son el score editorial del medio (no un conteo).
+          const puntos = Object.values(distTendencia)
+            .map(v => parseFloat(v))
             .filter(s => !isNaN(s))
             .map(s => ({ score: s, count: 1 }));
 
@@ -684,6 +702,17 @@
       const c = { todos: clusters.length, izquierda:0, centro:0, derecha:0, plural:0 };
       clusters.forEach(cl => { if (c[cl.tendenciaDominante]!==undefined) c[cl.tendenciaDominante]++; });
       Object.entries(c).forEach(([k,v]) => { const el=document.getElementById('cnt-'+k); if(el) el.textContent=v; });
+
+      // Timestamp: fecha más reciente entre todos los clusters
+      const fechas = clusters.map(cl => new Date(cl.fechaCreacion)).filter(d => !isNaN(d));
+      if (fechas.length > 0) {
+        const ultima = new Date(Math.max(...fechas));
+        const hora = ultima.toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'});
+        const hoy  = new Date();
+        const mismodia = ultima.toDateString() === hoy.toDateString();
+        document.getElementById('hora-actualizacion').textContent =
+          mismodia ? 'Últ. actualización ' + hora : 'Actualizado ' + ultima.toLocaleDateString('es-CL',{day:'numeric',month:'short'});
+      }
     }
 
     function limpiarTitular(t) {
@@ -709,10 +738,7 @@
       } catch(e) { return ''; }
     }
 
-    function actualizarHora() {
-      document.getElementById('hora-actualizacion').textContent =
-        'Actualizado '+new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
-    }
+    function actualizarHora() { /* timestamp se actualiza en actualizarContadores */ }
 
     function mostrarError(msg) {
       document.getElementById('grid-clusters').innerHTML =
@@ -722,6 +748,64 @@
 
     cargarDatos();
     setInterval(cargarDatos, 15*60*1000);
+
+    function abrirModal() {
+      document.getElementById('modal-metodologia').classList.add('visible');
+      document.body.style.overflow = 'hidden';
+    }
+    function cerrarModal() {
+      document.getElementById('modal-metodologia').classList.remove('visible');
+      document.body.style.overflow = '';
+    }
+    function cerrarModalSiOverlay(e) {
+      if (e.target === document.getElementById('modal-metodologia')) cerrarModal();
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
   </script>
+
+  <!-- MODAL METODOLOGÍA -->
+  <div class="modal-overlay" id="modal-metodologia" onclick="cerrarModalSiOverlay(event)">
+    <div class="modal">
+      <button class="modal-cerrar" onclick="cerrarModal()">✕</button>
+      <h2>Metodología</h2>
+      <p class="modal-subtitulo">Cómo funciona Contrastar.cl</p>
+
+      <h3>¿Qué es Contrastar?</h3>
+      <p>Contrastar.cl es un agregador de medios chilenos que detecta automáticamente cuando distintos medios cubren el mismo evento noticioso, y muestra cómo cada uno lo enmarca según su tendencia editorial.</p>
+
+      <h3>Recopilación de noticias</h3>
+      <p>Recopilamos titulares de medios chilenos de forma automática cada pocas horas. Solo procesamos el titular y la fuente — no almacenamos el contenido completo de las noticias.</p>
+
+      <h3>Agrupación de eventos</h3>
+      <p>Un modelo de inteligencia artificial (Claude de Anthropic) analiza los titulares y detecta cuándo distintos medios están cubriendo el mismo hecho concreto, independientemente del framing editorial. Para formar un grupo se requiere:</p>
+      <ul>
+        <li>Al menos 2 medios distintos cubriendo el mismo hecho</li>
+        <li>Misma acción, mismo sujeto y mismo momento</li>
+        <li>No se agrupan análisis, columnas de opinión ni programas de televisión</li>
+      </ul>
+
+      <h3>Escala de tendencia editorial</h3>
+      <p>Cada medio tiene asignado un puntaje de tendencia editorial en una escala de −2 (izquierda) a +2 (derecha), basado en análisis independientes de su línea editorial. Esta clasificación es estática y se revisa periódicamente.</p>
+      <div class="escala-visual">
+        <div style="flex:1">
+          <div class="escala-barra-modal"></div>
+          <div class="escala-etiquetas">
+            <span style="color:#c0392b">Izquierda</span>
+            <span>Centro-izq.</span>
+            <span>Centro</span>
+            <span>Centro-der.</span>
+            <span style="color:#2c3e7a">Derecha</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Espectro de cobertura</h3>
+      <p>La barra de cada evento muestra qué proporción de los medios que lo cubrieron pertenece a cada zona del espectro. Cada medio cuenta una vez, independientemente de cuántas noticias publicó sobre el tema.</p>
+
+      <h3>Limitaciones</h3>
+      <p>La clasificación editorial de los medios es una aproximación y puede no reflejar la posición de cada pieza periodística individual. El agrupador automático puede cometer errores al identificar eventos similares.</p>
+    </div>
+  </div>
+
 </body>
 </html>
