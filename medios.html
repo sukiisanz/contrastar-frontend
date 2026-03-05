@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medios — Contrastar.cl</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --negro: #0f0e0d;
+      --gris-oscuro: #3a3835;
+      --gris-medio: #8c8880;
+      --gris-claro: #e8e5e0;
+      --crema: #f7f4ef;
+      --blanco: #ffffff;
+      --izquierda: #c0392b;
+      --centro: #c8b89a;
+      --derecha: #2c3e7a;
+      --acento: #d4500a;
+      --fuente-display: 'Fraunces', Georgia, serif;
+      --fuente-cuerpo: 'DM Sans', sans-serif;
+      --radio: 3px;
+      --sombra: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body { font-family: var(--fuente-cuerpo); background: var(--crema); color: var(--negro); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    header { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); position: sticky; top: 0; z-index: 100; padding: 0 2rem; }
+    .header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { display: flex; align-items: baseline; gap: 0.2rem; text-decoration: none; }
+    .logo-principal { font-family: var(--fuente-display); font-size: 1.5rem; font-weight: 700; color: var(--negro); letter-spacing: -0.02em; }
+    .logo-punto { color: var(--acento); font-family: var(--fuente-display); font-size: 1.5rem; font-weight: 700; }
+    .logo-cl { font-family: var(--fuente-cuerpo); font-size: 0.75rem; font-weight: 500; color: var(--gris-medio); letter-spacing: 0.05em; text-transform: uppercase; }
+    nav { display: flex; align-items: center; gap: 2rem; }
+    nav a { font-size: 0.85rem; color: var(--gris-oscuro); text-decoration: none; transition: color 0.2s; }
+    nav a:hover, nav a.activo { color: var(--acento); }
+
+    .hero { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); padding: 3rem 2rem 2.5rem; }
+    .hero-inner { max-width: 1100px; margin: 0 auto; }
+    .hero-etiqueta { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--acento); margin-bottom: 0.75rem; }
+    .hero-titulo { font-family: var(--fuente-display); font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 300; line-height: 1.15; color: var(--negro); letter-spacing: -0.03em; margin-bottom: 0.75rem; }
+    .hero-bajada { font-size: 0.9rem; color: var(--gris-medio); max-width: 520px; font-weight: 300; }
+
+    /* ESCALA ESPECTRO */
+    .escala-strip { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); padding: 0.75rem 2rem; }
+    .escala-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 1.5rem; }
+    .escala-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-medio); white-space: nowrap; }
+    .escala-barra-wrap { flex: 1; }
+    .escala-barra { height: 8px; border-radius: 4px; background: linear-gradient(to right, #c0392b 0%, #d4826a 25%, #c8b89a 50%, #7a8fc4 75%, #2c3e7a 100%); position: relative; }
+    .escala-ticks { display: flex; justify-content: space-between; margin-top: 0.35rem; }
+    .escala-tick { font-size: 0.62rem; color: var(--gris-medio); }
+    .escala-rango { font-size: 0.65rem; color: var(--gris-medio); white-space: nowrap; }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; }
+
+    /* FILTROS */
+    .filtros-tendencia { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .filtro-chip { padding: 0.35rem 1rem; border-radius: 20px; border: 1px solid var(--gris-claro); background: var(--blanco); font-family: var(--fuente-cuerpo); font-size: 0.8rem; color: var(--gris-oscuro); cursor: pointer; transition: all 0.15s; }
+    .filtro-chip:hover { border-color: var(--gris-medio); color: var(--negro); }
+    .filtro-chip.activo { background: var(--negro); color: var(--blanco); border-color: var(--negro); }
+    .filtro-chip.izq.activo  { background: var(--izquierda); border-color: var(--izquierda); }
+    .filtro-chip.der.activo  { background: var(--derecha);   border-color: var(--derecha);   }
+    .filtro-chip.cnt.activo  { background: #7a6a50;          border-color: #7a6a50;          }
+
+    /* GRID MEDIOS */
+    .grid-medios { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--gris-claro); border: 1px solid var(--gris-claro); border-radius: var(--radio); overflow: hidden; }
+    .medio-card { background: var(--blanco); padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; transition: background 0.15s; cursor: default; }
+    .medio-card:hover { background: #faf8f5; }
+
+    .medio-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .medio-info { flex: 1; min-width: 0; }
+    .medio-nombre { font-size: 0.9rem; font-weight: 500; color: var(--negro); margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .medio-tipo { font-size: 0.72rem; color: var(--gris-medio); }
+
+    .medio-score-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; flex-shrink: 0; }
+    .medio-score { font-family: var(--fuente-display); font-size: 1rem; font-weight: 600; }
+    .medio-barra-wrap { width: 60px; height: 4px; background: var(--gris-claro); border-radius: 2px; overflow: hidden; }
+    .medio-barra { height: 100%; border-radius: 2px; }
+
+    .seccion-titulo { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gris-medio); margin: 2rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--gris-claro); }
+
+    .nota { font-size: 0.8rem; color: var(--gris-medio); margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gris-claro); line-height: 1.7; max-width: 600px; }
+
+    footer { border-top: 1px solid var(--gris-claro); background: var(--blanco); padding: 2rem; margin-top: 4rem; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    .footer-logo { font-family: var(--fuente-display); font-size: 1rem; font-weight: 600; color: var(--negro); }
+    .footer-texto { font-size: 0.78rem; color: var(--gris-medio); max-width: 400px; text-align: center; }
+    .footer-link { font-size: 0.78rem; color: var(--gris-medio); text-decoration: none; }
+    .footer-link:hover { color: var(--acento); }
+
+    @media (max-width: 640px) {
+      .grid-medios { grid-template-columns: 1fr; }
+      .escala-inner { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-principal">Contrastar</span>
+      <span class="logo-punto">.</span>
+      <span class="logo-cl">cl</span>
+    </a>
+    <nav>
+      <a href="index.html">← Volver al feed</a>
+      <a href="medios.html" class="activo">Medios</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-etiqueta">Fuentes · Tendencia editorial</p>
+    <h1 class="hero-titulo">Medios que monitoreamos</h1>
+    <p class="hero-bajada">Cada medio tiene asignado un puntaje de tendencia editorial en una escala de −2 (izquierda) a +2 (derecha), basado en análisis de su línea editorial.</p>
+  </div>
+</section>
+
+<div class="escala-strip">
+  <div class="escala-inner">
+    <span class="escala-label">Espectro</span>
+    <div class="escala-barra-wrap">
+      <div class="escala-barra"></div>
+      <div class="escala-ticks">
+        <span class="escala-tick" style="color:#c0392b">−2 Izquierda</span>
+        <span class="escala-tick">−1</span>
+        <span class="escala-tick">0 Centro</span>
+        <span class="escala-tick">+1</span>
+        <span class="escala-tick" style="color:#2c3e7a">+2 Derecha</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div class="filtros-tendencia">
+    <button class="filtro-chip activo" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filtro-chip izq"   onclick="filtrar('izquierda',this)">Izquierda</button>
+    <button class="filtro-chip cnt"   onclick="filtrar('centro',this)">Centro</button>
+    <button class="filtro-chip der"   onclick="filtrar('derecha',this)">Derecha</button>
+  </div>
+
+  <div id="contenedor-medios"></div>
+
+  <p class="nota">
+    La clasificación editorial es una aproximación basada en análisis del contenido y línea editorial de cada medio. No implica juicio de valor sobre la calidad periodística. Se revisa periódicamente.
+  </p>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Contrastar.cl</span>
+    <p class="footer-texto">Plataforma independiente de contraste de medios. No generamos noticias, solo mostramos cómo otros las cubren.</p>
+    <a href="index.html" class="footer-link">Volver al feed →</a>
+  </div>
+</footer>
+
+<script>
+  const MEDIOS = [
+    // IZQUIERDA
+    { nombre: "El Ciudadano",       tipo: "Digital",        score: -1.8 },
+    { nombre: "Interferencia",      tipo: "Digital",        score: -1.5 },
+    { nombre: "El Desconcierto",    tipo: "Digital",        score: -1.5 },
+    { nombre: "Zancada",            tipo: "Digital",        score: -1.5 },
+    { nombre: "Radio Uchile",       tipo: "Radio",          score: -1.2 },
+    { nombre: "CIPER Chile",        tipo: "Investigación",  score: -1.0 },
+    { nombre: "The Clinic",         tipo: "Digital",        score: -1.0 },
+    { nombre: "OPE / Publimetro",   tipo: "Prensa",         score: -0.8 },
+
+    // CENTRO-IZQUIERDA
+    { nombre: "La Tercera",         tipo: "Prensa",         score: -0.5 },
+    { nombre: "Emol / El Mercurio", tipo: "Prensa",         score: -0.3 },
+    { nombre: "Meganoticias",       tipo: "TV",             score: -0.3 },
+    { nombre: "CNN Chile",          tipo: "TV",             score: -0.2 },
+
+    // CENTRO
+    { nombre: "Radio Cooperativa",  tipo: "Radio",          score:  0.0 },
+    { nombre: "Radio Bío-Bío",      tipo: "Radio",          score:  0.0 },
+    { nombre: "24Horas / TVN",      tipo: "TV",             score:  0.1 },
+    { nombre: "ADNRadio",           tipo: "Radio",          score:  0.1 },
+    { nombre: "Fast Check CL",      tipo: "Verificación",   score:  0.0 },
+    { nombre: "Tiempo21",           tipo: "Digital",        score:  0.2 },
+    { nombre: "El Mostrador",       tipo: "Digital",        score: -0.2 },
+    { nombre: "T13 / Canal 13",     tipo: "TV",             score:  0.3 },
+
+    // CENTRO-DERECHA
+    { nombre: "El Mercurio / Emol", tipo: "Prensa",         score:  0.8 },
+    { nombre: "Pulso",              tipo: "Prensa",         score:  0.8 },
+    { nombre: "Diario Financiero",  tipo: "Prensa",         score:  1.0 },
+    { nombre: "Radio Agricultura",  tipo: "Radio",          score:  1.2 },
+    { nombre: "El Líbero",          tipo: "Digital",        score:  1.5 },
+    { nombre: "Tele13 Radio",       tipo: "Radio",          score:  0.5 },
+    { nombre: "Mega",               tipo: "TV",             score:  0.4 },
+
+    // DERECHA
+    { nombre: "RadioSago",          tipo: "Radio",          score:  1.5 },
+    { nombre: "El Mostrador Mkt",   tipo: "Digital",        score:  1.8 },
+  ].sort((a, b) => a.score - b.score);
+
+  let filtroActual = 'todos';
+
+  function colorScore(s) {
+    if (s <= -1.0) return '#c0392b';
+    if (s <  -0.5) return '#d4826a';
+    if (s <=  0.5) return '#b8a98a';
+    if (s <=  1.0) return '#7a8fc4';
+    return '#2c3e7a';
+  }
+
+  function categoriaScore(s) {
+    if (s <= -0.5) return 'izquierda';
+    if (s >=  0.5) return 'derecha';
+    return 'centro';
+  }
+
+  function labelCategoria(s) {
+    if (s <= -1.0) return 'Izquierda';
+    if (s <  -0.5) return 'Centro-izquierda';
+    if (s <   0.5) return 'Centro';
+    if (s <   1.0) return 'Centro-derecha';
+    return 'Derecha';
+  }
+
+  function pctBarra(s) {
+    return ((s + 2) / 4) * 100;
+  }
+
+  function filtrar(zona, btn) {
+    filtroActual = zona;
+    document.querySelectorAll('.filtro-chip').forEach(b => b.classList.remove('activo'));
+    btn.classList.add('activo');
+    renderizar();
+  }
+
+  function renderizar() {
+    const mediosFiltrados = filtroActual === 'todos'
+      ? MEDIOS
+      : MEDIOS.filter(m => categoriaScore(m.score) === filtroActual);
+
+    // Agrupar por zona para mostrar secciones
+    const zonas = [
+      { key: 'izquierda', label: 'Izquierda y centro-izquierda' },
+      { key: 'centro',    label: 'Centro' },
+      { key: 'derecha',   label: 'Centro-derecha y derecha' },
+    ];
+
+    let html = '';
+
+    if (filtroActual === 'todos') {
+      zonas.forEach(zona => {
+        const grupo = mediosFiltrados.filter(m => categoriaScore(m.score) === zona.key);
+        if (grupo.length === 0) return;
+        html += `<p class="seccion-titulo">${zona.label} <span style="font-weight:300;letter-spacing:0">(${grupo.length})</span></p>`;
+        html += '<div class="grid-medios">' + grupo.map(m => tarjeta(m)).join('') + '</div>';
+      });
+    } else {
+      html += '<div class="grid-medios">' + mediosFiltrados.map(m => tarjeta(m)).join('') + '</div>';
+    }
+
+    document.getElementById('contenedor-medios').innerHTML = html;
+  }
+
+  function tarjeta(m) {
+    const color = colorScore(m.score);
+    const pct   = pctBarra(m.score);
+    const signo = m.score > 0 ? '+' : '';
+    const label = labelCategoria(m.score);
+    return `
+      <div class="medio-card">
+        <div class="medio-dot" style="background:${color}"></div>
+        <div class="medio-info">
+          <div class="medio-nombre">${m.nombre}</div>
+          <div class="medio-tipo">${m.tipo} · ${label}</div>
+        </div>
+        <div class="medio-score-wrap">
+          <span class="medio-score" style="color:${color}">${signo}${m.score.toFixed(1)}</span>
+          <div class="medio-barra-wrap">
+            <div class="medio-barra" style="width:${pct}%;background:${color}"></div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  renderizar();
+</script>
+</body>
+</html>
