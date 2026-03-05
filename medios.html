@@ -8,91 +8,122 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --negro: #0f0e0d;
-      --gris-oscuro: #3a3835;
-      --gris-medio: #8c8880;
-      --gris-claro: #e8e5e0;
-      --crema: #f7f4ef;
-      --blanco: #ffffff;
-      --izquierda: #c0392b;
-      --centro: #c8b89a;
-      --derecha: #2c3e7a;
-      --acento: #d4500a;
-      --fuente-display: 'Fraunces', Georgia, serif;
-      --fuente-cuerpo: 'DM Sans', sans-serif;
-      --radio: 3px;
-      --sombra: 0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+      --negro:#0f0e0d; --gris-oscuro:#3a3835; --gris-medio:#8c8880;
+      --gris-claro:#e8e5e0; --crema:#f7f4ef; --blanco:#ffffff;
+      --acento:#d4500a;
+      --izq:#c0392b; --der:#2c3e7a;
+      --ff-display:'Fraunces',Georgia,serif;
+      --ff-body:'DM Sans',sans-serif;
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; }
-    body { font-family: var(--fuente-cuerpo); background: var(--crema); color: var(--negro); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--ff-body);background:var(--crema);color:var(--negro);-webkit-font-smoothing:antialiased}
 
-    header { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); position: sticky; top: 0; z-index: 100; padding: 0 2rem; }
-    .header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
-    .logo { display: flex; align-items: baseline; gap: 0.2rem; text-decoration: none; }
-    .logo-principal { font-family: var(--fuente-display); font-size: 1.5rem; font-weight: 700; color: var(--negro); letter-spacing: -0.02em; }
-    .logo-punto { color: var(--acento); font-family: var(--fuente-display); font-size: 1.5rem; font-weight: 700; }
-    .logo-cl { font-family: var(--fuente-cuerpo); font-size: 0.75rem; font-weight: 500; color: var(--gris-medio); letter-spacing: 0.05em; text-transform: uppercase; }
-    nav { display: flex; align-items: center; gap: 2rem; }
-    nav a { font-size: 0.85rem; color: var(--gris-oscuro); text-decoration: none; transition: color 0.2s; }
-    nav a:hover, nav a.activo { color: var(--acento); }
+    /* ── HEADER ── */
+    header{background:var(--blanco);border-bottom:1px solid var(--gris-claro);position:sticky;top:0;z-index:100;padding:0 2rem}
+    .header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+    .logo{display:flex;align-items:baseline;gap:.15rem;text-decoration:none}
+    .logo-c{font-family:var(--ff-display);font-size:1.5rem;font-weight:700;color:var(--negro);letter-spacing:-.02em}
+    .logo-p{color:var(--acento);font-family:var(--ff-display);font-size:1.5rem;font-weight:700}
+    .logo-cl{font-size:.72rem;font-weight:500;color:var(--gris-medio);letter-spacing:.05em;text-transform:uppercase}
+    nav{display:flex;gap:2rem}
+    nav a{font-size:.85rem;color:var(--gris-oscuro);text-decoration:none;transition:color .15s}
+    nav a:hover,nav a.activo{color:var(--acento)}
 
-    .hero { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); padding: 3rem 2rem 2.5rem; }
-    .hero-inner { max-width: 1100px; margin: 0 auto; }
-    .hero-etiqueta { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--acento); margin-bottom: 0.75rem; }
-    .hero-titulo { font-family: var(--fuente-display); font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 300; line-height: 1.15; color: var(--negro); letter-spacing: -0.03em; margin-bottom: 0.75rem; }
-    .hero-bajada { font-size: 0.9rem; color: var(--gris-medio); max-width: 520px; font-weight: 300; }
+    /* ── HERO ── */
+    .hero{background:var(--blanco);border-bottom:1px solid var(--gris-claro);padding:2.5rem 2rem 2rem}
+    .hero-inner{max-width:1100px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+    .etiq{font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--acento);margin-bottom:.5rem}
+    .hero-inner h1{font-family:var(--ff-display);font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:300;line-height:1.15;letter-spacing:-.03em;margin-bottom:.5rem}
+    .hero-inner p{font-size:.87rem;color:var(--gris-medio);max-width:460px;font-weight:300;line-height:1.6}
+    .hero-stats{display:flex;gap:2rem;flex-shrink:0}
+    .stat-num{font-family:var(--ff-display);font-size:2rem;font-weight:600;line-height:1}
+    .stat-lbl{font-size:.67rem;color:var(--gris-medio);text-transform:uppercase;letter-spacing:.08em}
 
-    /* ESCALA ESPECTRO */
-    .escala-strip { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); padding: 0.75rem 2rem; }
-    .escala-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 1.5rem; }
-    .escala-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-medio); white-space: nowrap; }
-    .escala-barra-wrap { flex: 1; }
-    .escala-barra { height: 8px; border-radius: 4px; background: linear-gradient(to right, #c0392b 0%, #d4826a 25%, #c8b89a 50%, #7a8fc4 75%, #2c3e7a 100%); position: relative; }
-    .escala-ticks { display: flex; justify-content: space-between; margin-top: 0.35rem; }
-    .escala-tick { font-size: 0.62rem; color: var(--gris-medio); }
-    .escala-rango { font-size: 0.65rem; color: var(--gris-medio); white-space: nowrap; }
+    /* ── ESPECTRO ── */
+    .esp-strip{background:var(--blanco);border-bottom:1px solid var(--gris-claro);padding:.7rem 2rem}
+    .esp-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:1.5rem}
+    .esp-lbl{font-size:.67rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--gris-medio);white-space:nowrap}
+    .esp-barra{height:6px;border-radius:3px;background:linear-gradient(to right,#c0392b,#d4826a,#c8b89a,#7a8fc4,#2c3e7a);flex:1}
+    .esp-ticks{display:flex;justify-content:space-between;margin-top:.3rem}
+    .esp-tick{font-size:.6rem;color:var(--gris-medio)}
 
-    main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem; }
+    /* ── LAYOUT ── */
+    .pagina{max-width:1100px;margin:0 auto;padding:2rem 2rem 4rem;display:grid;grid-template-columns:210px 1fr;gap:2.5rem;align-items:start}
+    .sidebar{position:sticky;top:80px}
+    .sb-sec{margin-bottom:1.75rem}
+    .sb-tit{font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gris-medio);margin-bottom:.6rem;padding-bottom:.4rem;border-bottom:1px solid var(--gris-claro)}
+    .fb{display:block;width:100%;text-align:left;background:none;border:none;font-family:var(--ff-body);font-size:.83rem;color:var(--gris-oscuro);padding:.35rem .5rem;border-radius:3px;cursor:pointer;transition:background .12s}
+    .fb:hover{background:var(--gris-claro)}
+    .fb.activo{background:var(--negro);color:var(--blanco)}
+    .fb .cnt{float:right;font-size:.75rem;opacity:.6}
+    .sb-txt{font-size:.74rem;color:var(--gris-medio);line-height:1.5;margin-bottom:.5rem}
 
-    /* FILTROS */
-    .filtros-tendencia { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
-    .filtro-chip { padding: 0.35rem 1rem; border-radius: 20px; border: 1px solid var(--gris-claro); background: var(--blanco); font-family: var(--fuente-cuerpo); font-size: 0.8rem; color: var(--gris-oscuro); cursor: pointer; transition: all 0.15s; }
-    .filtro-chip:hover { border-color: var(--gris-medio); color: var(--negro); }
-    .filtro-chip.activo { background: var(--negro); color: var(--blanco); border-color: var(--negro); }
-    .filtro-chip.izq.activo  { background: var(--izquierda); border-color: var(--izquierda); }
-    .filtro-chip.der.activo  { background: var(--derecha);   border-color: var(--derecha);   }
-    .filtro-chip.cnt.activo  { background: #7a6a50;          border-color: #7a6a50;          }
+    /* ── BUSCADOR ── */
+    .busq{position:relative;margin-bottom:1.25rem}
+    .busq-ico{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);font-size:.8rem;color:var(--gris-medio);pointer-events:none}
+    .busq input{width:100%;padding:.58rem .85rem .58rem 2.2rem;border:1px solid var(--gris-claro);border-radius:3px;font-family:var(--ff-body);font-size:.85rem;background:var(--blanco);color:var(--negro)}
+    .busq input:focus{outline:none;border-color:var(--gris-medio)}
 
-    /* GRID MEDIOS */
-    .grid-medios { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--gris-claro); border: 1px solid var(--gris-claro); border-radius: var(--radio); overflow: hidden; }
-    .medio-card { background: var(--blanco); padding: 1.25rem 1.5rem; display: flex; align-items: center; gap: 1rem; transition: background 0.15s; cursor: default; }
-    .medio-card:hover { background: #faf8f5; }
+    /* ── SECCIÓN ── */
+    .sec-tit{font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gris-medio);margin:1.75rem 0 .75rem;padding-bottom:.4rem;border-bottom:1px solid var(--gris-claro);display:flex;justify-content:space-between}
+    .sec-tit:first-child{margin-top:0}
 
-    .medio-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-    .medio-info { flex: 1; min-width: 0; }
-    .medio-nombre { font-size: 0.9rem; font-weight: 500; color: var(--negro); margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .medio-tipo { font-size: 0.72rem; color: var(--gris-medio); }
+    /* ── CARDS ── */
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1px;background:var(--gris-claro);border:1px solid var(--gris-claro);border-radius:3px;overflow:hidden}
+    .card{background:var(--blanco);padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.55rem;transition:background .12s;cursor:default}
+    .card:hover{background:#faf8f5}
 
-    .medio-score-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; flex-shrink: 0; }
-    .medio-score { font-family: var(--fuente-display); font-size: 1rem; font-weight: 600; }
-    .medio-barra-wrap { width: 60px; height: 4px; background: var(--gris-claro); border-radius: 2px; overflow: hidden; }
-    .medio-barra { height: 100%; border-radius: 2px; }
+    /* fila principal */
+    .card-top{display:flex;align-items:center;gap:.8rem}
+    .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .card-info{flex:1;min-width:0}
+    .card-nombre{font-size:.88rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .card-nombre a{color:var(--negro);text-decoration:none}
+    .card-nombre a:hover{color:var(--acento)}
+    .card-prop{font-size:.68rem;color:var(--gris-medio);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .card-score-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:.2rem}
+    .card-score{font-family:var(--ff-display);font-size:.95rem;font-weight:600}
+    .barra-bg{width:48px;height:3px;background:var(--gris-claro);border-radius:2px;overflow:hidden}
+    .barra{height:100%;border-radius:2px}
 
-    .seccion-titulo { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gris-medio); margin: 2rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--gris-claro); }
+    /* fila votos */
+    .card-votos{display:flex;align-items:center;gap:.5rem}
+    .voto-lbl{font-size:.67rem;color:var(--gris-medio);flex:1}
 
-    .nota { font-size: 0.8rem; color: var(--gris-medio); margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gris-claro); line-height: 1.7; max-width: 600px; }
+    /* barra de presión */
+    .presion-wrap{flex:1;height:4px;background:var(--gris-claro);border-radius:2px;overflow:hidden;position:relative}
+    .presion-bar{height:100%;border-radius:2px;transition:width .4s ease}
+    /* izquierda = rojo desde el centro hacia izq; derecha = azul desde centro hacia der */
+    .presion-izq{background:#c0392b;float:right}
+    .presion-der{background:#2c3e7a}
 
-    footer { border-top: 1px solid var(--gris-claro); background: var(--blanco); padding: 2rem; margin-top: 4rem; }
-    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-    .footer-logo { font-family: var(--fuente-display); font-size: 1rem; font-weight: 600; color: var(--negro); }
-    .footer-texto { font-size: 0.78rem; color: var(--gris-medio); max-width: 400px; text-align: center; }
-    .footer-link { font-size: 0.78rem; color: var(--gris-medio); text-decoration: none; }
-    .footer-link:hover { color: var(--acento); }
+    .vbtn{border:1px solid var(--gris-claro);background:none;font-family:var(--ff-body);font-size:.7rem;cursor:pointer;padding:.22rem .55rem;border-radius:2px;color:var(--gris-oscuro);transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:.25rem}
+    .vbtn:hover{border-color:var(--gris-medio)}
+    .vbtn.vactivo-izq{border-color:var(--izq);color:var(--izq);background:#fdf5f5}
+    .vbtn.vactivo-der{border-color:var(--der);color:var(--der);background:#f5f6fc}
+    .vbtn-cnt{font-size:.65rem;opacity:.75}
+    .presion-badge{font-size:.6rem;padding:.15rem .4rem;border-radius:2px;font-weight:500}
+    .badge-izq{background:#fdf0ee;color:#c0392b}
+    .badge-der{background:#eef0fc;color:#2c3e7a}
+    .badge-ok{background:#f0f5ee;color:#3a6b2a;font-size:.62rem;padding:.12rem .35rem;border-radius:2px}
 
-    @media (max-width: 640px) {
-      .grid-medios { grid-template-columns: 1fr; }
-      .escala-inner { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    /* ── NOTA ── */
+    .nota{font-size:.77rem;color:var(--gris-medio);margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--gris-claro);line-height:1.7}
+
+    /* ── TOAST ── */
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--negro);color:var(--blanco);font-size:.8rem;padding:.6rem 1.25rem;border-radius:3px;opacity:0;transition:all .3s;pointer-events:none;z-index:300;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+    footer{border-top:1px solid var(--gris-claro);background:var(--blanco);padding:1.5rem 2rem}
+    .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+    .footer-logo{font-family:var(--ff-display);font-size:.95rem;font-weight:600}
+    .footer-lnk{font-size:.77rem;color:var(--gris-medio);text-decoration:none}
+    .footer-lnk:hover{color:var(--acento)}
+
+    @media(max-width:768px){
+      .pagina{grid-template-columns:1fr}
+      .sidebar{position:static}
+      .hero-inner{flex-direction:column;align-items:flex-start}
     }
   </style>
 </head>
@@ -101,12 +132,10 @@
 <header>
   <div class="header-inner">
     <a href="index.html" class="logo">
-      <span class="logo-principal">Contrastar</span>
-      <span class="logo-punto">.</span>
-      <span class="logo-cl">cl</span>
+      <span class="logo-c">Contrastar</span><span class="logo-p">.</span><span class="logo-cl">cl</span>
     </a>
     <nav>
-      <a href="index.html">← Volver al feed</a>
+      <a href="index.html">← Feed</a>
       <a href="medios.html" class="activo">Medios</a>
     </nav>
   </div>
@@ -114,178 +143,315 @@
 
 <section class="hero">
   <div class="hero-inner">
-    <p class="hero-etiqueta">Fuentes · Tendencia editorial</p>
-    <h1 class="hero-titulo">Medios que monitoreamos</h1>
-    <p class="hero-bajada">Cada medio tiene asignado un puntaje de tendencia editorial en una escala de −2 (izquierda) a +2 (derecha), basado en análisis de su línea editorial.</p>
+    <div>
+      <p class="etiq">Fuentes monitoreadas · Tendencia editorial</p>
+      <h1>Medios que<br>monitoreamos</h1>
+      <p>Cada medio tiene un puntaje de tendencia editorial de −2 (izquierda) a +2 (derecha), basado en análisis de su propiedad, línea editorial y cobertura histórica.<br><br>Puedes votar si crees que un puntaje está mal calibrado. Los votos no cambian el score directamente — son una señal visible para que el equipo revise.</p>
+    </div>
+    <div class="hero-stats">
+      <div><div class="stat-num" id="cnt-total">—</div><div class="stat-lbl">Medios</div></div>
+      <div><div class="stat-num" id="cnt-nac">—</div><div class="stat-lbl">Nacionales</div></div>
+      <div><div class="stat-num" id="cnt-reg">—</div><div class="stat-lbl">Regionales</div></div>
+    </div>
   </div>
 </section>
 
-<div class="escala-strip">
-  <div class="escala-inner">
-    <span class="escala-label">Espectro</span>
-    <div class="escala-barra-wrap">
-      <div class="escala-barra"></div>
-      <div class="escala-ticks">
-        <span class="escala-tick" style="color:#c0392b">−2 Izquierda</span>
-        <span class="escala-tick">−1</span>
-        <span class="escala-tick">0 Centro</span>
-        <span class="escala-tick">+1</span>
-        <span class="escala-tick" style="color:#2c3e7a">+2 Derecha</span>
+<div class="esp-strip">
+  <div class="esp-inner">
+    <span class="esp-lbl">Espectro</span>
+    <div style="flex:1">
+      <div class="esp-barra"></div>
+      <div class="esp-ticks">
+        <span class="esp-tick" style="color:#c0392b">−2 Izquierda</span>
+        <span class="esp-tick">−1</span>
+        <span class="esp-tick">0 Centro</span>
+        <span class="esp-tick">+1</span>
+        <span class="esp-tick" style="color:#2c3e7a">+2 Derecha</span>
       </div>
     </div>
   </div>
 </div>
 
-<main>
-  <div class="filtros-tendencia">
-    <button class="filtro-chip activo" onclick="filtrar('todos',this)">Todos</button>
-    <button class="filtro-chip izq"   onclick="filtrar('izquierda',this)">Izquierda</button>
-    <button class="filtro-chip cnt"   onclick="filtrar('centro',this)">Centro</button>
-    <button class="filtro-chip der"   onclick="filtrar('derecha',this)">Derecha</button>
-  </div>
+<div class="pagina">
+  <aside class="sidebar">
+    <div class="sb-sec">
+      <div class="sb-tit">Tendencia</div>
+      <button class="fb activo" onclick="setT('todos',this)">Todos <span class="cnt" id="f-todos"></span></button>
+      <button class="fb" onclick="setT('izquierda',this)">← Izquierda <span class="cnt" id="f-izq"></span></button>
+      <button class="fb" onclick="setT('centro',this)">— Centro <span class="cnt" id="f-cnt"></span></button>
+      <button class="fb" onclick="setT('derecha',this)">→ Derecha <span class="cnt" id="f-der"></span></button>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-tit">Alcance</div>
+      <button class="fb activo" onclick="setA('todos',this)">Todos</button>
+      <button class="fb" onclick="setA('Nacional',this)">Nacionales</button>
+      <button class="fb" onclick="setA('Regional',this)">Regionales</button>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-tit">Sistema de votos</div>
+      <p class="sb-txt">Los votos muestran <strong>presión de revisión</strong>: si muchos creen que un medio está mal clasificado, el equipo lo revisa. El puntaje final siempre lo decide el equipo editorial.</p>
+      <p class="sb-txt" style="margin-top:.5rem;font-size:.7rem">← Más a la izquierda &nbsp;·&nbsp; → Más a la derecha</p>
+    </div>
+  </aside>
 
-  <div id="contenedor-medios"></div>
-
-  <p class="nota">
-    La clasificación editorial es una aproximación basada en análisis del contenido y línea editorial de cada medio. No implica juicio de valor sobre la calidad periodística. Se revisa periódicamente.
-  </p>
-</main>
+  <main>
+    <div class="busq">
+      <span class="busq-ico">🔍</span>
+      <input type="text" id="buscador" placeholder="Buscar por nombre o región..." oninput="render()">
+    </div>
+    <div id="contenedor"></div>
+    <p class="nota">La clasificación editorial es una aproximación basada en análisis de propiedad, línea editorial histórica y cobertura. No implica juicio sobre la calidad periodística individual. Los puntajes son revisados periódicamente por el equipo, tomando en cuenta la presión de votos acumulada. Los votos de la comunidad son una señal, no una decisión automática.</p>
+  </main>
+</div>
 
 <footer>
   <div class="footer-inner">
     <span class="footer-logo">Contrastar.cl</span>
-    <p class="footer-texto">Plataforma independiente de contraste de medios. No generamos noticias, solo mostramos cómo otros las cubren.</p>
-    <a href="index.html" class="footer-link">Volver al feed →</a>
+    <a href="index.html" class="footer-lnk">← Volver al feed</a>
   </div>
 </footer>
 
+<div class="toast" id="toast"></div>
+
 <script>
-  const MEDIOS = [
-    // IZQUIERDA
-    { nombre: "El Ciudadano",       tipo: "Digital",        score: -1.8 },
-    { nombre: "Interferencia",      tipo: "Digital",        score: -1.5 },
-    { nombre: "El Desconcierto",    tipo: "Digital",        score: -1.5 },
-    { nombre: "Zancada",            tipo: "Digital",        score: -1.5 },
-    { nombre: "Radio Uchile",       tipo: "Radio",          score: -1.2 },
-    { nombre: "CIPER Chile",        tipo: "Investigación",  score: -1.0 },
-    { nombre: "The Clinic",         tipo: "Digital",        score: -1.0 },
-    { nombre: "OPE / Publimetro",   tipo: "Prensa",         score: -0.8 },
+// ─────────────────────────────────────────────
+// DATOS (70 medios del Excel, ordenados por score)
+// ─────────────────────────────────────────────
+const MEDIOS = [
+  { id:'izqdiario',     nombre:'La Izquierda Diario',   url:'https://www.laizquierdadiario.cl', score:-2.0, tipo:'Nacional', region:'Nacional',           propietario:'PTS (Trotskista)' },
+  { id:'elsiglo',       nombre:'El Siglo',               url:'https://elsiglo.cl',                score:-2.0, tipo:'Nacional', region:'Nacional',           propietario:'PC Chile' },
+  { id:'radionuevomundo',nombre:'Radio Nuevo Mundo',     url:'https://radionuevomundo.cl',        score:-1.8, tipo:'Nacional', region:'Nacional',           propietario:'PC Chile / Sindicalismo' },
+  { id:'werkenrojo',    nombre:'Werken Rojo',            url:'https://werkenrojo.cl',             score:-1.9, tipo:'Regional',region:'La Araucanía',       propietario:'Colectivo activista' },
+  { id:'radiokurruf',   nombre:'Radio Kurruf',           url:'https://radiokurruf.org',           score:-1.8, tipo:'Regional',region:'Biobío',             propietario:'Colectivo autónomo' },
+  { id:'lemonde',       nombre:'Le Monde Diplomatique',  url:'https://www.lemondediplomatique.cl',score:-1.7, tipo:'Nacional', region:'Nacional',           propietario:'Independiente (franquicia)' },
+  { id:'mapuexpress',   nombre:'Mapuexpress',            url:'https://www.mapuexpress.org',       score:-1.7, tipo:'Regional',region:'La Araucanía',       propietario:'Colectivo activista' },
+  { id:'ciudadano',     nombre:'El Ciudadano',           url:'https://www.elciudadano.com',       score:-1.6, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'resumen',       nombre:'Resumen.cl',             url:'https://resumen.cl',                score:-1.5, tipo:'Regional',region:'Biobío',             propietario:'Colectivo Concepción' },
+  { id:'interferencia', nombre:'Interferencia',          url:'https://interferencia.cl',          score:-1.4, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'desconcierto',  nombre:'El Desconcierto',        url:'https://www.eldesconcierto.cl',     score:-1.3, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'cronicadigital',nombre:'Crónica Digital',        url:'https://cronicadigital.cl',         score:-1.3, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'ciper',         nombre:'CIPER Chile',            url:'https://www.ciperchile.cl',         score:-0.8, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'uchile',        nombre:'Radio UChile',           url:'https://radio.uchile.cl',           score:-0.8, tipo:'Nacional', region:'Metropolitana',      propietario:'Universidad de Chile' },
+  { id:'theclinic',     nombre:'The Clinic',             url:'https://www.theclinic.cl',          score:-0.7, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'elperiodista',  nombre:'El Periodista',          url:'https://elperiodista.cl',           score:-0.7, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'elmostrador',   nombre:'El Mostrador',           url:'https://www.elmostrador.cl',        score:-0.6, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'zancada',       nombre:'Zancada',                url:'https://zancada.com/',              score:-0.6, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'cambio21',      nombre:'Cambio21',               url:'https://cambio21.cl',               score:-0.6, tipo:'Nacional', region:'Nacional',           propietario:'Ligado a PPD/Concertación' },
+  { id:'diariousach',   nombre:'Diario Usach',           url:'https://www.diariousach.cl/',       score:-0.6, tipo:'Nacional', region:'Metropolitana',      propietario:'Univ. de Santiago' },
+  { id:'cooperativa',   nombre:'Radio Cooperativa',      url:'https://www.cooperativa.cl',        score:-0.4, tipo:'Nacional', region:'Nacional',           propietario:'Cía. Chilena de Comunicaciones' },
+  { id:'infogate',      nombre:'Infogate',               url:'https://infogate.cl',               score:-0.3, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'elmorrocotudo', nombre:'El Morrocotudo',         url:'https://www.elmorrocotudo.cl',      score:-0.3, tipo:'Regional',region:'Arica y Parinacota', propietario:'Red Mi Voz' },
+  { id:'elboyaldia',    nombre:'El Boyaldía',            url:'https://www.elboyaldia.cl',         score:-0.3, tipo:'Regional',region:'Tarapacá',           propietario:'Red Mi Voz' },
+  { id:'elnortero',     nombre:'El Nortero',             url:'https://www.elnortero.cl',          score:-0.3, tipo:'Regional',region:'Antofagasta',        propietario:'Red Mi Voz' },
+  { id:'eldivisadero',  nombre:'El Divisadero',          url:'https://eldivisadero.cl',           score:-0.3, tipo:'Regional',region:'Aysén',              propietario:'Independiente' },
+  { id:'cnnchile',      nombre:'CNN Chile',              url:'https://www.cnnchile.com',          score:-0.2, tipo:'Nacional', region:'Nacional',           propietario:'Carey Media' },
+  { id:'chv',           nombre:'Chilevisión Noticias',   url:'https://www.chvnoticias.cl',        score:-0.2, tipo:'Nacional', region:'Nacional',           propietario:'Paramount' },
+  { id:'adnradio',      nombre:'Radio ADN',              url:'https://www.adnradio.cl',           score:-0.1, tipo:'Nacional', region:'Nacional',           propietario:'Grupo Prisa' },
+  { id:'eldefinido',    nombre:'El Definido',            url:'https://www.eldefinido.cl',         score:-0.1, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'tvn',           nombre:'TVN / 24Horas',          url:'https://www.24horas.cl',            score: 0.0, tipo:'Nacional', region:'Nacional',           propietario:'Estado de Chile' },
+  { id:'fastcheck',     nombre:'Fast Check CL',          url:'https://www.fastcheck.cl',          score: 0.0, tipo:'Nacional', region:'Nacional',           propietario:'Independiente (IFCN)' },
+  { id:'lanacion',      nombre:'La Nación',              url:'https://www.lanacion.cl',           score: 0.0, tipo:'Nacional', region:'Nacional',           propietario:'Estado de Chile' },
+  { id:'pagina7',       nombre:'Página 7',               url:'https://www.pagina7.cl',            score: 0.0, tipo:'Nacional', region:'Nacional',           propietario:'Bío-Bío Comunicaciones' },
+  { id:'malaespinacheck',nombre:'Mala Espina Check',     url:'https://malaespinacheck.cl',        score: 0.0, tipo:'Nacional', region:'Nacional',           propietario:'Independiente (IFCN)' },
+  { id:'camdiputadostv',nombre:'Cámara de Diputados TV', url:'https://www.camara.cl/',            score: 0.0, tipo:'Nacional', region:'Nacional',           propietario:'Estado de Chile' },
+  { id:'senadotv',      nombre:'Senado TV',              url:'https://www.senado.cl/',            score: 0.0, tipo:'Nacional', region:'Nacional',           propietario:'Estado de Chile' },
+  { id:'publimetro',    nombre:'Publimetro',             url:'https://www.publimetro.cl',         score: 0.1, tipo:'Nacional', region:'Nacional',           propietario:'Metro International' },
+  { id:'radiopolar',    nombre:'Radio Polar',            url:'https://radiopolar.com',            score: 0.1, tipo:'Regional',region:'Magallanes',         propietario:'Independiente' },
+  { id:'sabes',         nombre:'Sabes.cl',               url:'https://sabes.cl',                  score: 0.1, tipo:'Regional',region:'Biobío',             propietario:'Independiente' },
+  { id:'timeline',      nombre:'Timeline Antofagasta',   url:'https://timeline.cl',               score: 0.2, tipo:'Regional',region:'Antofagasta',        propietario:'Independiente' },
+  { id:'diarioconce',   nombre:'Diario Concepción',      url:'https://www.diarioconcepcion.cl',   score: 0.2, tipo:'Regional',region:'Biobío',             propietario:'Univ. de Concepción' },
+  { id:'vlnradio',      nombre:'VLN Radio',              url:'https://vlnradio.cl',               score: 0.2, tipo:'Regional',region:'Maule',              propietario:'Independiente' },
+  { id:'diariovaldivia',nombre:'Diario de Valdivia',     url:'https://diariodevaldivia.cl',       score: 0.2, tipo:'Regional',region:'Los Ríos',           propietario:'Grupo Diario Sur' },
+  { id:'diariodeosorno',nombre:'Diario de Osorno',       url:'https://diariodeosorno.cl',         score: 0.2, tipo:'Regional',region:'Los Lagos',          propietario:'Grupo Diario Sur' },
+  { id:'elmagallanico', nombre:'El Magallánico',         url:'https://elmagallanico.com',         score: 0.2, tipo:'Regional',region:'Magallanes',         propietario:'Independiente' },
+  { id:'puranoticia',   nombre:'Pura Noticia',           url:'https://puranoticia.pnt.cl',        score: 0.2, tipo:'Regional',region:'Valparaíso',         propietario:'Independiente' },
+  { id:'tipografo',     nombre:'El Tipógrafo',           url:'https://eltipografo.cl',            score: 0.3, tipo:'Regional',region:"O'Higgins",          propietario:'Independiente' },
+  { id:'elcentro',      nombre:'El Centro',              url:'https://diarioelcentro.cl',         score: 0.3, tipo:'Regional',region:'Maule',              propietario:'Independiente' },
+  { id:'tiempo21',      nombre:'Tiempo21',               url:'https://tiempo21.cl',               score: 0.3, tipo:'Regional',region:'La Araucanía',       propietario:'Independiente' },
+  { id:'dinamo',        nombre:'El Dínamo',              url:'https://www.eldinamo.cl',           score: 0.4, tipo:'Nacional', region:'Nacional',           propietario:'Ediciones Giro País' },
+  { id:'diariotalca',   nombre:'Diario Talca',           url:'https://diariotalca.cl',            score: 0.4, tipo:'Regional',region:'Maule',              propietario:'Independiente' },
+  { id:'eldia',         nombre:'El Día',                 url:'https://www.diarioeldia.cl',        score: 0.4, tipo:'Regional',region:'Coquimbo',           propietario:'Familia Puga' },
+  { id:'biobio',        nombre:'Radio Bío-Bío',          url:'https://www.biobiochile.cl',        score: 0.5, tipo:'Nacional', region:'Nacional',           propietario:'Familia Mosciatti' },
+  { id:'canal13',       nombre:'Canal 13',               url:'https://www.t13.cl',                score: 0.6, tipo:'Nacional', region:'Nacional',           propietario:'Grupo Luksic' },
+  { id:'mega',          nombre:'Mega Noticias',          url:'https://www.meganoticias.cl',       score: 0.6, tipo:'Nacional', region:'Nacional',           propietario:'Grupo Bethia' },
+  { id:'rancaguino',    nombre:'El Rancagüino',          url:'https://elrancaguino.cl',           score: 0.6, tipo:'Regional',region:"O'Higgins",          propietario:'Familia Casals' },
+  { id:'diarioaysen',   nombre:'Diario Aysén',           url:'https://diarioaysen.cl',            score: 0.6, tipo:'Regional',region:'Aysén',              propietario:'Independiente' },
+  { id:'araucaniadiario',nombre:'Araucanía Diario',      url:'https://araucaniadiario.cl',        score: 0.7, tipo:'Regional',region:'La Araucanía',       propietario:'Independiente' },
+  { id:'elpinguino',    nombre:'El Pingüino',            url:'https://elpinguino.com',            score: 0.7, tipo:'Regional',region:'Magallanes',         propietario:'Multimedia Pingüino' },
+  { id:'latercera',     nombre:'La Tercera',             url:'https://www.latercera.com',         score: 0.8, tipo:'Nacional', region:'Nacional',           propietario:'Grupo Copesa' },
+  { id:'latribuna',     nombre:'La Tribuna',             url:'https://latribuna.cl',              score: 0.8, tipo:'Regional',region:'Biobío',             propietario:'Ligado a forestales/gremios' },
+  { id:'exante',        nombre:'Ex-Ante',                url:'https://www.ex-ante.cl',            score: 1.2, tipo:'Nacional', region:'Nacional',           propietario:'Cristián Bofill' },
+  { id:'estrategia',    nombre:'Diario Estrategia',      url:'https://www.diarioestrategia.cl',   score: 1.2, tipo:'Nacional', region:'Nacional',           propietario:'Independiente' },
+  { id:'pulso',         nombre:'Pulso',                  url:'https://www.pulso.cl',              score: 1.2, tipo:'Nacional', region:'Nacional',           propietario:'Grupo Copesa' },
+  { id:'df',            nombre:'Diario Financiero',      url:'https://www.df.cl',                 score: 1.3, tipo:'Nacional', region:'Nacional',           propietario:'Grupo Claro' },
+  { id:'radiosago',     nombre:'Radio Sago',             url:'https://radiosago.cl',              score: 1.4, tipo:'Regional',region:'Los Lagos',          propietario:'SAGO (Soc. Agrícola de Osorno)' },
+  { id:'emol',          nombre:'El Mercurio / Emol',     url:'https://www.emol.com',              score: 1.5, tipo:'Nacional', region:'Nacional',           propietario:'El Mercurio S.A.P.' },
+  { id:'ellibero',      nombre:'El Líbero',              url:'https://ellibero.cl',               score: 1.8, tipo:'Nacional', region:'Nacional',           propietario:'Fundación Nuestros Valores' },
+  { id:'agricultura',   nombre:'Radio Agricultura',      url:'https://www.radioagricultura.cl',   score: 1.9, tipo:'Nacional', region:'Nacional',           propietario:'Soc. Nacional de Agricultura' },
+];
 
-    // CENTRO-IZQUIERDA
-    { nombre: "La Tercera",         tipo: "Prensa",         score: -0.5 },
-    { nombre: "Emol / El Mercurio", tipo: "Prensa",         score: -0.3 },
-    { nombre: "Meganoticias",       tipo: "TV",             score: -0.3 },
-    { nombre: "CNN Chile",          tipo: "TV",             score: -0.2 },
+// ─────────────────────────────────────────────
+// ESTADO: votos en memoria (shared = público)
+// Estructura: { [id]: { izq: N, der: N } }
+// ─────────────────────────────────────────────
+let VOTOS = {};       // cargado desde storage
+let MI_VOTO = {};     // { [id]: 'izq'|'der'|null } — solo este usuario
 
-    // CENTRO
-    { nombre: "Radio Cooperativa",  tipo: "Radio",          score:  0.0 },
-    { nombre: "Radio Bío-Bío",      tipo: "Radio",          score:  0.0 },
-    { nombre: "24Horas / TVN",      tipo: "TV",             score:  0.1 },
-    { nombre: "ADNRadio",           tipo: "Radio",          score:  0.1 },
-    { nombre: "Fast Check CL",      tipo: "Verificación",   score:  0.0 },
-    { nombre: "Tiempo21",           tipo: "Digital",        score:  0.2 },
-    { nombre: "El Mostrador",       tipo: "Digital",        score: -0.2 },
-    { nombre: "T13 / Canal 13",     tipo: "TV",             score:  0.3 },
+const STORAGE_KEY  = 'medios-votos-v1';
+const MI_VOTO_KEY  = 'medios-mi-voto-v1';
 
-    // CENTRO-DERECHA
-    { nombre: "El Mercurio / Emol", tipo: "Prensa",         score:  0.8 },
-    { nombre: "Pulso",              tipo: "Prensa",         score:  0.8 },
-    { nombre: "Diario Financiero",  tipo: "Prensa",         score:  1.0 },
-    { nombre: "Radio Agricultura",  tipo: "Radio",          score:  1.2 },
-    { nombre: "El Líbero",          tipo: "Digital",        score:  1.5 },
-    { nombre: "Tele13 Radio",       tipo: "Radio",          score:  0.5 },
-    { nombre: "Mega",               tipo: "TV",             score:  0.4 },
+async function cargarVotos() {
+  try {
+    const r = await window.storage.get(STORAGE_KEY, true); // shared
+    VOTOS = r ? JSON.parse(r.value) : {};
+  } catch(_) { VOTOS = {}; }
+  try {
+    const r2 = await window.storage.get(MI_VOTO_KEY, false); // personal
+    MI_VOTO = r2 ? JSON.parse(r2.value) : {};
+  } catch(_) { MI_VOTO = {}; }
+}
 
-    // DERECHA
-    { nombre: "RadioSago",          tipo: "Radio",          score:  1.5 },
-    { nombre: "El Mostrador Mkt",   tipo: "Digital",        score:  1.8 },
-  ].sort((a, b) => a.score - b.score);
+async function guardarVotos() {
+  try { await window.storage.set(STORAGE_KEY, JSON.stringify(VOTOS), true); } catch(_){}
+  try { await window.storage.set(MI_VOTO_KEY, JSON.stringify(MI_VOTO), false); } catch(_){}
+}
 
-  let filtroActual = 'todos';
+async function votar(id, dir) {
+  const actual = MI_VOTO[id];
+  if (!VOTOS[id]) VOTOS[id] = { izq: 0, der: 0 };
 
-  function colorScore(s) {
-    if (s <= -1.0) return '#c0392b';
-    if (s <  -0.5) return '#d4826a';
-    if (s <=  0.5) return '#b8a98a';
-    if (s <=  1.0) return '#7a8fc4';
-    return '#2c3e7a';
+  if (actual === dir) {
+    // deshacer voto
+    VOTOS[id][dir] = Math.max(0, (VOTOS[id][dir]||0) - 1);
+    MI_VOTO[id] = null;
+    toast('Voto retirado');
+  } else {
+    // cambiar o nuevo voto
+    if (actual) VOTOS[id][actual] = Math.max(0, (VOTOS[id][actual]||0) - 1);
+    VOTOS[id][dir] = (VOTOS[id][dir]||0) + 1;
+    MI_VOTO[id] = dir;
+    toast(dir === 'izq' ? '← Votado: más a la izquierda' : '→ Votado: más a la derecha');
+  }
+  await guardarVotos();
+  render();
+}
+
+// ─────────────────────────────────────────────
+// FILTROS
+// ─────────────────────────────────────────────
+let fT = 'todos', fA = 'todos';
+const zona = s => s <= -0.5 ? 'izquierda' : s >= 0.5 ? 'derecha' : 'centro';
+const clr  = s => s<=-1?'#c0392b':s<-0.5?'#d4826a':s<0.5?'#b8a98a':s<1?'#7a8fc4':'#2c3e7a';
+const lbl  = s => s<=-1.5?'Izquierda':s<=-0.5?'Centro-izq.':s<0.5?'Centro':s<1.5?'Centro-der.':'Derecha';
+
+function setT(f,btn){fT=f;document.querySelectorAll('.sb-sec:nth-child(1) .fb').forEach(b=>b.classList.remove('activo'));btn.classList.add('activo');render();}
+function setA(a,btn){fA=a;document.querySelectorAll('.sb-sec:nth-child(2) .fb').forEach(b=>b.classList.remove('activo'));btn.classList.add('activo');render();}
+
+// ─────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────
+function render() {
+  const q = document.getElementById('buscador').value.toLowerCase().trim();
+  const medios = MEDIOS.filter(m => {
+    if (fT !== 'todos' && zona(m.score) !== fT) return false;
+    if (fA !== 'todos' && m.tipo !== fA) return false;
+    if (q && !m.nombre.toLowerCase().includes(q) && !m.region.toLowerCase().includes(q) && !m.propietario.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  document.getElementById('f-todos').textContent = MEDIOS.length;
+  document.getElementById('f-izq').textContent   = MEDIOS.filter(m=>zona(m.score)==='izquierda').length;
+  document.getElementById('f-cnt').textContent   = MEDIOS.filter(m=>zona(m.score)==='centro').length;
+  document.getElementById('f-der').textContent   = MEDIOS.filter(m=>zona(m.score)==='derecha').length;
+  document.getElementById('cnt-total').textContent = MEDIOS.length;
+  document.getElementById('cnt-nac').textContent   = MEDIOS.filter(m=>m.tipo==='Nacional').length;
+  document.getElementById('cnt-reg').textContent   = MEDIOS.filter(m=>m.tipo==='Regional').length;
+
+  if (!medios.length) {
+    document.getElementById('contenedor').innerHTML = '<p style="color:var(--gris-medio);font-size:.85rem;padding:1rem 0">No se encontraron medios.</p>';
+    return;
   }
 
-  function categoriaScore(s) {
-    if (s <= -0.5) return 'izquierda';
-    if (s >=  0.5) return 'derecha';
-    return 'centro';
+  let html = '';
+  if (fT === 'todos' && !q) {
+    [['izquierda','Izquierda y centro-izquierda'],['centro','Centro'],['derecha','Centro-derecha y derecha']].forEach(([z,lz])=>{
+      const g = medios.filter(m => zona(m.score) === z);
+      if (!g.length) return;
+      html += `<div class="sec-tit"><span>${lz}</span><span style="font-weight:300">${g.length} medios</span></div>`;
+      html += '<div class="grid">' + g.map(cardHTML).join('') + '</div>';
+    });
+  } else {
+    html += `<div class="sec-tit"><span>Resultados</span><span style="font-weight:300">${medios.length} medios</span></div>`;
+    html += '<div class="grid">' + medios.map(cardHTML).join('') + '</div>';
   }
+  document.getElementById('contenedor').innerHTML = html;
+}
 
-  function labelCategoria(s) {
-    if (s <= -1.0) return 'Izquierda';
-    if (s <  -0.5) return 'Centro-izquierda';
-    if (s <   0.5) return 'Centro';
-    if (s <   1.0) return 'Centro-derecha';
-    return 'Derecha';
-  }
+function cardHTML(m) {
+  const c   = clr(m.score);
+  const pct = ((m.score + 2) / 4) * 100;
+  const sig = m.score > 0 ? '+' : '';
+  const reg = m.tipo === 'Regional' ? ` · ${m.region}` : '';
+  const v   = VOTOS[m.id] || { izq:0, der:0 };
+  const mv  = MI_VOTO[m.id] || null;
+  const total = (v.izq||0) + (v.der||0);
 
-  function pctBarra(s) {
-    return ((s + 2) / 4) * 100;
-  }
-
-  function filtrar(zona, btn) {
-    filtroActual = zona;
-    document.querySelectorAll('.filtro-chip').forEach(b => b.classList.remove('activo'));
-    btn.classList.add('activo');
-    renderizar();
-  }
-
-  function renderizar() {
-    const mediosFiltrados = filtroActual === 'todos'
-      ? MEDIOS
-      : MEDIOS.filter(m => categoriaScore(m.score) === filtroActual);
-
-    // Agrupar por zona para mostrar secciones
-    const zonas = [
-      { key: 'izquierda', label: 'Izquierda y centro-izquierda' },
-      { key: 'centro',    label: 'Centro' },
-      { key: 'derecha',   label: 'Centro-derecha y derecha' },
-    ];
-
-    let html = '';
-
-    if (filtroActual === 'todos') {
-      zonas.forEach(zona => {
-        const grupo = mediosFiltrados.filter(m => categoriaScore(m.score) === zona.key);
-        if (grupo.length === 0) return;
-        html += `<p class="seccion-titulo">${zona.label} <span style="font-weight:300;letter-spacing:0">(${grupo.length})</span></p>`;
-        html += '<div class="grid-medios">' + grupo.map(m => tarjeta(m)).join('') + '</div>';
-      });
+  // Calcular presión dominante
+  let presionHTML = '';
+  if (total === 0) {
+    presionHTML = `<span class="badge-ok">sin votos</span>`;
+  } else {
+    const pIzq = Math.round((v.izq/total)*100);
+    const pDer = Math.round((v.der/total)*100);
+    if (pIzq >= 60) {
+      presionHTML = `<span class="presion-badge badge-izq">← revisión izq (${v.izq})</span>`;
+    } else if (pDer >= 60) {
+      presionHTML = `<span class="presion-badge badge-der">revisión der → (${v.der})</span>`;
     } else {
-      html += '<div class="grid-medios">' + mediosFiltrados.map(m => tarjeta(m)).join('') + '</div>';
+      presionHTML = `<span class="presion-badge" style="background:#f5f5f0;color:var(--gris-medio)">dividido (${total})</span>`;
     }
-
-    document.getElementById('contenedor-medios').innerHTML = html;
   }
 
-  function tarjeta(m) {
-    const color = colorScore(m.score);
-    const pct   = pctBarra(m.score);
-    const signo = m.score > 0 ? '+' : '';
-    const label = labelCategoria(m.score);
-    return `
-      <div class="medio-card">
-        <div class="medio-dot" style="background:${color}"></div>
-        <div class="medio-info">
-          <div class="medio-nombre">${m.nombre}</div>
-          <div class="medio-tipo">${m.tipo} · ${label}</div>
-        </div>
-        <div class="medio-score-wrap">
-          <span class="medio-score" style="color:${color}">${signo}${m.score.toFixed(1)}</span>
-          <div class="medio-barra-wrap">
-            <div class="medio-barra" style="width:${pct}%;background:${color}"></div>
-          </div>
-        </div>
-      </div>`;
-  }
+  return `<div class="card">
+    <div class="card-top">
+      <div class="dot" style="background:${c}"></div>
+      <div class="card-info">
+        <div class="card-nombre"><a href="${m.url}" target="_blank" rel="noopener">${m.nombre}</a></div>
+        <div class="card-prop">${m.propietario}${reg}</div>
+      </div>
+      <div class="card-score-wrap">
+        <span class="card-score" style="color:${c}">${sig}${m.score.toFixed(1)}</span>
+        <div class="barra-bg"><div class="barra" style="width:${pct}%;background:${c}"></div></div>
+      </div>
+    </div>
+    <div class="card-votos">
+      <button class="vbtn ${mv==='izq'?'vactivo-izq':''}" onclick="votar('${m.id}','izq')">
+        ← más izq <span class="vbtn-cnt">${v.izq||0}</span>
+      </button>
+      ${presionHTML}
+      <button class="vbtn ${mv==='der'?'vactivo-der':''}" onclick="votar('${m.id}','der')">
+        más der → <span class="vbtn-cnt">${v.der||0}</span>
+      </button>
+    </div>
+  </div>`;
+}
 
-  renderizar();
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+let toastT;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+cargarVotos().then(() => render());
 </script>
 </body>
 </html>
