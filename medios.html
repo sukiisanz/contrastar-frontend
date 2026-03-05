@@ -18,15 +18,6 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:var(--ff-body);background:var(--crema);color:var(--negro);-webkit-font-smoothing:antialiased}
 
-    /* ── ADMIN PANEL ── */
-    #admin-panel {
-      display:none; background: #fff; border: 2px solid var(--negro); 
-      padding: 2rem; margin: 2rem auto; max-width: 1100px; border-radius: 8px;
-    }
-    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    .admin-table td, .admin-table th { padding: 10px; border-bottom: 1px solid var(--gris-claro); }
-    .presion-alta { color: var(--izq); font-weight: bold; }
-
     /* ── HEADER ── */
     header{background:var(--blanco);border-bottom:1px solid var(--gris-claro);position:sticky;top:0;z-index:100;padding:0 2rem}
     .header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
@@ -82,18 +73,29 @@
     .card{background:var(--blanco);padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.55rem;transition:background .12s;cursor:default}
     .card:hover{background:#faf8f5}
 
+    /* fila principal */
     .card-top{display:flex;align-items:center;gap:.8rem}
     .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
     .card-info{flex:1;min-width:0}
     .card-nombre{font-size:.88rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .card-nombre a{color:var(--negro);text-decoration:none}
+    .card-nombre a:hover{color:var(--acento)}
     .card-prop{font-size:.68rem;color:var(--gris-medio);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .card-score-wrap{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:.2rem}
     .card-score{font-family:var(--ff-display);font-size:.95rem;font-weight:600}
     .barra-bg{width:48px;height:3px;background:var(--gris-claro);border-radius:2px;overflow:hidden}
     .barra{height:100%;border-radius:2px}
 
+    /* fila votos */
     .card-votos{display:flex;align-items:center;gap:.5rem}
+    .voto-lbl{font-size:.67rem;color:var(--gris-medio);flex:1}
+
+    /* barra de presión */
+    .presion-wrap{flex:1;height:4px;background:var(--gris-claro);border-radius:2px;overflow:hidden;position:relative}
+    .presion-bar{height:100%;border-radius:2px;transition:width .4s ease}
+    .presion-izq{background:#c0392b;float:right}
+    .presion-der{background:#2c3e7a}
+
     .vbtn{border:1px solid var(--gris-claro);background:none;font-family:var(--ff-body);font-size:.7rem;cursor:pointer;padding:.22rem .55rem;border-radius:2px;color:var(--gris-oscuro);transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:.25rem}
     .vbtn:hover{border-color:var(--gris-medio)}
     .vbtn.vactivo-izq{border-color:var(--izq);color:var(--izq);background:#fdf5f5}
@@ -104,7 +106,10 @@
     .badge-der{background:#eef0fc;color:#2c3e7a}
     .badge-ok{background:#f0f5ee;color:#3a6b2a;font-size:.62rem;padding:.12rem .35rem;border-radius:2px}
 
+    /* ── NOTA ── */
     .nota{font-size:.77rem;color:var(--gris-medio);margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--gris-claro);line-height:1.7}
+
+    /* ── TOAST ── */
     .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--negro);color:var(--blanco);font-size:.8rem;padding:.6rem 1.25rem;border-radius:3px;opacity:0;transition:all .3s;pointer-events:none;z-index:300;white-space:nowrap}
     .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -112,12 +117,22 @@
     .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
     .footer-logo{font-family:var(--ff-display);font-size:.95rem;font-weight:600}
     .footer-lnk{font-size:.77rem;color:var(--gris-medio);text-decoration:none}
+    .footer-lnk:hover{color:var(--acento)}
 
     @media(max-width:768px){
       .pagina{grid-template-columns:1fr}
       .sidebar{position:static}
       .hero-inner{flex-direction:column;align-items:flex-start}
     }
+
+    /* ── PANEL ADMIN (NUEVO) ── */
+    #admin-panel {
+      display:none; background: #fff; border: 2px solid var(--negro); 
+      padding: 2rem; margin: 2rem auto; max-width: 1100px; border-radius: 8px;
+    }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .admin-table td, .admin-table th { padding: 10px; border-bottom: 1px solid var(--gris-claro); text-align: left; }
+    .presion-alta { color: var(--izq); font-weight: bold; }
   </style>
 </head>
 <body>
@@ -139,7 +154,7 @@
     <div>
       <p class="etiq">Fuentes monitoreadas · Tendencia editorial</p>
       <h1>Medios que<br>monitoreamos</h1>
-      <p>Cada medio tiene un puntaje de tendencia editorial de −2 (izquierda) a +2 (derecha).<br><br>Puedes votar si crees que un puntaje está mal calibrado. Los votos son una señal visible para que el equipo revise.</p>
+      <p>Cada medio tiene un puntaje de tendencia editorial de −2 (izquierda) a +2 (derecha), basado en análisis de su propiedad, línea editorial y cobertura histórica.<br><br>Puedes votar si crees que un puntaje está mal calibrado. Los votos no cambian el score directamente — son una señal visible para que el equipo revise.</p>
     </div>
     <div class="hero-stats">
       <div><div class="stat-num" id="cnt-total">—</div><div class="stat-lbl">Medios</div></div>
@@ -170,33 +185,20 @@
     <div class="sb-sec">
       <div class="sb-tit">Tendencia</div>
       <button class="fb activo" onclick="setT('todos',this)">Todos <span class="cnt" id="f-todos"></span></button>
-      
-      <button class="fb" onclick="setT('izquierda',this)" style="display:flex;align-items:center;gap:0.4rem">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> 
-        Izquierda  <span class="cnt" id="f-izq"></span>
-      </button>
-      
-      <button class="fb" onclick="setT('centro',this)" style="display:flex;align-items:center;gap:0.4rem">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8c8880" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><path d="M3 6l4 8a4 4 0 0 0 8 0l4-8"/><line x1="3" y1="6" x2="21" y2="6"/></svg> 
-        Centro  <span class="cnt" id="f-cnt"></span>
-      </button>
-      
-      <button class="fb" onclick="setT('derecha',this)" style="display:flex;align-items:center;gap:0.4rem">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#2c3e7a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg> 
-        Derecha  <span class="cnt" id="f-der"></span>
-      </button>
+      <button class="fb" onclick="setT('izquierda',this)">← Izquierda <span class="cnt" id="f-izq"></span></button>
+      <button class="fb" onclick="setT('centro',this)">— Centro <span class="cnt" id="f-cnt"></span></button>
+      <button class="fb" onclick="setT('derecha',this)">→ Derecha <span class="cnt" id="f-der"></span></button>
     </div>
-
     <div class="sb-sec">
       <div class="sb-tit">Alcance</div>
       <button class="fb activo" onclick="setA('todos',this)">Todos</button>
       <button class="fb" onclick="setA('Nacional',this)">Nacionales</button>
       <button class="fb" onclick="setA('Regional',this)">Regionales</button>
     </div>
-
     <div class="sb-sec">
       <div class="sb-tit">Sistema de votos</div>
-      <p class="sb-txt">Los votos muestran <strong>presión de revisión</strong>. El puntaje final lo decide el equipo editorial.</p>
+      <p class="sb-txt">Los votos muestran <strong>presión de revisión</strong>: si muchos creen que un medio está mal clasificado, el equipo lo revisa. El puntaje final siempre lo decide el equipo editorial.</p>
+      <p class="sb-txt" style="margin-top:.5rem;font-size:.7rem">← Más a la izquierda &nbsp;·&nbsp; → Más a la derecha</p>
     </div>
   </aside>
 
@@ -205,15 +207,17 @@
       <span class="busq-ico">🔍</span>
       <input type="text" id="buscador" placeholder="Buscar por nombre o región..." oninput="render()">
     </div>
-    <div id="contenedor">Cargando medios...</div>
-    <p class="nota">La clasificación editorial es una aproximación basada en análisis de propiedad y línea editorial histórica. Los puntajes son revisados periódicamente por el equipo.</p>
+    <div id="contenedor"></div>
+    <p class="nota">La clasificación editorial es una aproximación basada en análisis de propiedad, línea editorial histórica y cobertura. No implica juicio sobre la calidad periodística individual. Los puntajes son revisados periódicamente por el equipo, tomando en cuenta la presión de votos acumulada. Los votos de la comunidad son una señal, no una decisión automática.</p>
   </main>
 </div>
 
 <section id="admin-panel">
-  <h2 style="font-family:var(--ff-display); margin-bottom:1rem">Panel de Auditoría Editorial</h2>
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <h2 style="font-family:var(--ff-display)">Panel de Auditoría Editorial</h2>
+    <button onclick="document.getElementById('admin-panel').style.display='none'" style="cursor:pointer; background:none; border:1px solid var(--gris-claro); padding:5px 10px;">Cerrar ×</button>
+  </div>
   <div id="admin-tabla-container"></div>
-  <button onclick="document.getElementById('admin-panel').style.display='none'" style="margin-top:1rem; cursor:pointer">Cerrar</button>
 </section>
 
 <footer>
@@ -227,7 +231,7 @@
 
 <script>
 // ─────────────────────────────────────────────
-// DATOS (Tu lista de medios)
+// DATOS (70 medios del Excel, ordenados por score)
 // ─────────────────────────────────────────────
 const MEDIOS = [
   { id:'izqdiario',     nombre:'La Izquierda Diario',   url:'https://www.laizquierdadiario.cl', score:-2.0, tipo:'Nacional', region:'Nacional',           propietario:'PTS (Trotskista)' },
@@ -303,171 +307,299 @@ const MEDIOS = [
 ];
 
 // ─────────────────────────────────────────────
-// LÓGICA DE ESTADO
+// FINGERPRINT — identidad estable sin login
+// Usamos @fingerprintjs/fingerprintjs (open source, sin API key)
+// Combina canvas, WebGL, fonts, timezone, screen, etc.
+// Difícil de evadir sin esfuerzo técnico deliberado.
 // ─────────────────────────────────────────────
-let VOTOS = {}; let VOTOS_FP = {}; let MI_VOTO = {}; let FP_ID = null;
-let fT = 'todos', fA = 'todos';
-const UMBRAL_BADGE = 5;
+let FP_ID = null; // se carga al inicio
 
-/** Obtiene huella digital del navegador */
 async function obtenerFingerprint() {
   try {
+    // Cargamos la librería dinámicamente desde CDN
     const FingerprintJS = await import('https://openfpcdn.io/fingerprintjs/v4');
     const fp = await FingerprintJS.load();
     const result = await fp.get();
-    return result.visitorId;
+    return result.visitorId; // hash estable ~32 chars
   } catch(_) {
-    return 'anon-' + Math.random().toString(36).slice(2);
+    // Fallback: generamos un ID aleatorio y lo guardamos en personal storage
+    // Menos robusto pero mejor que nada si el CDN falla
+    try {
+      const r = await window.storage.get('fp-fallback-id', false);
+      if (r) return r.value;
+      const id = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      await window.storage.set('fp-fallback-id', id, false);
+      return id;
+    } catch(_) { return 'anon-' + Math.random().toString(36).slice(2); }
   }
 }
 
-/** Sincroniza votos del usuario actual */
-function sincronizarMisVotos() {
-  if (!FP_ID) return;
-  MI_VOTO = {};
-  for (let key in VOTOS_FP) {
-    if (key.endsWith('::' + FP_ID)) {
-      MI_VOTO[key.split('::')[0]] = VOTOS_FP[key];
+// ─────────────────────────────────────────────
+// ESTADO: votos
+// VOTOS (shared):  { [medioId]: { izq: N, der: N } }
+// VOTOS_FP (shared): { [medioId+fp]: 'izq'|'der' }
+//   → registra QUÉ fingerprint votó QUÉ dirección
+//   → impide que la misma huella vote dos veces aunque recargue
+// ─────────────────────────────────────────────
+let VOTOS    = {};
+let VOTOS_FP = {};
+let MI_VOTO  = {}; // caché local para render rápido sin consultar storage
+
+const KEY_VOTOS   = 'medios-votos-v2';
+const KEY_VFINGER = 'medios-votos-fp-v2';
+
+// Umbral mínimo para mostrar badge de presión (evita que 1 voto active la alarma)
+const UMBRAL_BADGE = 5;
+
+// (MODIFICADO): Carga conectada a Apps Script y window.storage
+async function cargarVotos() {
+  return new Promise(async (resolve) => {
+    if (typeof google !== 'undefined' && google.script) {
+      google.script.run.withSuccessHandler(data => {
+        VOTOS = data.votos || {};
+        VOTOS_FP = data.fp || {};
+        if (FP_ID) {
+          MI_VOTO = {};
+          for (const medioId of Object.keys(VOTOS_FP)) {
+            const key = medioId + '::' + FP_ID;
+            if (VOTOS_FP[key]) MI_VOTO[medioId] = VOTOS_FP[key];
+          }
+        }
+        resolve();
+      }).obtenerVotosIniciales();
+    } else {
+      // Fallback a tu window.storage original si se prueba localmente
+      try { const r = await window.storage.get(KEY_VOTOS,   true);  VOTOS    = r ? JSON.parse(r.value) : {}; } catch(_) { VOTOS    = {}; }
+      try { const r = await window.storage.get(KEY_VFINGER, true);  VOTOS_FP = r ? JSON.parse(r.value) : {}; } catch(_) { VOTOS_FP = {}; }
+
+      if (FP_ID) {
+        MI_VOTO = {};
+        for (const medioId of Object.keys(VOTOS_FP)) {
+          const key = medioId + '::' + FP_ID;
+          if (VOTOS_FP[key]) MI_VOTO[medioId] = VOTOS_FP[key];
+        }
+      }
+      resolve();
     }
-  }
-}
-
-/** Inicialización conectada al Servidor GAS */
-async function inicializar() {
-  FP_ID = await obtenerFingerprint();
-  
-  google.script.run.withSuccessHandler(data => {
-    VOTOS = data.votos;
-    VOTOS_FP = data.fp;
-    sincronizarMisVotos();
-    render();
-  }).obtenerVotosIniciales();
-}
-
-/** VOTAR (Conexión Servidor) */
-async function votar(id, dir) {
-  if (!FP_ID) { toast('Identificando navegador...'); return; }
-  toast('Procesando voto...');
-  
-  google.script.run.withSuccessHandler(data => {
-    VOTOS = data.votos;
-    VOTOS_FP = data.fp;
-    sincronizarMisVotos();
-    render();
-    toast('Voto actualizado');
-  }).registrarVotoServer(id, dir, FP_ID);
-}
-
-// ─────────────────────────────────────────────
-// RENDER Y FILTROS
-// ─────────────────────────────────────────────
-const zona = s => s <= -0.5 ? 'izquierda' : s >= 0.5 ? 'derecha' : 'centro';
-const clr  = s => s<=-1?'#c0392b':s<-0.5?'#d4826a':s<0.5?'#b8a98a':s<1?'#7a8fc4':'#2c3e7a';
-
-function setT(f,btn){fT=f;document.querySelectorAll('.sb-sec:nth-child(1) .fb').forEach(b=>b.classList.remove('activo'));btn.classList.add('activo');render();}
-function setA(a,btn){fA=a;document.querySelectorAll('.sb-sec:nth-child(2) .fb').forEach(b=>b.classList.remove('activo'));btn.classList.add('activo');render();}
-
-function render() {
-  const q = document.getElementById('buscador').value.toLowerCase().trim();
-  const medios = MEDIOS.filter(m => {
-    if (fT !== 'todos' && zona(m.score) !== fT) return false;
-    if (fA !== 'todos' && m.tipo !== fA) return false;
-    if (q && !m.nombre.toLowerCase().includes(q) && !m.region.toLowerCase().includes(q)) return false;
-    return true;
   });
-
-  // Actualizar contadores
-  document.getElementById('f-todos').textContent = MEDIOS.length;
-  document.getElementById('f-izq').textContent = MEDIOS.filter(m=>zona(m.score)==='izquierda').length;
-  document.getElementById('f-cnt').textContent = MEDIOS.filter(m=>zona(m.score)==='centro').length;
-  document.getElementById('f-der').textContent = MEDIOS.filter(m=>zona(m.score)==='derecha').length;
-  document.getElementById('cnt-total').textContent = MEDIOS.length;
-  document.getElementById('cnt-nac').textContent = MEDIOS.filter(m=>m.tipo==='Nacional').length;
-  document.getElementById('cnt-reg').textContent = MEDIOS.filter(m=>m.tipo==='Regional').length;
-
-  const contenedor = document.getElementById('contenedor');
-  if (!medios.length) {
-    contenedor.innerHTML = '<p style="padding:1rem; color:var(--gris-medio)">No se encontraron medios.</p>';
-    return;
-  }
-
-  let html = '';
-  if (fT === 'todos' && !q) {
-    [['izquierda','Izquierda'],['centro','Centro'],['derecha','Derecha']].forEach(([z,lz])=>{
-      const g = medios.filter(m => zona(m.score) === z);
-      if (!g.length) return;
-      html += `<div class="sec-tit"><span>${lz}</span><span>${g.length}</span></div><div class="grid">${g.map(cardHTML).join('')}</div>`;
-    });
-  } else {
-    html = `<div class="grid">${medios.map(cardHTML).join('')}</div>`;
-  }
-  contenedor.innerHTML = html;
 }
 
-function cardHTML(m) {
-  const c = clr(m.score);
-  const pct = ((m.score + 2) / 4) * 100;
-  const v = VOTOS[m.id] || { izq:0, der:0 };
-  const total = v.izq + v.der;
-  const mv = MI_VOTO[m.id] || null;
+async function guardarVotos() {
+  try { await window.storage.set(KEY_VOTOS,   JSON.stringify(VOTOS),    true); } catch(_){}
+  try { await window.storage.set(KEY_VFINGER, JSON.stringify(VOTOS_FP), true); } catch(_){}
+}
 
-  let presionHTML = '';
-  if (total >= UMBRAL_BADGE) {
-    if (v.izq/total >= 0.6) presionHTML = `<span class="presion-badge badge-izq">← revisar izq</span>`;
-    else if (v.der/total >= 0.6) presionHTML = `<span class="presion-badge badge-der">revisar der →</span>`;
-    else presionHTML = `<span class="presion-badge" style="background:var(--gris-claro)">dividido</span>`;
+// (MODIFICADO): Votar conectado a Apps Script y window.storage
+async function votar(id, dir) {
+  if (!FP_ID) { toast('Cargando identificación del navegador…'); return; }
+
+  const fpKey = id + '::' + FP_ID;
+  const actual = VOTOS_FP[fpKey] || null;
+
+  if (!VOTOS[id]) VOTOS[id] = { izq: 0, der: 0 };
+
+  if (actual === dir) {
+    // ── DESHACER voto ──
+    VOTOS[id][dir] = Math.max(0, (VOTOS[id][dir]||0) - 1);
+    delete VOTOS_FP[fpKey];
+    MI_VOTO[id] = null;
+    toast('Voto retirado');
   } else {
-    presionHTML = `<span class="badge-ok">${total} votos</span>`;
+    // ── NUEVO o CAMBIO de voto ──
+    // Si ya votó en otra dirección, restar primero
+    if (actual) VOTOS[id][actual] = Math.max(0, (VOTOS[id][actual]||0) - 1);
+    VOTOS[id][dir] = (VOTOS[id][dir]||0) + 1;
+    VOTOS_FP[fpKey] = dir;
+    MI_VOTO[id] = dir;
+    toast(dir === 'izq' ? '← Votado: debería estar más a la izquierda' : '→ Votado: debería estar más a la derecha');
   }
 
-  return `
-    <div class="card">
-      <div class="card-top">
-        <div class="dot" style="background:${c}"></div>
-        <div class="card-info">
-          <div class="card-nombre"><a href="${m.url}" target="_blank">${m.nombre}</a></div>
-          <div class="card-prop">${m.propietario}</div>
-        </div>
-        <div class="card-score-wrap">
-          <span class="card-score" style="color:${c}">${m.score > 0 ? '+' : ''}${m.score.toFixed(1)}</span>
-          <div class="barra-bg"><div class="barra" style="width:${pct}%; background:${c}"></div></div>
-        </div>
-      </div>
-      <div class="card-votos">
-        <button class="vbtn ${mv==='izq'?'vactivo-izq':''}" onclick="votar('${m.id}','izq')">← izq <span class="vbtn-cnt">${v.izq}</span></button>
-        ${presionHTML}
-        <button class="vbtn ${mv==='der'?'vactivo-der':''}" onclick="votar('${m.id}','der')">der → <span class="vbtn-cnt">${v.der}</span></button>
-      </div>
-    </div>`;
+  // Guardar localmente
+  await guardarVotos();
+
+  // Guardar en el servidor (Excel)
+  if (typeof google !== 'undefined' && google.script) {
+    google.script.run.registrarVotoServer(id, dir, FP_ID);
+  }
+
+  render();
 }
 
 // ─────────────────────────────────────────────
-// ADMIN Y TOAST
+// PANEL ADMIN (NUEVO)
 // ─────────────────────────────────────────────
 window.addEventListener('keydown', (e) => {
   if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-    document.getElementById('admin-panel').style.display = 'block';
+    const panel = document.getElementById('admin-panel');
+    panel.style.display = 'block';
+    panel.scrollIntoView({ behavior: 'smooth' });
     renderAuditoria();
   }
 });
 
 function renderAuditoria() {
   const container = document.getElementById('admin-tabla-container');
-  let html = `<table class="admin-table"><tr><th>Medio</th><th>Izq</th><th>Der</th><th>Total</th></tr>`;
+  let html = `<table class="admin-table">
+    <tr>
+      <th>Medio</th>
+      <th>Votos Izq</th>
+      <th>Votos Der</th>
+      <th>Total</th>
+      <th>Estado</th>
+    </tr>`;
+  
   MEDIOS.forEach(m => {
-    const v = VOTOS[m.id] || {izq:0, der:0};
-    if (v.izq + v.der > 0) html += `<tr><td>${m.nombre}</td><td>${v.izq}</td><td>${v.der}</td><td>${v.izq+v.der}</td></tr>`;
+    const v = VOTOS[m.id] || { izq:0, der:0 };
+    const total = v.izq + v.der;
+    if (total === 0) return;
+    
+    let estado = "Pocos votos";
+    let clase = "";
+    if (total >= UMBRAL_BADGE) {
+      if (v.izq/total >= 0.6) { estado = "⚠️ REVISAR IZQ"; clase = "presion-alta"; }
+      else if (v.der/total >= 0.6) { estado = "⚠️ REVISAR DER"; clase = "presion-alta"; }
+      else { estado = "Dividido"; }
+    }
+    
+    html += `<tr>
+      <td>${m.nombre}</td>
+      <td>${v.izq}</td>
+      <td>${v.der}</td>
+      <td><strong>${total}</strong></td>
+      <td class="${clase}">${estado}</td>
+    </tr>`;
   });
+  
   container.innerHTML = html + `</table>`;
 }
 
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2000);
+// ─────────────────────────────────────────────
+// FILTROS
+// ─────────────────────────────────────────────
+let fT = 'todos', fA = 'todos';
+const zona = s => s <= -0.5 ? 'izquierda' : s >= 0.5 ? 'derecha' : 'centro';
+const clr  = s => s<=-1?'#c0392b':s<-0.5?'#d4826a':s<0.5?'#b8a98a':s<1?'#7a8fc4':'#2c3e7a';
+const lbl  = s => s<=-1.5?'Izquierda':s<=-0.5?'Centro-izq.':s<0.5?'Centro':s<1.5?'Centro-der.':'Derecha';
+
+function setT(f,btn){fT=f;document.querySelectorAll('.sb-sec:nth-child(1) .fb').forEach(b=>b.classList.remove('activo'));btn.classList.add('activo');render();}
+function setA(a,btn){fA=a;document.querySelectorAll('.sb-sec:nth-child(2) .fb').forEach(b=>b.classList.remove('activo'));btn.classList.add('activo');render();}
+
+// ─────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────
+function render() {
+  const q = document.getElementById('buscador').value.toLowerCase().trim();
+  const medios = MEDIOS.filter(m => {
+    if (fT !== 'todos' && zona(m.score) !== fT) return false;
+    if (fA !== 'todos' && m.tipo !== fA) return false;
+    if (q && !m.nombre.toLowerCase().includes(q) && !m.region.toLowerCase().includes(q) && !m.propietario.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  document.getElementById('f-todos').textContent = MEDIOS.length;
+  document.getElementById('f-izq').textContent   = MEDIOS.filter(m=>zona(m.score)==='izquierda').length;
+  document.getElementById('f-cnt').textContent   = MEDIOS.filter(m=>zona(m.score)==='centro').length;
+  document.getElementById('f-der').textContent   = MEDIOS.filter(m=>zona(m.score)==='derecha').length;
+  document.getElementById('cnt-total').textContent = MEDIOS.length;
+  document.getElementById('cnt-nac').textContent   = MEDIOS.filter(m=>m.tipo==='Nacional').length;
+  document.getElementById('cnt-reg').textContent   = MEDIOS.filter(m=>m.tipo==='Regional').length;
+
+  if (!medios.length) {
+    document.getElementById('contenedor').innerHTML = '<p style="color:var(--gris-medio);font-size:.85rem;padding:1rem 0">No se encontraron medios.</p>';
+    return;
+  }
+
+  let html = '';
+  if (fT === 'todos' && !q) {
+    [['izquierda','Izquierda y centro-izquierda'],['centro','Centro'],['derecha','Centro-derecha y derecha']].forEach(([z,lz])=>{
+      const g = medios.filter(m => zona(m.score) === z);
+      if (!g.length) return;
+      html += `<div class="sec-tit"><span>${lz}</span><span style="font-weight:300">${g.length} medios</span></div>`;
+      html += '<div class="grid">' + g.map(cardHTML).join('') + '</div>';
+    });
+  } else {
+    html += `<div class="sec-tit"><span>Resultados</span><span style="font-weight:300">${medios.length} medios</span></div>`;
+    html += '<div class="grid">' + medios.map(cardHTML).join('') + '</div>';
+  }
+  document.getElementById('contenedor').innerHTML = html;
 }
 
-window.onload = inicializar;
+function cardHTML(m) {
+  const c   = clr(m.score);
+  const pct = ((m.score + 2) / 4) * 100;
+  const sig = m.score > 0 ? '+' : '';
+  const reg = m.tipo === 'Regional' ? ` · ${m.region}` : '';
+  const v   = VOTOS[m.id] || { izq:0, der:0 };
+  const mv  = MI_VOTO[m.id] || null;
+  const total = (v.izq||0) + (v.der||0);
+
+  // Calcular presión dominante — solo se muestra badge si hay ≥ UMBRAL_BADGE votos
+  let presionHTML = '';
+  if (total === 0) {
+    presionHTML = `<span class="badge-ok">sin votos</span>`;
+  } else if (total < UMBRAL_BADGE) {
+    presionHTML = `<span class="badge-ok">${total} voto${total>1?'s':''}</span>`;
+  } else {
+    const pIzq = Math.round((v.izq/total)*100);
+    const pDer = Math.round((v.der/total)*100);
+    if (pIzq >= 60) {
+      presionHTML = `<span class="presion-badge badge-izq">← revisar izq (${v.izq}/${total})</span>`;
+    } else if (pDer >= 60) {
+      presionHTML = `<span class="presion-badge badge-der">revisar der → (${v.der}/${total})</span>`;
+    } else {
+      presionHTML = `<span class="presion-badge" style="background:#f5f5f0;color:var(--gris-medio)">opinión dividida (${total})</span>`;
+    }
+  }
+
+  return `<div class="card">
+    <div class="card-top">
+      <div class="dot" style="background:${c}"></div>
+      <div class="card-info">
+        <div class="card-nombre"><a href="${m.url}" target="_blank" rel="noopener">${m.nombre}</a></div>
+        <div class="card-prop">${m.propietario}${reg}</div>
+      </div>
+      <div class="card-score-wrap">
+        <span class="card-score" style="color:${c}">${sig}${m.score.toFixed(1)}</span>
+        <div class="barra-bg"><div class="barra" style="width:${pct}%;background:${c}"></div></div>
+      </div>
+    </div>
+    <div class="card-votos">
+      <button class="vbtn ${mv==='izq'?'vactivo-izq':''}" onclick="votar('${m.id}','izq')">
+        ← más izq <span class="vbtn-cnt">${v.izq||0}</span>
+      </button>
+      ${presionHTML}
+      <button class="vbtn ${mv==='der'?'vactivo-der':''}" onclick="votar('${m.id}','der')">
+        más der → <span class="vbtn-cnt">${v.der||0}</span>
+      </button>
+    </div>
+  </div>`;
+}
+
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+let toastT;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+(async () => {
+  // Mostrar página sin esperar fingerprint (render inmediato)
+  await cargarVotos();
+  render();
+
+  // Cargar fingerprint en paralelo — cuando esté listo, sincronizar MI_VOTO y re-render
+  FP_ID = await obtenerFingerprint();
+  await cargarVotos(); // re-sincronizar MI_VOTO con el FP real
+  render();
+})();
 </script>
 </body>
 </html>
