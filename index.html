@@ -369,11 +369,7 @@
       return '#2c3e7a';
     }
 
-    // =============================================
-    // BARRA DE DENSIDAD — renderiza con canvas 2d
-    // Cada medio contribuye una gaussiana suave en su posición del espectro.
-    // El resultado es una barra que se ilumina donde hay más concentración.
-    // =============================================
+
     function renderizarDensidad(puntos, canvasEl) {
       const W = canvasEl.offsetWidth || 300;
       const H = canvasEl.offsetHeight || 10;
@@ -382,22 +378,16 @@
       const ctx = canvasEl.getContext('2d');
       ctx.clearRect(0, 0, W, H);
 
-      // Dibujamos 3 zonas proporcionales al porcentaje de cada tendencia,
-      // con colores del espectro y transiciones suaves entre zonas.
-      // pctIzq, pctCentro, pctDer vienen del cluster y suman ~100.
-      // La barra siempre va de rojo a azul en sus extremos.
 
-      // Recuperar porcentajes del cluster desde el dataset
       const pctIzq    = parseFloat(canvasEl.dataset.izq    || 0) / 100;
       const pctCentro = parseFloat(canvasEl.dataset.centro || 0) / 100;
       const pctDer    = parseFloat(canvasEl.dataset.der    || 0) / 100;
 
-      // Puntos de corte en la barra (0..1)
+
       const corte1 = pctIzq;
       const corte2 = pctIzq + pctCentro;
 
-      // Paleta: izq=rojo, centro=beige, der=azul
-      // Con degradado suave entre zonas (blur gaussiano al final)
+
       const COLOR_IZQ    = [192,  57,  43];
       const COLOR_CENTRO = [200, 184, 154];
       const COLOR_DER    = [ 44,  62, 122];
@@ -406,8 +396,6 @@
         return a.map((v, i) => Math.round(v + (b[i] - v) * t));
       }
 
-      // Transición suave entre zonas, proporcional al tamaño de cada zona.
-      // Si una zona es 0% no hay transición hacia ella.
       const blend = 0.06;
       const hasIzq    = pctIzq    > 0.01;
       const hasCentro = pctCentro > 0.01;
@@ -478,8 +466,7 @@
           let distTendencia = {};
           try { distTendencia = JSON.parse(fila.dist_tendencia || '{}'); } catch(e) {}
 
-          // distTendencia = {idMedio: score} — cada clave es un medio único.
-          // Los valores son el score editorial del medio (no un conteo).
+
           const puntos = Object.values(distTendencia)
             .map(v => parseFloat(v))
             .filter(s => !isNaN(s))
@@ -488,8 +475,7 @@
           const total = puntos.length;
           const scoreProm = total > 0 ? puntos.reduce((a,b) => a+b.score, 0)/total : 0;
 
-          // Clasificación suave: centro-izq y centro-der contribuyen parcialmente
-          // a sus zonas vecinas en vez de caer bruscamente en una categoría.
+
           let cntIzq=0, cntCentro=0, cntDer=0;
           puntos.forEach(p => {
             const s = p.score;
@@ -506,7 +492,6 @@
             }
           });
 
-          // Redondear a 2 decimales para evitar 1.9000000000000001 etc.
           cntIzq    = Math.round(cntIzq    * 100) / 100;
           cntCentro = Math.round(cntCentro * 100) / 100;
           cntDer    = Math.round(cntDer    * 100) / 100;
@@ -520,7 +505,7 @@
           else if (pctDer    > 60) tendenciaDominante = 'derecha';
           else if (pctCentro > 50) tendenciaDominante = 'centro';
 
-          // Tiene contraste si al menos 2 zonas tienen presencia (>5%)
+      
           const tieneContraste = [pctIzq, pctCentro, pctDer].filter(p => p > 5).length >= 2;
 
           return {
@@ -538,7 +523,7 @@
         })
         .filter(c => c.totalNoticias >= 2)
         .sort((a,b) => {
-          // Con contraste primero; dentro de cada grupo, más fuentes primero
+   
           if (a.tieneContraste !== b.tieneContraste) return b.tieneContraste - a.tieneContraste;
           return b.totalNoticias - a.totalNoticias;
         });
@@ -674,7 +659,6 @@
           </article>`;
       }).join('');
 
-      // Renderizar canvas de densidad tras insertar en DOM
       requestAnimationFrame(() => {
         const mapaCluster = {};
         clusters.forEach(c => mapaCluster[c.id] = c);
@@ -724,7 +708,6 @@
       clusters.forEach(cl => { if (c[cl.tendenciaDominante]!==undefined) c[cl.tendenciaDominante]++; });
       Object.entries(c).forEach(([k,v]) => { const el=document.getElementById('cnt-'+k); if(el) el.textContent=v; });
 
-      // Timestamp: fecha más reciente entre todos los clusters
       const fechas = clusters.map(cl => new Date(cl.fechaCreacion)).filter(d => !isNaN(d));
       if (fechas.length > 0) {
         const ultima = new Date(Math.max(...fechas));
@@ -784,7 +767,6 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarModal(); });
   </script>
 
-  <!-- MODAL METODOLOGÍA -->
   <div class="modal-overlay" id="modal-metodologia" onclick="cerrarModalSiOverlay(event)">
     <div class="modal">
       <button class="modal-cerrar" onclick="cerrarModal()">✕</button>
