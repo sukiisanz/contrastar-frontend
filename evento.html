@@ -347,9 +347,9 @@
       let distTendencia = {};
       try { distTendencia = JSON.parse(cluster.dist_tendencia || '{}'); } catch(e) {}
 
-      // 1 clave = 1 medio (ignoramos count para no inflar medios repetidos)
-      const puntos = Object.keys(distTendencia)
-        .map(k => parseFloat(k))
+      // distTendencia = {idMedio: score} — cada clave es un medio único.
+      const puntos = Object.values(distTendencia)
+        .map(v => parseFloat(v))
         .filter(s => !isNaN(s))
         .map(s => ({ score: s, count: 1 }));
 
