@@ -179,6 +179,21 @@
       nav { gap: 1rem; }
       .hero { padding: 2rem 1rem 1.5rem; }
     }
+  
+    /* Buy Me a Coffee */
+    .bmc-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--blanco); color: #000000;
+      font-family: var(--fuente-cuerpo); font-size: 0.78rem; font-weight: 600;
+      padding: 0.38rem 0.85rem; border-radius: 3px;
+      text-decoration: none; letter-spacing: 0.01em;
+      transition: background 0.15s, transform 0.1s;
+      white-space: nowrap; border: 1.5px solid #FFDD00; cursor: pointer;
+    }
+    .bmc-btn:hover { background: #fffbe6; transform: translateY(-1px); }
+    .bmc-btn .bmc-ico { font-size: 0.9rem; }
+    .footer-bmc { display: flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; }
+    .footer-bmc-txt { font-size: 0.72rem; color: var(--gris-medio); }
   </style>
 </head>
 <body>
@@ -193,6 +208,7 @@
       <nav>
         <a href="medios.html">Medios</a>
         <a href="#" onclick="abrirModal();return false;">Metodología</a>
+        <a href="https://buymeacoffee.com/sukiisanz" target="_blank" rel="noopener" class="bmc-btn"><span class="bmc-ico">☕</span> Apoyar</a>
         <div class="nav-actualizacion">
           <div class="pulso"></div>
           <span id="hora-actualizacion">Actualizando...</span>
@@ -317,7 +333,12 @@
     <div class="footer-inner">
       <span class="footer-logo">Contrastar.cl</span>
       <p class="footer-texto">Plataforma independiente de contraste de medios. No generamos noticias, solo mostramos cómo otros las cubren.</p>
-      <a href="#" class="footer-link">Metodología →</a>
+      <div class="footer-bmc">
+        <span class="footer-bmc-txt">¿Te resulta útil?</span>
+        <a href="https://buymeacoffee.com/sukiisanz" target="_blank" rel="noopener" class="bmc-btn">
+          <span class="bmc-ico">☕</span> Buy me a coffee
+        </a>
+      </div>
     </div>
   </footer>
 
