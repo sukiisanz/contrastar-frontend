@@ -58,7 +58,6 @@
     .metrica-label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-medio); }
     .metrica-sep { width: 1px; background: var(--gris-claro); align-self: stretch; }
 
-    /* BARRA DENSIDAD (igual que index) */
     .sesgo-grande { margin-bottom: 2.5rem; }
     .sesgo-grande-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gris-medio); margin-bottom: 0.6rem; }
     .densidad-wrap { position: relative; height: 10px; border-radius: 5px; overflow: hidden; background: var(--gris-claro); }
@@ -225,7 +224,6 @@
     const CSV_CLUSTERS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=415099479&single=true&output=csv';
     const CSV_NOTICIAS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=356275760&single=true&output=csv';
 
-    // Umbrales (mismos que index.html)
     const UMBRAL_IZQ = -0.5;
     const UMBRAL_DER = +0.5;
 
@@ -255,22 +253,14 @@
       const ctx = canvasEl.getContext('2d');
       ctx.clearRect(0, 0, W, H);
 
-      // Dibujamos 3 zonas proporcionales al porcentaje de cada tendencia,
-      // con colores del espectro y transiciones suaves entre zonas.
-      // pctIzq, pctCentro, pctDer vienen del cluster y suman ~100.
-      // La barra siempre va de rojo a azul en sus extremos.
 
-      // Recuperar porcentajes del cluster desde el dataset
       const pctIzq    = parseFloat(canvasEl.dataset.izq    || 0) / 100;
       const pctCentro = parseFloat(canvasEl.dataset.centro || 0) / 100;
       const pctDer    = parseFloat(canvasEl.dataset.der    || 0) / 100;
 
-      // Puntos de corte en la barra (0..1)
-      const corte1 = pctIzq;
+        const corte1 = pctIzq;
       const corte2 = pctIzq + pctCentro;
 
-      // Paleta: izq=rojo, centro=beige, der=azul
-      // Con degradado suave entre zonas (blur gaussiano al final)
       const COLOR_IZQ    = [192,  57,  43];
       const COLOR_CENTRO = [200, 184, 154];
       const COLOR_DER    = [ 44,  62, 122];
@@ -279,14 +269,12 @@
         return a.map((v, i) => Math.round(v + (b[i] - v) * t));
       }
 
-      // Transición suave entre zonas, proporcional al tamaño de cada zona.
-      // Si una zona es 0% no hay transición hacia ella.
+
       const blend = 0.06;
       const hasIzq    = pctIzq    > 0.01;
       const hasCentro = pctCentro > 0.01;
       const hasDer    = pctDer    > 0.01;
 
-      // Usar canvas gradient — maneja 100% de un color correctamente
       const grad = ctx.createLinearGradient(0, 0, W, 0);
       const C_IZQ_CSS    = 'rgb(192,57,43)';
       const C_CENTRO_CSS = 'rgb(200,184,154)';
@@ -367,7 +355,6 @@
       let distTendencia = {};
       try { distTendencia = JSON.parse(cluster.dist_tendencia || '{}'); } catch(e) {}
 
-      // distTendencia = {idMedio: score} — cada clave es un medio único.
       const puntos = Object.values(distTendencia)
         .map(v => parseFloat(v))
         .filter(s => !isNaN(s))
@@ -375,7 +362,6 @@
 
       const total = puntos.length;
 
-      // Clasificación suave: centro-izq/der contribuyen parcialmente a zonas vecinas
       let cntIzq=0, cntCentro=0, cntDer=0;
       puntos.forEach(p => {
         const s = p.score;
@@ -412,7 +398,6 @@
       document.getElementById('num-centro').textContent = pctCentro>0 ? pctCentro+'% Centro' : '';
       document.getElementById('num-der').textContent = pctDer>0 ? pctDer+'% Derecha' : '';
 
-      // Renderizar barra densidad
       requestAnimationFrame(() => {
         const canvas = document.getElementById('densidad-canvas');
         canvas.dataset.izq    = pctIzq;
@@ -421,7 +406,6 @@
         renderizarDensidad(puntos, canvas);
       });
 
-      // Separar noticias por tendencia usando los mismos umbrales
       const noticiasIzq    = noticiasCluster.filter(n => parseFloat(n.tendencia_score_medio) < UMBRAL_IZQ);
       const noticiasCentro = noticiasCluster.filter(n => { const s=parseFloat(n.tendencia_score_medio); return s>=UMBRAL_IZQ && s<=UMBRAL_DER; });
       const noticiasDer    = noticiasCluster.filter(n => parseFloat(n.tendencia_score_medio) > UMBRAL_DER);
