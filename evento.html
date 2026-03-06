@@ -263,8 +263,10 @@
   </footer>
 
   <script>
-    const CSV_CLUSTERS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=415099479&single=true&output=csv';
-    const CSV_NOTICIAS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=356275760&single=true&output=csv';
+    const CSV_CLUSTERS         = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=415099479&single=true&output=csv';
+    const CSV_NOTICIAS         = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=356275760&single=true&output=csv';
+    const CSV_CLUSTERS_ARCHIVO = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=830475405&single=true&output=csv';
+    const CSV_NOTICIAS_ARCHIVO = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=1174614104&single=true&output=csv';
 
     const UMBRAL_IZQ = -0.5;
     const UMBRAL_DER = +0.5;
@@ -374,14 +376,45 @@
     }
 
     function cargarEvento(idCluster) {
-      let clustersData = null, noticiasData = null;
+      let clustersActivos = null, clustersArchivo = null;
+      let noticiasActivas = null, noticiasArchivo = null;
+
+      function intentarRender() {
+        if (clustersActivos === null || clustersArchivo === null ||
+            noticiasActivas === null || noticiasArchivo === null) return;
+
+        // Fusionar clusters — activos tienen prioridad
+        const mapaC = {};
+        [...clustersArchivo, ...clustersActivos].forEach(c => { if (c.id_cluster) mapaC[c.id_cluster] = c; });
+        const todosClusters = Object.values(mapaC);
+
+        // Fusionar noticias — deduplicar por id_noticia
+        const mapaN = {};
+        [...noticiasArchivo, ...noticiasActivas].forEach(n => { if (n.id_noticia) mapaN[n.id_noticia] = n; });
+        const todasNoticias = Object.values(mapaN);
+
+        renderizarEvento(idCluster, todosClusters, todasNoticias);
+      }
+
       Papa.parse(CSV_CLUSTERS, {
         download: true, header: true, skipEmptyLines: true,
-        complete: function(res) { clustersData = res.data; if (noticiasData) renderizarEvento(idCluster, clustersData, noticiasData); }
+        complete: function(res) { clustersActivos = res.data; intentarRender(); },
+        error: function() { clustersActivos = []; intentarRender(); }
+      });
+      Papa.parse(CSV_CLUSTERS_ARCHIVO, {
+        download: true, header: true, skipEmptyLines: true,
+        complete: function(res) { clustersArchivo = res.data; intentarRender(); },
+        error: function() { clustersArchivo = []; intentarRender(); }
       });
       Papa.parse(CSV_NOTICIAS, {
         download: true, header: true, skipEmptyLines: true,
-        complete: function(res) { noticiasData = res.data; if (clustersData) renderizarEvento(idCluster, clustersData, noticiasData); }
+        complete: function(res) { noticiasActivas = res.data; intentarRender(); },
+        error: function() { noticiasActivas = []; intentarRender(); }
+      });
+      Papa.parse(CSV_NOTICIAS_ARCHIVO, {
+        download: true, header: true, skipEmptyLines: true,
+        complete: function(res) { noticiasArchivo = res.data; intentarRender(); },
+        error: function() { noticiasArchivo = []; intentarRender(); }
       });
     }
 
