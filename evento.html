@@ -158,12 +158,15 @@
       header { padding: 0 1rem; }
       .header-inner { height: auto; min-height: 56px; flex-wrap: wrap; padding: 0.5rem 0; gap: 0.5rem; }
       nav { gap: 0.75rem; flex-wrap: wrap; }
+      nav a { font-size: 0.8rem; }
       .evento-hero { padding: 1rem 1rem 0; }
-      .columnas { grid-template-columns: 1fr; }
+      .columnas { grid-template-columns: 1fr !important; }
       .footer-inner { flex-direction: column; gap: 1rem; text-align: center; }
       .footer-bmc { align-items: center; }
       .modal { padding: 1.5rem; }
+      .metricas { gap: 1rem; }
     }
+  </style>
 </head>
 <body>
 
@@ -234,12 +237,12 @@
       </div>
     </div>
 
-    <div style="margin-top:2rem;padding:1.25rem 1.5rem;background:var(--blanco);border:1px solid var(--gris-claro);border-radius:var(--radio);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+    <div style="margin-top:2rem;padding:1.25rem 1.5rem;background:var(--blanco);border:1px solid var(--gris-claro);border-radius:var(--radio);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
       <div>
-        <p style="font-size:0.85rem;font-weight:500;color:var(--negro);margin-bottom:0.2rem;">¿El sesgo de un medio no te parece correcto?</p>
+        <p style="font-size:0.85rem;font-weight:500;color:var(--negro);margin-bottom:0.2rem;">¿El sesgo de algún medio no te parece correcto?</p>
         <p style="font-size:0.78rem;color:var(--gris-medio);">Puedes votar para ayudarnos a calibrar mejor la escala editorial.</p>
       </div>
-      <a href="https://contrastar.cl/medios" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;background:var(--negro);color:var(--blanco);border-radius:var(--radio);font-size:0.82rem;font-weight:500;text-decoration:none;transition:opacity 0.2s;white-space:nowrap;" onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+      <a href="https://contrastar.cl/medios" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1.1rem;background:var(--negro);color:var(--blanco);border-radius:var(--radio);font-size:0.82rem;font-weight:500;text-decoration:none;white-space:nowrap;transition:opacity 0.2s;" onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">
         Ir a Medios →
       </a>
     </div>
@@ -535,10 +538,11 @@
         if (h<24) return 'Hace '+h+'h';
         const d=Math.floor(h/24);
         if (d===1) return 'Ayer';
-        if (d<7) return 'Hace '+d+' d\u00edas';
+        if (d<7) return 'Hace '+d+' días';
         return f.toLocaleDateString('es-CL',{day:'numeric',month:'short'});
       } catch(e) { return ''; }
     }
+
     function abrirModal() {
       document.getElementById('modal-metodologia').classList.add('visible');
       document.body.style.overflow = 'hidden';
