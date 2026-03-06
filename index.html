@@ -733,11 +733,19 @@
         const diff   = ahora - ultima;
         const horas  = Math.floor(diff / 3600000);
         const dias   = Math.floor(diff / 86400000);
+
+        // Detectar si la fecha original tiene hora (HH:MM) o solo fecha
+        const strFecha = clusters.find(cl => parsearFecha(cl.fechaCreacion)?.getTime() === ultima.getTime())?.fechaCreacion || '';
+        const tieneHora = /\d{1,2}\/\d{1,2}\/\d{4}[,\s]+\d{1,2}:\d{2}/.test(strFecha) ||
+                          /T\d{2}:\d{2}/.test(strFecha);
+
         let textoFecha;
-        if (diff < 0 || horas < 1) {
+        if (tieneHora && (diff < 0 || horas < 1)) {
           textoFecha = 'Últ. actualización ' + ultima.toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'});
-        } else if (ultima.toDateString() === ahora.toDateString()) {
+        } else if (tieneHora && ultima.toDateString() === ahora.toDateString()) {
           textoFecha = 'Últ. actualización ' + ultima.toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'});
+        } else if (dias === 0) {
+          textoFecha = 'Últ. actualización hoy, ' + ultima.toLocaleDateString('es-CL', {day:'numeric', month:'long'});
         } else if (dias === 1) {
           textoFecha = 'Actualizado ayer';
         } else if (dias < 7) {
