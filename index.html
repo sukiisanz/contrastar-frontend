@@ -757,11 +757,31 @@
     }
 
     function parsearFecha(str) {
-      // new Date('YYYY-MM-DD') parsea como UTC medianoche → desfase en Chile.
-      // Reemplazamos el separador para que se lea como fecha local.
       if (!str) return null;
-      const f = new Date(str.replace(/-/g, '/'));
-      return isNaN(f) ? null : f;
+
+      // Formato chileno con hora: "3/6/2026 14:35:00"
+      // Google Sheets en locale es-CL exporta D/M/YYYY
+      const conHora = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})[,\s]+(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+      if (conHora) {
+        const [, d, m, y, h, min, sec] = conHora;
+        return new Date(+y, +m - 1, +d, +h, +min, +(sec||0));
+      }
+
+      // Solo fecha: "3/6/2026"
+      const soloFecha = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (soloFecha) {
+        const [, d, m, y] = soloFecha;
+        return new Date(+y, +m - 1, +d);
+      }
+
+      // Formato ISO "2026-06-03" o con hora — parsear local evitando desfase UTC
+      const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2})(?::(\d{2}))?)?/);
+      if (iso) {
+        const [, y, m, d, h='0', min='0', sec='0'] = iso;
+        return new Date(+y, +m - 1, +d, +h, +min, +sec);
+      }
+
+      return null;
     }
 
     function formatearFecha(str) {
