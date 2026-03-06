@@ -28,11 +28,11 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; scroll-behavior: smooth; }
-    body { font-family: var(--fuente-cuerpo); background-color: var(--crema); color: var(--negro); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    html { font-size: 16px; scroll-behavior: smooth; overflow-x: hidden; }
+    body { font-family: var(--fuente-cuerpo); background-color: var(--crema); color: var(--negro); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-    header { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); position: sticky; top: 0; z-index: 100; padding: 0 2rem; }
-    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    header { background: var(--blanco); border-bottom: 1px solid var(--gris-claro); position: sticky; top: 0; z-index: 100; padding: 0 2rem; width: 100%; }
+    .header-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 1rem; }
     .logo { display: flex; align-items: baseline; gap: 0.2rem; text-decoration: none; }
     .logo-principal { font-family: var(--fuente-display); font-size: 1.5rem; font-weight: 700; color: var(--negro); letter-spacing: -0.02em; }
     .logo-punto { color: var(--acento); font-family: var(--fuente-display); font-size: 1.5rem; font-weight: 700; }
@@ -149,9 +149,9 @@
 
 
     /* ── MODAL METODOLOGÍA ── */
-    .modal-overlay { position:fixed; inset:0; background:rgba(15,14,13,0.55); z-index:500; display:flex; align-items:center; justify-content:center; padding:1.5rem; opacity:0; pointer-events:none; transition:opacity 0.2s; }
+    .modal-overlay { position:fixed; inset:0; background:rgba(15,14,13,0.55); z-index:500; display:flex; align-items:center; justify-content:center; padding:1rem; opacity:0; pointer-events:none; transition:opacity 0.2s; }
     .modal-overlay.visible { opacity:1; pointer-events:all; }
-    .modal { background:var(--blanco); border-radius:6px; max-width:600px; width:100%; max-height:85vh; overflow-y:auto; padding:2.5rem; position:relative; box-shadow:0 8px 40px rgba(0,0,0,0.18); transform:translateY(12px); transition:transform 0.2s; }
+    .modal { background:var(--blanco); border-radius:6px; max-width:600px; width:100%; max-height:90vh; overflow-y:auto; padding:2rem; position:relative; box-shadow:0 8px 40px rgba(0,0,0,0.18); transform:translateY(12px); transition:transform 0.2s; }
     .modal-overlay.visible .modal { transform:translateY(0); }
     .modal-cerrar { position:absolute; top:1.25rem; right:1.25rem; background:none; border:none; font-size:1.2rem; color:var(--gris-medio); cursor:pointer; line-height:1; padding:0.25rem; }
     .modal-cerrar:hover { color:var(--negro); }
@@ -166,6 +166,12 @@
     .escala-etiquetas { display:flex; justify-content:space-between; font-size:0.65rem; color:var(--gris-medio); margin-top:0.25rem; }
 
     @media (max-width: 768px) {
+      header { padding: 0 1rem; }
+      .header-inner { height: auto; min-height: 56px; flex-wrap: wrap; padding: 0.5rem 0; gap: 0.5rem; }
+      nav { gap: 0.75rem; flex-wrap: wrap; }
+      nav a { font-size: 0.8rem; }
+      .nav-actualizacion { font-size: 0.7rem; }
+      .bmc-btn { font-size: 0.72rem; padding: 0.3rem 0.65rem; }
       main { grid-template-columns: 1fr; padding: 1rem; }
       .sidebar { position: static; display: flex; gap: 0.5rem; flex-wrap: wrap; }
       .sidebar-seccion { margin-bottom: 0; }
@@ -175,9 +181,14 @@
       .grid-clusters { grid-template-columns: 1fr; }
       .cluster-card.destacada { grid-column: span 1; grid-template-columns: 1fr; }
       .sesgo-visual-grande { display: none; }
-      .header-inner { padding: 0; }
-      nav { gap: 1rem; }
-      .hero { padding: 2rem 1rem 1.5rem; }
+      .hero { padding: 1.5rem 1rem; }
+      .hero-titulo { font-size: 1.6rem; }
+      .modal { padding: 1.5rem; max-height: 85vh; }
+      .modal h2 { font-size: 1.2rem; }
+      .footer-inner { flex-direction: column; gap: 1rem; text-align: center; }
+      .footer-bmc { align-items: center; }
+      .leyenda-sesgo { padding: 0.75rem 1rem; }
+      .buscador-contenedor { padding: 0.75rem 1rem; }
     }
   
     /* Buy Me a Coffee */
@@ -268,7 +279,6 @@
       <div class="sidebar-seccion">
         <p class="sidebar-titulo">Alcance</p>
         <button class="filtro-btn activo" onclick="setFiltro('alcance','todos',this)">Todos</button>
-        <button class="filtro-btn" onclick="setFiltro('alcance','Internacional',this)" style="display:flex;align-items:center;gap:0.4rem"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> Internacional</button>
         <button class="filtro-btn" onclick="setFiltro('alcance','Nacional',this)" style="display:flex;align-items:center;gap:0.4rem"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg> Nacional</button>
         <button class="filtro-btn" onclick="setFiltro('alcance','Regional',this)" style="display:flex;align-items:center;gap:0.4rem"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Regional</button>
       </div>
@@ -287,29 +297,6 @@
           <option value="Justicia">Justicia</option>
           <option value="Tecnología">Tecnología</option>
           <option value="Cultura">Cultura</option>
-        </select>
-      </div>
-
-      <div class="sidebar-seccion">
-        <p class="sidebar-titulo">Región</p>
-        <select class="filtro-select" id="select-region" onchange="setFiltroSelect('region', this.value)">
-          <option value="todos">Todas las regiones</option>
-          <option value="Arica y Parinacota">Arica y Parinacota</option>
-          <option value="Tarapacá">Tarapacá</option>
-          <option value="Antofagasta">Antofagasta</option>
-          <option value="Atacama">Atacama</option>
-          <option value="Coquimbo">Coquimbo</option>
-          <option value="Valparaíso">Valparaíso</option>
-          <option value="Metropolitana">Región Metropolitana</option>
-          <option value="O'Higgins">O'Higgins</option>
-          <option value="Maule">Maule</option>
-          <option value="Ñuble">Ñuble</option>
-          <option value="Biobío">Biobío</option>
-          <option value="La Araucanía">La Araucanía</option>
-          <option value="Los Ríos">Los Ríos</option>
-          <option value="Los Lagos">Los Lagos</option>
-          <option value="Aysén">Aysén</option>
-          <option value="Magallanes">Magallanes</option>
         </select>
       </div>
 
@@ -333,20 +320,24 @@
     <div class="footer-inner">
       <span class="footer-logo">Contrastar.cl</span>
       <p class="footer-texto">Plataforma independiente de contraste de medios. No generamos noticias, solo mostramos cómo otros las cubren.</p>
-      <div class="footer-bmc">
-        <span class="footer-bmc-txt">¿Te resulta útil?</span>
-        <a href="https://buymeacoffee.com/sukiisanz" target="_blank" rel="noopener" class="bmc-btn">
-          <span class="bmc-ico">☕</span> Buy me a coffee
-        </a>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.5rem">
+        <a href="#" onclick="abrirModal();return false;" class="footer-link">Metodología</a>
+        <div class="footer-bmc">
+          <span class="footer-bmc-txt">¿Te resulta útil?</span>
+          <a href="https://buymeacoffee.com/sukiisanz" target="_blank" rel="noopener" class="bmc-btn">
+            <span class="bmc-ico">☕</span> Buy me a coffee
+          </a>
+        </div>
       </div>
     </div>
   </footer>
 
   <script>
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=415099479&single=true&output=csv';
+    const CSV_URL         = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=415099479&single=true&output=csv';
+    const CSV_ARCHIVO_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaNHJSwY2OTOvED7vWNyi8qOPSlt-8E8j31HannI5ePO-F-p0WDUjnUyxA5h7RisVee0jfeIFqR-Bp/pub?gid=830475405&single=true&output=csv';
 
     let todosClusters = [];
-    let filtros = { tendencia: 'todos', alcance: 'todos', categoria: 'todos', region: 'todos' };
+    let filtros = { tendencia: 'todos', alcance: 'todos', categoria: 'todos' };
     let busquedaActual = '';
 
     // Umbrales escala -2 a +2
@@ -447,15 +438,30 @@
     }
 
     function cargarDatos() {
+      let activosData = null;
+      let archivoData = null;
+
+      function intentarFusion() {
+        if (activosData === null || archivoData === null) return;
+        const fusionados = [...activosData, ...archivoData];
+        // Deduplicar por id — activos tienen prioridad
+        const mapaIds = {};
+        fusionados.forEach(f => { if (f.id_cluster) mapaIds[f.id_cluster] = f; });
+        todosClusters = procesarClusters(Object.values(mapaIds));
+        aplicarFiltros();
+        actualizarContadores(todosClusters);
+      }
+
       Papa.parse(CSV_URL, {
         download: true, header: true, skipEmptyLines: true,
-        complete: function(res) {
-          todosClusters = procesarClusters(res.data);
-          aplicarFiltros();
-          actualizarContadores(todosClusters);
+        complete: function(res) { activosData = res.data; intentarFusion(); },
+        error: function() { activosData = []; intentarFusion(); mostrarError('No se pudo cargar el feed activo.'); }
+      });
 
-        },
-        error: function() { mostrarError('No se pudo cargar el feed. Intenta recargar la página.'); }
+      Papa.parse(CSV_ARCHIVO_URL, {
+        download: true, header: true, skipEmptyLines: true,
+        complete: function(res) { archivoData = res.data; intentarFusion(); },
+        error: function() { archivoData = []; intentarFusion(); }
       });
     }
 
@@ -551,7 +557,6 @@
       if (filtros.tendencia  !== 'todos') r = r.filter(c => c.tendenciaDominante === filtros.tendencia);
       if (filtros.alcance    !== 'todos') r = r.filter(c => c.alcance            === filtros.alcance);
       if (filtros.categoria  !== 'todos') r = r.filter(c => c.categoria          === filtros.categoria);
-      if (filtros.region     !== 'todos') r = r.filter(c => c.region             === filtros.region);
 
       if (busquedaActual.length > 0) {
         const terminos = normalizar(busquedaActual).split(/\s+/);
@@ -598,7 +603,7 @@
         return;
       }
 
-      meta.textContent = clusters.length+' eventos · últimas 24h';
+      meta.textContent = clusters.length+' eventos · últimos 7 días';
 
       grid.innerHTML = clusters.map((c, i) => {
         const esDestacada = i===0 && !busquedaActual;
