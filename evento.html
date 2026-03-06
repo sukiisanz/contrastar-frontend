@@ -323,7 +323,13 @@
       const C_IZQ_CSS    = 'rgb(192,57,43)';
       const C_CENTRO_CSS = 'rgb(200,184,154)';
       const C_DER_CSS    = 'rgb(44,62,122)';
-      const BL = 0.07; // zona de transición
+      // Blend máximo: 6% del ancho total, pero nunca más que la mitad del segmento más pequeño
+      const minSeg = Math.min(
+        hasIzq    ? pctIzq    : 1,
+        hasCentro ? pctCentro : 1,
+        hasDer    ? pctDer    : 1
+      );
+      const BL = Math.min(0.06, minSeg * 0.4);
 
       if (!hasCentro && !hasDer) {
         grad.addColorStop(0, C_IZQ_CSS); grad.addColorStop(1, C_IZQ_CSS);
@@ -332,30 +338,37 @@
       } else if (!hasIzq && !hasCentro) {
         grad.addColorStop(0, C_DER_CSS); grad.addColorStop(1, C_DER_CSS);
       } else if (!hasCentro) {
-        // Izq + Der directo
+        // Izq + Der directo — sin color centro de ningún modo
+        const mid = corte1;
         grad.addColorStop(0, C_IZQ_CSS);
-        grad.addColorStop(Math.max(0.01, corte1 - BL), C_IZQ_CSS);
-        grad.addColorStop(Math.min(0.99, corte1 + BL), C_DER_CSS);
+        grad.addColorStop(Math.max(0.001, mid - BL), C_IZQ_CSS);
+        grad.addColorStop(Math.min(0.999, mid + BL), C_DER_CSS);
         grad.addColorStop(1, C_DER_CSS);
       } else if (!hasIzq) {
         // Centro + Der
+        const mid = corte2;
         grad.addColorStop(0, C_CENTRO_CSS);
-        grad.addColorStop(Math.max(0.01, corte2 - BL), C_CENTRO_CSS);
-        grad.addColorStop(Math.min(0.99, corte2 + BL), C_DER_CSS);
+        grad.addColorStop(Math.max(0.001, mid - BL), C_CENTRO_CSS);
+        grad.addColorStop(Math.min(0.999, mid + BL), C_DER_CSS);
         grad.addColorStop(1, C_DER_CSS);
       } else if (!hasDer) {
         // Izq + Centro
+        const mid = corte1;
         grad.addColorStop(0, C_IZQ_CSS);
-        grad.addColorStop(Math.max(0.01, corte1 - BL), C_IZQ_CSS);
-        grad.addColorStop(Math.min(0.99, corte1 + BL), C_CENTRO_CSS);
+        grad.addColorStop(Math.max(0.001, mid - BL), C_IZQ_CSS);
+        grad.addColorStop(Math.min(0.999, mid + BL), C_CENTRO_CSS);
         grad.addColorStop(1, C_CENTRO_CSS);
       } else {
-        // Los tres
+        // Los tres — garantizar que los stops no se crucen entre sí
+        const s1lo = Math.max(0.001, corte1 - BL);
+        const s1hi = Math.min(corte1 + BL, corte2 - BL - 0.001);
+        const s2lo = Math.max(corte1 + BL + 0.001, corte2 - BL);
+        const s2hi = Math.min(0.999, corte2 + BL);
         grad.addColorStop(0, C_IZQ_CSS);
-        grad.addColorStop(Math.max(0.01, corte1 - BL), C_IZQ_CSS);
-        grad.addColorStop(Math.min(0.49, corte1 + BL), C_CENTRO_CSS);
-        grad.addColorStop(Math.max(0.51, corte2 - BL), C_CENTRO_CSS);
-        grad.addColorStop(Math.min(0.99, corte2 + BL), C_DER_CSS);
+        grad.addColorStop(s1lo, C_IZQ_CSS);
+        grad.addColorStop(s1hi, C_CENTRO_CSS);
+        grad.addColorStop(s2lo, C_CENTRO_CSS);
+        grad.addColorStop(s2hi, C_DER_CSS);
         grad.addColorStop(1, C_DER_CSS);
       }
 
@@ -561,18 +574,28 @@
       return nombres[idMedio] || idMedio;
     }
 
+    function parsearFecha(str) {
+      // new Date('YYYY-MM-DD') parsea como UTC medianoche → desfase en Chile.
+      // Reemplazamos el separador para que se lea como fecha local.
+      if (!str) return null;
+      const f = new Date(str.replace(/-/g, '/'));
+      return isNaN(f) ? null : f;
+    }
+
     function formatearFecha(str) {
       if (!str) return '';
       try {
-        const f=new Date(str), ahora=new Date(), diff=ahora-f;
-        if (diff<0) return 'Reciente';
-        const h=Math.floor(diff/3600000), m=Math.floor(diff/60000);
-        if (m<60) return 'Hace '+m+' min';
-        if (h<24) return 'Hace '+h+'h';
-        const d=Math.floor(h/24);
-        if (d===1) return 'Ayer';
-        if (d<7) return 'Hace '+d+' días';
-        return f.toLocaleDateString('es-CL',{day:'numeric',month:'short'});
+        const f = parsearFecha(str);
+        if (!f) return '';
+        const ahora = new Date(), diff = ahora - f;
+        if (diff < 0) return 'Reciente';
+        const h = Math.floor(diff/3600000), m = Math.floor(diff/60000);
+        if (m < 60) return 'Hace ' + m + ' min';
+        if (h < 24) return 'Hace ' + h + 'h';
+        const d = Math.floor(h/24);
+        if (d === 1) return 'Ayer';
+        if (d < 7) return 'Hace ' + d + ' días';
+        return f.toLocaleDateString('es-CL', {day:'numeric', month:'short'});
       } catch(e) { return ''; }
     }
 
