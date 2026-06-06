@@ -27,6 +27,24 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
+  /* ── MODO DÍA ── */
+  body.day {
+    --bg:     #f0f0f0;
+    --bg2:    #ffffff;
+    --bg3:    #e4e4e4;
+    --border: #cccccc;
+    --border2:#b8b8b8;
+    --text:   #1a1a1a;
+    --muted:  #636363;
+  }
+  body.day .task:active { background: #d4d4d4; }
+  body.day .nav-btn:active { background: #d0d0d0; }
+  body.day .wa-block { background: rgba(0,120,60,0.06); border-color: rgba(0,120,60,0.22); }
+  body.day .wa-text { color: #1a7a3a; }
+  body.day .copy-btn { color: #1a7a3a; border-color: rgba(0,120,60,0.35); background: rgba(0,120,60,0.08); }
+  body.day .copy-btn:active, body.day .copy-btn.copied { background: rgba(0,120,60,0.22); color: #fff; }
+  body.day .turno-alert { background: rgba(0,0,0,0.45); }
+
   body {
     background: var(--bg);
     color: var(--text);
@@ -94,6 +112,23 @@
     text-transform: uppercase;
   }
 
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .theme-btn {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 2px 4px;
+    line-height: 1;
+    opacity: 0.65;
+    transition: opacity 0.15s;
+  }
+  .theme-btn:active { opacity: 1; }
+
   .clock {
     font-family: 'Oswald', sans-serif;
     font-size: 1.1rem;
@@ -101,6 +136,13 @@
     color: var(--renfe-gold);
     letter-spacing: 0.08em;
     text-align: right;
+  }
+
+  .tab-ops {
+    font-size: 0.62rem;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 0.02em;
   }
 
   .progress-row {
@@ -134,6 +176,90 @@
     letter-spacing: 0.06em;
     white-space: nowrap;
   }
+
+  /* ── BANNER INICIO TURNO ── */
+  .turno-banner {
+    flex-shrink: 0;
+    background: rgba(212,160,23,0.1);
+    border-bottom: 1px solid rgba(212,160,23,0.35);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .turno-banner-text {
+    font-size: 0.78rem;
+    color: var(--renfe-gold);
+    line-height: 1.4;
+  }
+  .turno-banner-btn {
+    flex-shrink: 0;
+    background: rgba(212,160,23,0.18);
+    border: 1px solid rgba(212,160,23,0.5);
+    color: var(--renfe-gold);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 6px 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+  .turno-banner-btn:active { background: rgba(212,160,23,0.35); }
+
+  /* ── ALERTA FIN TURNO ── */
+  .turno-alert {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 24px;
+  }
+  .turno-alert-box {
+    background: var(--bg2);
+    border: 2px solid var(--renfe-red);
+    border-radius: 4px;
+    padding: 28px 22px 22px;
+    max-width: 320px;
+    width: 100%;
+    text-align: center;
+  }
+  .turno-alert-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  .turno-alert-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+  .turno-alert-msg {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 22px;
+    line-height: 1.55;
+  }
+  .turno-alert-btn {
+    background: var(--renfe-red);
+    border: none;
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .turno-alert-btn:active { background: var(--renfe-red2); }
 
   /* ── TABS ── */
   .tabs-wrap {
@@ -536,7 +662,10 @@
         <div class="renfe-logo">Renfe</div>
         <div class="header-station">Betanzos-Infesta</div>
       </div>
-      <div class="clock" id="clock">--:--</div>
+      <div class="header-right">
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Modo día/noche">☀️</button>
+        <div class="clock" id="clock">--:--</div>
+      </div>
     </div>
   </div>
   <div class="progress-row">
@@ -547,6 +676,11 @@
   </div>
 </header>
 
+<div class="turno-banner" id="turno-banner">
+  <span class="turno-banner-text">⚠️ Recuerda marcar <strong>inicio de turno</strong> en el portal</span>
+  <button class="turno-banner-btn" onclick="marcarTurnoInicio()">✓ Ya marqué</button>
+</div>
+
 <div class="tabs-wrap"><div class="tabs" id="tabs"></div></div>
 <div class="panels" id="panels"></div>
 
@@ -556,6 +690,15 @@
   <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Siguiente →</button>
 </div>
 <div class="toast" id="toast"></div>
+
+<div class="turno-alert" id="turno-fin-alert" style="display:none">
+  <div class="turno-alert-box">
+    <div class="turno-alert-icon">🔔</div>
+    <div class="turno-alert-title">Son las 23:00</div>
+    <div class="turno-alert-msg">Recuerda marcar el <strong>fin de turno</strong> en el portal del contratador.</div>
+    <button class="turno-alert-btn" onclick="cerrarFinTurnoAlert()">✓ Entendido</button>
+  </div>
+</div>
 
 <script>
 const TRIPS = [
@@ -934,7 +1077,11 @@ function resetAll() {
     if(base) el.textContent = '📱 ' + base;
   });
   document.querySelectorAll('.trip-notes-area').forEach(el => { el.value = ''; });
-  document.querySelectorAll('.taxi-chip').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.taxi-chip').forEach(el => {
+    el.classList.remove('active');
+    if(el.dataset.station !== 'none') el.textContent = el.dataset.station;
+  });
+  checkTurnoInicio();
   TRIPS.forEach((_,i) => updateTabDot(i));
   updateProgress();
 }
@@ -949,10 +1096,16 @@ function render() {
     tab.className = 'tab' + (idx===0?' active':'');
     tab.id = 'tab_'+trip.id;
     tab.onclick = () => showPanel(idx);
+    const opsIcons = trip.blocks.map(b => {
+      if(b.badge === 'train-in')  return '🚆↓';
+      if(b.badge === 'train-out') return '🚆↑';
+      return '🚌';
+    }).join(' · ');
     tab.innerHTML = `
       <span class="tab-viaje">${trip.viaje}</span>
       <span class="tab-horario">${trip.horario}</span>
       <span class="tab-dir">${trip.dir}</span>
+      <span class="tab-ops">${opsIcons}</span>
       <div class="tab-dot" id="dot_${trip.id}"></div>`;
     tabsEl.appendChild(tab);
 
@@ -1059,16 +1212,55 @@ function jumpToNow() {
   showPanel(best);
 }
 
+function marcarTurnoInicio() {
+  state['turno_inicio'] = true;
+  saveState();
+  document.getElementById('turno-banner').style.display = 'none';
+}
+
+function cerrarFinTurnoAlert() {
+  state['turno_fin_alert'] = true;
+  saveState();
+  document.getElementById('turno-fin-alert').style.display = 'none';
+}
+
+function checkTurnoInicio() {
+  document.getElementById('turno-banner').style.display =
+    state['turno_inicio'] ? 'none' : 'flex';
+}
+
 function updateClock() {
   const now = new Date();
+  const h = now.getHours(), m = now.getMinutes();
   document.getElementById('clock').textContent =
-    String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+    String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+  if(h === 23 && m < 15 && !state['turno_fin_alert']) {
+    state['turno_fin_alert'] = true;
+    saveState();
+    document.getElementById('turno-fin-alert').style.display = 'flex';
+  }
+}
+
+function toggleTheme() {
+  const isDay = document.body.classList.toggle('day');
+  localStorage.setItem('betanzos_theme', isDay ? 'day' : 'night');
+  document.getElementById('themeBtn').textContent = isDay ? '🌙' : '☀️';
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem('betanzos_theme');
+  if(saved === 'day') {
+    document.body.classList.add('day');
+    document.getElementById('themeBtn').textContent = '🌙';
+  }
 }
 
 loadState();
 loadNotes();
+loadTheme();
 render();
 jumpToNow();
+checkTurnoInicio();
 updateClock();
 setInterval(updateClock, 15000);
 </script>
