@@ -384,6 +384,39 @@
     color: #fff;
   }
 
+  /* ── NOTAS ── */
+  .trip-notes {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .trip-notes-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.62rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .trip-notes-area {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.82rem;
+    padding: 10px 12px;
+    resize: none;
+    min-height: 76px;
+    line-height: 1.5;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+  .trip-notes-area:focus { border-color: var(--renfe-gold); }
+  .trip-notes-area::placeholder { color: var(--muted); opacity: 0.55; }
+
   /* ── DIVIDER ── */
   .svc-divider {
     border: none;
@@ -674,6 +707,7 @@ const TRIPS = [
 ];
 
 let state = {};
+let notes = {};
 let currentIdx = 0;
 
 function loadState() {
@@ -681,6 +715,13 @@ function loadState() {
 }
 function saveState() {
   try { localStorage.setItem('betanzos_v3', JSON.stringify(state)); } catch(e){}
+}
+function loadNotes() {
+  try { const n = localStorage.getItem('betanzos_notes_v1'); if(n) notes = JSON.parse(n); } catch(e){}
+}
+function saveNote(tripId, val) {
+  if(val.trim()) notes[tripId] = val; else delete notes[tripId];
+  try { localStorage.setItem('betanzos_notes_v1', JSON.stringify(notes)); } catch(e){}
 }
 
 function allTasksOf(trip) { return trip.blocks.flatMap(b => b.tasks); }
@@ -869,6 +910,15 @@ function render() {
       html += '</div></div>';
     });
 
+    const escNote = (notes[trip.id] || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    html += `
+      <div class="trip-notes">
+        <div class="trip-notes-label">📝 Notas del viaje</div>
+        <textarea class="trip-notes-area" id="note_${trip.id}"
+          placeholder="Incidencias, pasajeros en taxi, observaciones…"
+          oninput="saveNote('${trip.id}', this.value)">${escNote}</textarea>
+      </div>`;
+
     panel.innerHTML = html;
     panelsEl.appendChild(panel);
   });
@@ -897,6 +947,7 @@ function updateClock() {
 }
 
 loadState();
+loadNotes();
 render();
 jumpToNow();
 updateClock();
