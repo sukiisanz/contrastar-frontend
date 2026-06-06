@@ -823,8 +823,10 @@ function showPanel(idx) {
 }
 
 function resetAll() {
-  if(!confirm('¿Reiniciar todo el turno? Se borrarán todas las marcas.')) return;
+  if(!confirm('¿Reiniciar todo el turno? Se borrarán todas las marcas y notas.')) return;
   state = {}; saveState();
+  notes = {};
+  try { localStorage.removeItem('betanzos_notes_v1'); } catch(e){}
   document.querySelectorAll('.task').forEach(el => {
     el.classList.remove('done');
     const chk = el.querySelector('.task-check');
@@ -834,6 +836,7 @@ function resetAll() {
     const base = el.dataset.base;
     if(base) el.textContent = '📱 ' + base;
   });
+  document.querySelectorAll('.trip-notes-area').forEach(el => { el.value = ''; });
   TRIPS.forEach((_,i) => updateTabDot(i));
   updateProgress();
 }
