@@ -773,7 +773,8 @@ function toggleTask(taskId) {
   }
   if(waText) {
     const base = waText.dataset.base;
-    waText.textContent = '📱 ' + base + (state[taskId] && state['time_' + taskId] ? ' — ' + state['time_' + taskId] : '');
+    const t = state[taskId] && state['time_' + taskId];
+    waText.textContent = '📱 ' + (t ? base.replace(/a las \d{2}:\d{2}/, 'a las ' + t) : base);
   }
   updateProgress();
   updateTabDot(currentIdx);
@@ -781,7 +782,7 @@ function toggleTask(taskId) {
 
 function copyWA(msg, taskId, btn) {
   const time = state['time_' + taskId];
-  const fullMsg = time ? msg + ' — ' + time : msg;
+  const fullMsg = time ? msg.replace(/a las \d{2}:\d{2}/, 'a las ' + time) : msg;
   const doFallback = () => {
     const ta = document.createElement('textarea');
     ta.value = fullMsg; ta.style.cssText = 'position:fixed;opacity:0';
@@ -892,7 +893,7 @@ function render() {
           const esc = task.waMsg.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
           const escBase = task.waMsg.replace(/"/g,'&quot;');
           const storedTime = state['time_' + task.id];
-          const displayMsg = done && storedTime ? task.waMsg + ' — ' + storedTime : task.waMsg;
+          const displayMsg = done && storedTime ? task.waMsg.replace(/a las \d{2}:\d{2}/, 'a las ' + storedTime) : task.waMsg;
           waHtml = `
             <div class="wa-block" onclick="event.stopPropagation()">
               <span class="wa-text" data-base="${escBase}" data-id="${task.id}">📱 ${displayMsg}</span>
