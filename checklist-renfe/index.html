@@ -384,6 +384,39 @@
     color: #fff;
   }
 
+  /* ── NOTAS ── */
+  .trip-notes {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .trip-notes-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.62rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .trip-notes-area {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.82rem;
+    padding: 10px 12px;
+    resize: none;
+    min-height: 76px;
+    line-height: 1.5;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+  .trip-notes-area:focus { border-color: var(--renfe-gold); }
+  .trip-notes-area::placeholder { color: var(--muted); opacity: 0.55; }
+
   /* ── DIVIDER ── */
   .svc-divider {
     border: none;
@@ -674,6 +707,7 @@ const TRIPS = [
 ];
 
 let state = {};
+let notes = {};
 let currentIdx = 0;
 
 function loadState() {
@@ -681,6 +715,13 @@ function loadState() {
 }
 function saveState() {
   try { localStorage.setItem('betanzos_v3', JSON.stringify(state)); } catch(e){}
+}
+function loadNotes() {
+  try { const n = localStorage.getItem('betanzos_notes_v1'); if(n) notes = JSON.parse(n); } catch(e){}
+}
+function saveNote(tripId, val) {
+  if(val.trim()) notes[tripId] = val; else delete notes[tripId];
+  try { localStorage.setItem('betanzos_notes_v1', JSON.stringify(notes)); } catch(e){}
 }
 
 function allTasksOf(trip) { return trip.blocks.flatMap(b => b.tasks); }
@@ -713,6 +754,16 @@ function updateTabDot(idx) {
 
 function toggleTask(taskId) {
   state[taskId] = !state[taskId];
+  const waText = document.querySelector('#task_'+taskId+' .wa-text');
+  if(waText) {
+    if(state[taskId]) {
+      const now = new Date();
+      const t = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+      state['time_' + taskId] = t;
+    } else {
+      delete state['time_' + taskId];
+    }
+  }
   saveState();
   const el = document.getElementById('task_'+taskId);
   if(el) {
@@ -720,20 +771,26 @@ function toggleTask(taskId) {
     const chk = el.querySelector('.task-check');
     if(chk) chk.textContent = state[taskId] ? '✓' : '';
   }
+  if(waText) {
+    const base = waText.dataset.base;
+    waText.textContent = '📱 ' + base + (state[taskId] && state['time_' + taskId] ? ' — ' + state['time_' + taskId] : '');
+  }
   updateProgress();
   updateTabDot(currentIdx);
 }
 
-function copyWA(msg, btn) {
+function copyWA(msg, taskId, btn) {
+  const time = state['time_' + taskId];
+  const fullMsg = time ? msg + ' — ' + time : msg;
   const doFallback = () => {
     const ta = document.createElement('textarea');
-    ta.value = msg; ta.style.cssText = 'position:fixed;opacity:0';
+    ta.value = fullMsg; ta.style.cssText = 'position:fixed;opacity:0';
     document.body.appendChild(ta); ta.focus(); ta.select();
     try { document.execCommand('copy'); } catch(e){}
     document.body.removeChild(ta);
   };
   if(navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(msg).catch(doFallback);
+    navigator.clipboard.writeText(fullMsg).catch(doFallback);
   } else { doFallback(); }
   btn.textContent = '✓ Copiado';
   btn.classList.add('copied');
@@ -772,6 +829,10 @@ function resetAll() {
     el.classList.remove('done');
     const chk = el.querySelector('.task-check');
     if(chk) chk.textContent = '';
+  });
+  document.querySelectorAll('.wa-text').forEach(el => {
+    const base = el.dataset.base;
+    if(base) el.textContent = '📱 ' + base;
   });
   TRIPS.forEach((_,i) => updateTabDot(i));
   updateProgress();
@@ -826,10 +887,13 @@ function render() {
         let waHtml = '';
         if(task.waMsg) {
           const esc = task.waMsg.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          const escBase = task.waMsg.replace(/"/g,'&quot;');
+          const storedTime = state['time_' + task.id];
+          const displayMsg = done && storedTime ? task.waMsg + ' — ' + storedTime : task.waMsg;
           waHtml = `
             <div class="wa-block" onclick="event.stopPropagation()">
-              <span class="wa-text">📱 ${task.waMsg}</span>
-              <button class="copy-btn" onclick="copyWA('${esc}',this)">Copiar</button>
+              <span class="wa-text" data-base="${escBase}" data-id="${task.id}">📱 ${displayMsg}</span>
+              <button class="copy-btn" onclick="copyWA('${esc}','${task.id}',this)">Copiar</button>
             </div>`;
         }
         html += `
@@ -845,6 +909,15 @@ function render() {
 
       html += '</div></div>';
     });
+
+    const escNote = (notes[trip.id] || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;');
+    html += `
+      <div class="trip-notes">
+        <div class="trip-notes-label">📝 Notas del viaje</div>
+        <textarea class="trip-notes-area" id="note_${trip.id}"
+          placeholder="Incidencias, pasajeros en taxi, observaciones…"
+          oninput="saveNote('${trip.id}', this.value)">${escNote}</textarea>
+      </div>`;
 
     panel.innerHTML = html;
     panelsEl.appendChild(panel);
@@ -874,6 +947,7 @@ function updateClock() {
 }
 
 loadState();
+loadNotes();
 render();
 jumpToNow();
 updateClock();
