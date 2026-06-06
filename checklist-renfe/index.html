@@ -120,7 +120,7 @@
     align-items: center;
     gap: 10px;
   }
-  .theme-btn {
+  .theme-btn, .log-btn {
     background: none;
     border: none;
     font-size: 1.1rem;
@@ -130,7 +130,7 @@
     opacity: 0.65;
     transition: opacity 0.15s;
   }
-  .theme-btn:active { opacity: 1; }
+  .theme-btn:active, .log-btn:active { opacity: 1; }
 
   .clock {
     font-family: 'Oswald', sans-serif;
@@ -653,6 +653,101 @@
     text-transform: uppercase;
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── LOG MODAL ── */
+  .log-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 9999;
+    padding: 0;
+  }
+  .log-modal-box {
+    background: var(--bg2);
+    border-top: 2px solid var(--border2);
+    border-radius: 8px 8px 0 0;
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    max-height: 80dvh;
+  }
+  .log-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .log-modal-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text);
+  }
+  .log-modal-close {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 2px 6px;
+  }
+  .log-modal-area {
+    flex: 1;
+    background: var(--bg3);
+    border: none;
+    color: var(--text);
+    font-family: 'Source Sans 3', monospace;
+    font-size: 0.72rem;
+    line-height: 1.6;
+    padding: 12px 14px;
+    resize: none;
+    overflow-y: auto;
+    min-height: 0;
+  }
+  .log-modal-footer {
+    display: flex;
+    gap: 8px;
+    padding: 10px 14px 14px;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .log-download-btn {
+    flex: 1;
+    background: var(--renfe-red);
+    border: none;
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 10px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .log-download-btn:active { background: var(--renfe-red2); }
+  .log-clear-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .log-clear-btn:active { background: var(--border); }
+  body.day .log-modal { background: rgba(0,0,0,0.5); }
 </style>
 </head>
 <body>
@@ -667,6 +762,7 @@
       </div>
       <div class="header-right">
         <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Modo día/noche">☀️</button>
+        <button class="log-btn" onclick="openLog()" title="Ver log del mes">📋</button>
         <div class="clock" id="clock">--:--</div>
       </div>
     </div>
@@ -700,6 +796,20 @@
     <div class="turno-alert-title">Son las 23:00</div>
     <div class="turno-alert-msg">Recuerda marcar el <strong>fin de turno</strong> en el portal del contratador.</div>
     <button class="turno-alert-btn" onclick="cerrarFinTurnoAlert()">✓ Entendido</button>
+  </div>
+</div>
+
+<div class="log-modal" id="logModal" style="display:none">
+  <div class="log-modal-box">
+    <div class="log-modal-header">
+      <span class="log-modal-title">📋 Log del mes</span>
+      <button class="log-modal-close" onclick="closeLog()">✕</button>
+    </div>
+    <textarea class="log-modal-area" id="logArea" readonly></textarea>
+    <div class="log-modal-footer">
+      <button class="log-download-btn" onclick="downloadLog()">⬇ Descargar .txt</button>
+      <button class="log-clear-btn" onclick="clearLog()">🗑 Borrar log</button>
+    </div>
   </div>
 </div>
 
@@ -889,6 +999,7 @@ const TRIPS = [
 
 let state = {};
 let notes = {};
+let turnoLog = [];
 let currentIdx = 0;
 
 function loadState() {
@@ -899,6 +1010,22 @@ function saveState() {
 }
 function loadNotes() {
   try { const n = localStorage.getItem('betanzos_notes_v1'); if(n) notes = JSON.parse(n); } catch(e){}
+}
+function loadLog() {
+  try { const l = localStorage.getItem('betanzos_log_v1'); if(l) turnoLog = JSON.parse(l); } catch(e){ turnoLog = []; }
+}
+function saveLog() {
+  try { localStorage.setItem('betanzos_log_v1', JSON.stringify(turnoLog)); } catch(e){}
+}
+function addLogEntry(line) {
+  const now = new Date();
+  const ts = now.getFullYear() + '-' +
+    String(now.getMonth()+1).padStart(2,'0') + '-' +
+    String(now.getDate()).padStart(2,'0') + ' ' +
+    String(now.getHours()).padStart(2,'0') + ':' +
+    String(now.getMinutes()).padStart(2,'0');
+  turnoLog.push('[' + ts + '] ' + line);
+  saveLog();
 }
 function saveNote(tripId, val) {
   if(val.trim()) notes[tripId] = val; else delete notes[tripId];
@@ -1006,6 +1133,11 @@ function toggleTask(taskId) {
       delete state['time_' + taskId];
     }
   }
+  if(state[taskId]) {
+    const trip = TRIPS[currentIdx];
+    const task = trip && trip.blocks.flatMap(b=>b.tasks).find(t=>t.id===taskId);
+    if(task) addLogEntry(trip.viaje + ' | ' + task.icon + ' ' + task.text);
+  }
   saveState();
   const el = document.getElementById('task_'+taskId);
   if(el) {
@@ -1067,6 +1199,7 @@ function showPanel(idx) {
 
 function resetAll() {
   if(!confirm('¿Reiniciar todo el turno? Se borrarán todas las marcas y notas.')) return;
+  addLogEntry('═══ FIN DE TURNO ═══');
   state = {}; saveState();
   notes = {};
   try { localStorage.removeItem('betanzos_notes_v1'); } catch(e){}
@@ -1244,6 +1377,34 @@ function updateClock() {
   }
 }
 
+function openLog() {
+  const area = document.getElementById('logArea');
+  area.value = turnoLog.length
+    ? turnoLog.join('\n')
+    : '— Sin registros todavía —';
+  document.getElementById('logModal').style.display = 'flex';
+}
+function closeLog() {
+  document.getElementById('logModal').style.display = 'none';
+}
+function downloadLog() {
+  const now = new Date();
+  const fname = 'log-turno-' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + '.txt';
+  const blob = new Blob([turnoLog.join('\n')], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = fname;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function clearLog() {
+  if(!confirm('¿Borrar todo el log del mes?')) return;
+  turnoLog = [];
+  saveLog();
+  document.getElementById('logArea').value = '— Sin registros todavía —';
+}
+
 function toggleTheme() {
   const isDay = document.body.classList.toggle('day');
   localStorage.setItem('betanzos_theme', isDay ? 'day' : 'night');
@@ -1260,6 +1421,7 @@ function loadTheme() {
 
 loadState();
 loadNotes();
+loadLog();
 loadTheme();
 render();
 jumpToNow();
