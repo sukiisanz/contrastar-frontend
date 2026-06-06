@@ -135,6 +135,90 @@
     white-space: nowrap;
   }
 
+  /* ── BANNER INICIO TURNO ── */
+  .turno-banner {
+    flex-shrink: 0;
+    background: rgba(212,160,23,0.1);
+    border-bottom: 1px solid rgba(212,160,23,0.35);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .turno-banner-text {
+    font-size: 0.78rem;
+    color: var(--renfe-gold);
+    line-height: 1.4;
+  }
+  .turno-banner-btn {
+    flex-shrink: 0;
+    background: rgba(212,160,23,0.18);
+    border: 1px solid rgba(212,160,23,0.5);
+    color: var(--renfe-gold);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 6px 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+  .turno-banner-btn:active { background: rgba(212,160,23,0.35); }
+
+  /* ── ALERTA FIN TURNO ── */
+  .turno-alert {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 24px;
+  }
+  .turno-alert-box {
+    background: var(--bg2);
+    border: 2px solid var(--renfe-red);
+    border-radius: 4px;
+    padding: 28px 22px 22px;
+    max-width: 320px;
+    width: 100%;
+    text-align: center;
+  }
+  .turno-alert-icon { font-size: 2.2rem; margin-bottom: 10px; }
+  .turno-alert-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+  .turno-alert-msg {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 22px;
+    line-height: 1.55;
+  }
+  .turno-alert-btn {
+    background: var(--renfe-red);
+    border: none;
+    color: #fff;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    width: 100%;
+  }
+  .turno-alert-btn:active { background: var(--renfe-red2); }
+
   /* ── TABS ── */
   .tabs-wrap {
     flex-shrink: 0;
@@ -547,6 +631,11 @@
   </div>
 </header>
 
+<div class="turno-banner" id="turno-banner">
+  <span class="turno-banner-text">⚠️ Recuerda marcar <strong>inicio de turno</strong> en el portal</span>
+  <button class="turno-banner-btn" onclick="marcarTurnoInicio()">✓ Ya marqué</button>
+</div>
+
 <div class="tabs-wrap"><div class="tabs" id="tabs"></div></div>
 <div class="panels" id="panels"></div>
 
@@ -556,6 +645,15 @@
   <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Siguiente →</button>
 </div>
 <div class="toast" id="toast"></div>
+
+<div class="turno-alert" id="turno-fin-alert" style="display:none">
+  <div class="turno-alert-box">
+    <div class="turno-alert-icon">🔔</div>
+    <div class="turno-alert-title">Son las 23:00</div>
+    <div class="turno-alert-msg">Recuerda marcar el <strong>fin de turno</strong> en el portal del contratador.</div>
+    <button class="turno-alert-btn" onclick="cerrarFinTurnoAlert()">✓ Entendido</button>
+  </div>
+</div>
 
 <script>
 const TRIPS = [
@@ -934,7 +1032,11 @@ function resetAll() {
     if(base) el.textContent = '📱 ' + base;
   });
   document.querySelectorAll('.trip-notes-area').forEach(el => { el.value = ''; });
-  document.querySelectorAll('.taxi-chip').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.taxi-chip').forEach(el => {
+    el.classList.remove('active');
+    if(el.dataset.station !== 'none') el.textContent = el.dataset.station;
+  });
+  checkTurnoInicio();
   TRIPS.forEach((_,i) => updateTabDot(i));
   updateProgress();
 }
@@ -1059,16 +1161,40 @@ function jumpToNow() {
   showPanel(best);
 }
 
+function marcarTurnoInicio() {
+  state['turno_inicio'] = true;
+  saveState();
+  document.getElementById('turno-banner').style.display = 'none';
+}
+
+function cerrarFinTurnoAlert() {
+  state['turno_fin_alert'] = true;
+  saveState();
+  document.getElementById('turno-fin-alert').style.display = 'none';
+}
+
+function checkTurnoInicio() {
+  document.getElementById('turno-banner').style.display =
+    state['turno_inicio'] ? 'none' : 'flex';
+}
+
 function updateClock() {
   const now = new Date();
+  const h = now.getHours(), m = now.getMinutes();
   document.getElementById('clock').textContent =
-    String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+    String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
+  if(h === 23 && m < 15 && !state['turno_fin_alert']) {
+    state['turno_fin_alert'] = true;
+    saveState();
+    document.getElementById('turno-fin-alert').style.display = 'flex';
+  }
 }
 
 loadState();
 loadNotes();
 render();
 jumpToNow();
+checkTurnoInicio();
 updateClock();
 setInterval(updateClock, 15000);
 </script>
