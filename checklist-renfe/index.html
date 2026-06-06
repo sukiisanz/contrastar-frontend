@@ -774,6 +774,7 @@ function badgeClass(b) {
 }
 
 const TAXI_STATIONS = ['Elviña', 'Burgo', 'Cambre', 'Cecebre'];
+const TAXI_ETA = { 'Elviña': 20, 'Burgo': 20, 'Cambre': 15, 'Cecebre': 15 };
 
 function getTaxiState(taskId) {
   const v = state['taxi_' + taskId];
@@ -785,10 +786,20 @@ function toggleTaxiChip(taskId, station) {
   const cur = getTaxiState(taskId);
   if(station === 'none') {
     state['taxi_' + taskId] = (cur === 'none') ? [] : 'none';
+    TAXI_STATIONS.forEach(s => delete state['taxitime_' + taskId + '_' + s]);
   } else {
     const arr = (cur === 'none' || !Array.isArray(cur)) ? [] : [...cur];
     const i = arr.indexOf(station);
-    if(i >= 0) arr.splice(i, 1); else arr.push(station);
+    if(i >= 0) {
+      arr.splice(i, 1);
+      delete state['taxitime_' + taskId + '_' + station];
+    } else {
+      arr.push(station);
+      const now = new Date();
+      const arrival = new Date(now.getTime() + (TAXI_ETA[station] || 0) * 60000);
+      state['taxitime_' + taskId + '_' + station] =
+        String(arrival.getHours()).padStart(2,'0') + ':' + String(arrival.getMinutes()).padStart(2,'0');
+    }
     state['taxi_' + taskId] = arr;
   }
   const ns = state['taxi_' + taskId];
@@ -816,6 +827,10 @@ function refreshTaxiChips(taskId) {
     const s = chip.dataset.station;
     const isActive = s === 'none' ? cur === 'none' : Array.isArray(cur) && cur.includes(s);
     chip.classList.toggle('active', isActive);
+    if(s !== 'none') {
+      const eta = isActive ? state['taxitime_' + taskId + '_' + s] : null;
+      chip.textContent = eta ? s + ' ≈' + eta : s;
+    }
   });
 }
 
@@ -989,7 +1004,9 @@ function render() {
           const cur = getTaxiState(task.id);
           const chips = TAXI_STATIONS.map(s => {
             const active = Array.isArray(cur) && cur.includes(s);
-            return `<span class="taxi-chip${active?' active':''}" data-station="${s}" onclick="event.stopPropagation();toggleTaxiChip('${task.id}','${s}')">${s}</span>`;
+            const eta = active ? state['taxitime_' + task.id + '_' + s] : null;
+            const label = eta ? s + ' ≈' + eta : s;
+            return `<span class="taxi-chip${active?' active':''}" data-station="${s}" onclick="event.stopPropagation();toggleTaxiChip('${task.id}','${s}')">${label}</span>`;
           }).join('');
           const noneActive = cur === 'none';
           taxiHtml = `
