@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Turno Betanzos-Infesta</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap');
+
+  :root {
+    --bg:           #0e0e0e;
+    --bg2:          #161616;
+    --bg3:          #1e1e1e;
+    --border:       #2a2a2a;
+    --border2:      #383838;
+    --renfe-red:    #cc0000;
+    --renfe-red2:   #e60000;
+    --renfe-silver: #c8c8c8;
+    --renfe-gold:   #d4a017;
+    --text:         #efefef;
+    --muted:        #767676;
+    --green:        #3dba6e;
+    --amber:        #d4a017;
+    --blue-soft:    #6fa3d4;
+    --purple-soft:  #9b7fd4;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    flex-shrink: 0;
+    background: var(--bg2);
+    border-bottom: 3px solid var(--renfe-red);
+    padding: 0;
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: stretch;
+    height: 54px;
+  }
+
+  .renfe-stripe {
+    width: 6px;
+    background: var(--renfe-red);
+    flex-shrink: 0;
+  }
+
+  .header-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    gap: 10px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .renfe-logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--renfe-red2);
+    text-transform: uppercase;
+    border: 2px solid var(--renfe-red);
+    padding: 2px 7px;
+    border-radius: 2px;
+    line-height: 1;
+  }
+
+  .header-station {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--renfe-silver);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .clock {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--renfe-gold);
+    letter-spacing: 0.08em;
+    text-align: right;
+  }
+
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 14px 7px 20px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .progress-bar-wrap {
+    flex: 1;
+    background: var(--border);
+    border-radius: 2px;
+    height: 3px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--renfe-red), var(--renfe-gold));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+
+  /* ── TABS ── */
+  .tabs-wrap {
+    flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+  }
+  .tabs-wrap::-webkit-scrollbar { display: none; }
+  .tabs { display: flex; padding: 6px 8px; gap: 4px; width: max-content; }
+
+  .tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 7px 13px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.18s;
+    min-width: 84px;
+    background: var(--bg3);
+    font-family: 'Oswald', sans-serif;
+    position: relative;
+  }
+  .tab:active { opacity: 0.75; }
+
+  .tab.active {
+    background: var(--bg);
+    border-color: var(--renfe-red);
+    border-bottom: 2px solid var(--renfe-red);
+  }
+
+  .tab-viaje {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--renfe-silver);
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+  .tab.active .tab-viaje { color: #fff; }
+
+  .tab-horario {
+    font-size: 0.6rem;
+    color: var(--muted);
+    margin-top: 3px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+  .tab.active .tab-horario { color: var(--renfe-gold); }
+
+  .tab-dir {
+    font-size: 0.58rem;
+    color: var(--blue-soft);
+    margin-top: 2px;
+    font-weight: 400;
+    font-family: 'Source Sans 3', sans-serif;
+    font-style: italic;
+  }
+
+  .tab-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    margin-top: 5px;
+    background: var(--border2);
+    transition: background 0.2s;
+  }
+  .tab-dot.done-all  { background: var(--green); }
+  .tab-dot.done-some { background: var(--amber); }
+
+  /* ── PANELS ── */
+  .panels { flex: 1; overflow: hidden; position: relative; }
+  .panel {
+    display: none;
+    height: 100%;
+    overflow-y: auto;
+    padding: 16px 14px 82px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border2) transparent;
+  }
+  .panel.active { display: block; }
+
+  /* panel heading */
+  .panel-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .panel-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  .panel-title span {
+    color: var(--renfe-red2);
+    font-size: 1rem;
+    font-weight: 400;
+    display: block;
+    margin-bottom: 2px;
+    letter-spacing: 0.1em;
+  }
+
+  .panel-meta {
+    text-align: right;
+  }
+  .panel-horario {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--renfe-gold);
+    letter-spacing: 0.05em;
+  }
+  .panel-dir {
+    font-size: 0.72rem;
+    color: var(--blue-soft);
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  /* ── BLOQUES ── */
+  .svc-block { margin-bottom: 14px; }
+
+  .svc-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .svc-badge {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 3px 9px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .badge-train-in  { background: rgba(111,80,180,0.2); color: var(--purple-soft); border: 1px solid rgba(111,80,180,0.5); }
+  .badge-train-out { background: rgba(212,160,23,0.15); color: var(--renfe-gold); border: 1px solid rgba(212,160,23,0.4); }
+  .badge-bus-in    { background: rgba(111,163,212,0.15); color: var(--blue-soft); border: 1px solid rgba(111,163,212,0.4); }
+
+  .svc-time-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-left: auto;
+  }
+
+  .svc-desc {
+    font-size: 0.76rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 8px;
+    line-height: 1.45;
+    padding-left: 2px;
+  }
+
+  /* ── TAREAS ── */
+  .tasks { display: flex; flex-direction: column; gap: 6px; }
+
+  .task {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 3px;
+    background: var(--bg3);
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.2s;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .task:active { background: #242424; }
+
+  .task.done {
+    opacity: 0.32;
+    text-decoration: line-through;
+    text-decoration-color: var(--muted);
+  }
+
+  .task.type-alert  { border-left-color: var(--amber); }
+  .task.type-call   { border-left-color: var(--blue-soft); }
+  .task.type-action { border-left-color: var(--green); }
+  .task.type-wa     { border-left-color: #25d366; }
+  .task.done        { border-left-color: var(--border2) !important; }
+
+  .task-check {
+    width: 19px; height: 19px;
+    border-radius: 2px;
+    border: 2px solid var(--border2);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: #fff;
+    transition: all 0.15s;
+    margin-top: 2px;
+  }
+  .task.done .task-check { background: var(--green); border-color: var(--green); }
+
+  .task-icon { font-size: 0.95rem; flex-shrink: 0; line-height: 1.65; }
+  .task-body { flex: 1; }
+  .task-text { font-size: 0.82rem; line-height: 1.5; color: var(--text); }
+
+  /* ── WA BLOCK ── */
+  .wa-block {
+    margin-top: 7px;
+    background: rgba(37,211,102,0.06);
+    border: 1px solid rgba(37,211,102,0.18);
+    border-radius: 3px;
+    padding: 7px 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .wa-text { font-size: 0.71rem; color: #6ddc9a; line-height: 1.5; flex: 1; }
+
+  .copy-btn {
+    flex-shrink: 0;
+    background: rgba(37,211,102,0.12);
+    border: 1px solid rgba(37,211,102,0.3);
+    border-radius: 2px;
+    color: #6ddc9a;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+  .copy-btn:active, .copy-btn.copied {
+    background: rgba(37,211,102,0.28);
+    color: #fff;
+  }
+
+  /* ── DIVIDER ── */
+  .svc-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 14px 0;
+  }
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    padding: 10px 14px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+  }
+
+  .nav-btn {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    color: var(--renfe-silver);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+  .nav-btn:active { background: #2a2a2a; border-color: var(--renfe-red); color: #fff; }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 10px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+  .reset-btn:active { border-color: var(--renfe-red); color: var(--renfe-red); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 78px; left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: #25d366; color: #000;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 7px 18px;
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 999;
+    text-transform: uppercase;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="renfe-stripe"></div>
+    <div class="header-content">
+      <div class="header-left">
+        <div class="renfe-logo">Renfe</div>
+        <div class="header-station">Betanzos-Infesta</div>
+      </div>
+      <div class="clock" id="clock">--:--</div>
+    </div>
+  </div>
+  <div class="progress-row">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">0 / 0</div>
+  </div>
+</header>
+
+<div class="tabs-wrap"><div class="tabs" id="tabs"></div></div>
+<div class="panels" id="panels"></div>
+
+<div class="bottom-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)">← Anterior</button>
+  <button class="reset-btn" onclick="resetAll()" title="Reiniciar turno">↺ Reset</button>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Siguiente →</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const TRIPS = [
+  {
+    id:"t1", viaje:"12683", horario:"14:40 – 15:04", dir:"→ A Coruña",
+    blocks:[
+      { badge:"bus-in", badgeLabel:"🚌 Preparar Bus", timeLabel:"14:40",
+        desc:"Bus desde A Coruña debe estar en andén antes de las 15:00",
+        tasks:[
+          {id:"t1a1",type:"alert", icon:"⏰",text:"14:40 — Confirmar que el bus de A Coruña está en camino / ya en andén"},
+          {id:"t1a2",type:"call",  icon:"📞",text:"Si el bus NO confirma llegada → llamar y consultar estado"},
+          {id:"t1a3",type:"call",  icon:"🚕",text:"Taxis de estaciones intermedias: si no llaman, llama tú"},
+        ]
+      },
+      { badge:"train-in", badgeLabel:"🚆 Tren llega", timeLabel:"15:00",
+        desc:"Tren proveniente de Ferrol · pasajeros embarcan bus y taxis",
+        tasks:[
+          {id:"t1b1",type:"action",icon:"✅",text:"Recibir tren · identificar pasajeros A Coruña vs intermedias"},
+          {id:"t1b2",type:"action",icon:"🚌",text:"Dirigir pasajeros A Coruña → Bus"},
+          {id:"t1b3",type:"action",icon:"🚕",text:"Apartar pasajeros de intermedias → Taxi (NO subirlos al bus)"},
+          {id:"t1b4",type:"wa",    icon:"📲",text:"Avisar al grupo de coordinadores",
+            waMsg:"Llegada tren 12683 a las 15:00 a Betanzos-Infesta · pasajeros embarcados en bus y taxi ✓"},
+        ]
+      }
+    ]
+  },
+  {
+    id:"t2", viaje:"12684", horario:"15:09 – 15:33", dir:"→ Ferrol",
+    blocks:[
+      { badge:"bus-in", badgeLabel:"🚌 Preparar Bus", timeLabel:"15:09",
+        desc:"Bus A Coruña + taxis deben llegar aprox 15:29 para tren a las 15:33",
+        tasks:[
+          {id:"t2a1",type:"alert",icon:"⏰",text:"15:09 — Confirmar bus A Coruña en camino hacia Betanzos-Infesta"},
+          {id:"t2a2",type:"call", icon:"📞",text:"Si no confirma → llamar y consultar. Si viene atrasado → avisar"},
+          {id:"t2a3",type:"call", icon:"🚕",text:"Taxis intermedias: si no llaman antes de 15:15 → llama tú"},
+        ]
+      },
+      { badge:"train-out", badgeLabel:"🚆 Tren sale", timeLabel:"15:33",
+        desc:"Bus y taxis llegan · pasajeros embarcan tren dirección Ferrol",
+        tasks:[
+          {id:"t2b1",type:"action",icon:"✅",text:"Recibir pasajeros del bus y taxis · embarcar en tren dirección Ferrol"},
+          {id:"t2b2",type:"action",icon:"🚆",text:"Confirmar salida del tren"},
+          {id:"t2b3",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
+            waMsg:"Salida tren 12684 a las 15:33 desde Betanzos-Infesta dirección Ferrol ✓"},
+        ]
+      }
+    ]
+  },
+  {
+    id:"t3", viaje:"12685", horario:"18:07 – 18:31", dir:"→ A Coruña",
+    blocks:[
+      { badge:"bus-in", badgeLabel:"🚌 Preparar Bus", timeLabel:"18:07",
+        desc:"Bus desde A Coruña debe estar en andén antes de las 18:27",
+        tasks:[
+          {id:"t3a1",type:"alert",icon:"⏰",text:"18:07 — Confirmar bus A Coruña en andén o en camino"},
+          {id:"t3a2",type:"call", icon:"📞",text:"Si no confirma → llamar y consultar"},
+          {id:"t3a3",type:"call", icon:"🚕",text:"Taxis intermedias: si no llaman antes de 18:15 → llama tú"},
+        ]
+      },
+      { badge:"train-in", badgeLabel:"🚆 Tren llega", timeLabel:"18:27",
+        desc:"Tren proveniente de Ferrol · pasajeros embarcan bus y taxis",
+        tasks:[
+          {id:"t3b1",type:"action",icon:"✅",text:"Recibir tren · identificar pasajeros A Coruña vs intermedias"},
+          {id:"t3b2",type:"action",icon:"🚌",text:"Dirigir pasajeros A Coruña → Bus"},
+          {id:"t3b3",type:"action",icon:"🚕",text:"Apartar pasajeros intermedias → Taxi"},
+          {id:"t3b4",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
+            waMsg:"Llegada tren 12685 a las 18:27 a Betanzos-Infesta · pasajeros embarcados en bus y taxi ✓"},
+        ]
+      }
+    ]
+  },
+  {
+    id:"t4", viaje:"12690", horario:"18:40 – 19:04", dir:"→ Ferrol",
+    blocks:[
+      { badge:"bus-in", badgeLabel:"🚌 Preparar Bus", timeLabel:"18:40",
+        desc:"Bus A Coruña + taxis deben llegar aprox 19:00 para tren a las 19:04",
+        tasks:[
+          {id:"t4a1",type:"alert",icon:"⏰",text:"18:40 — Confirmar bus A Coruña en camino hacia Betanzos"},
+          {id:"t4a2",type:"call", icon:"📞",text:"Si no confirma → llamar y consultar"},
+          {id:"t4a3",type:"call", icon:"🚕",text:"Taxis intermedias: si no llaman antes de 18:45 → llama tú"},
+        ]
+      },
+      { badge:"train-out", badgeLabel:"🚆 Tren sale", timeLabel:"19:04",
+        desc:"Bus y taxis llegan · pasajeros embarcan tren dirección Ferrol",
+        tasks:[
+          {id:"t4b1",type:"action",icon:"✅",text:"Recibir pasajeros del bus y taxis · embarcar en tren dirección Ferrol"},
+          {id:"t4b2",type:"action",icon:"🚆",text:"Confirmar salida del tren"},
+          {id:"t4b3",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
+            waMsg:"Salida tren 12690 a las 19:04 desde Betanzos-Infesta dirección Ferrol ✓"},
+        ]
+      }
+    ]
+  },
+  {
+    id:"t5", viaje:"12642", horario:"19:44 – 20:05", dir:"→ Monforte",
+    blocks:[
+      { badge:"bus-in", badgeLabel:"🚌 Preparar Bus", timeLabel:"19:44",
+        desc:"Bus A Coruña + taxis deben llegar aprox 20:04 para tren a las 20:05 dirección Monforte",
+        tasks:[
+          {id:"t5a1",type:"alert",icon:"⏰",text:"19:44 — Confirmar bus A Coruña en camino hacia Betanzos"},
+          {id:"t5a2",type:"call", icon:"📞",text:"Si no confirma → llamar y consultar"},
+          {id:"t5a3",type:"call", icon:"🚕",text:"Taxis intermedias: si no llaman antes de 19:50 → llama tú"},
+        ]
+      },
+      { badge:"train-out", badgeLabel:"🚆 Tren sale", timeLabel:"20:05",
+        desc:"Bus y taxis llegan · pasajeros embarcan tren dirección Monforte",
+        tasks:[
+          {id:"t5b1",type:"action",icon:"✅",text:"Recibir pasajeros del bus y taxis · embarcar en tren dirección Monforte"},
+          {id:"t5b2",type:"action",icon:"🚆",text:"Confirmar salida del tren"},
+          {id:"t5b3",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
+            waMsg:"Salida tren 12642 a las 20:05 desde Betanzos-Infesta dirección Monforte ✓"},
+        ]
+      }
+    ]
+  },
+  {
+    id:"t6", viaje:"12687", horario:"21:00 – 21:25", dir:"→ A Coruña",
+    blocks:[
+      { badge:"bus-in", badgeLabel:"🚌 Preparar Bus", timeLabel:"21:00",
+        desc:"Bus desde A Coruña debe estar en andén antes de las 21:20",
+        tasks:[
+          {id:"t6a1",type:"alert",icon:"⏰",text:"21:00 — Confirmar bus A Coruña en andén o en camino"},
+          {id:"t6a2",type:"call", icon:"📞",text:"Si no confirma → llamar y consultar"},
+          {id:"t6a3",type:"call", icon:"🚕",text:"Taxis intermedias: si no llaman antes de 21:05 → llama tú"},
+        ]
+      },
+      { badge:"train-in", badgeLabel:"🚆 Tren llega", timeLabel:"21:20",
+        desc:"Tren proveniente de Ferrol · pasajeros embarcan bus y taxis",
+        tasks:[
+          {id:"t6b1",type:"action",icon:"✅",text:"Recibir tren · identificar pasajeros A Coruña vs intermedias"},
+          {id:"t6b2",type:"action",icon:"🚌",text:"Dirigir pasajeros A Coruña → Bus"},
+          {id:"t6b3",type:"action",icon:"🚕",text:"Apartar pasajeros intermedias → Taxi"},
+          {id:"t6b4",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
+            waMsg:"Llegada tren 12687 a las 21:20 a Betanzos-Infesta · pasajeros embarcados en bus y taxi ✓"},
+        ]
+      }
+    ]
+  },
+  {
+    id:"t7", viaje:"12646", horario:"22:32 – 22:53", dir:"→ A Coruña",
+    blocks:[
+      { badge:"bus-in", badgeLabel:"🚌 Preparar Bus", timeLabel:"22:32",
+        desc:"Bus desde A Coruña debe estar en andén antes de las 22:52 (tren de Ourense)",
+        tasks:[
+          {id:"t7a1",type:"alert",icon:"⏰",text:"22:32 — Confirmar bus A Coruña en andén o en camino"},
+          {id:"t7a2",type:"call", icon:"📞",text:"Si no confirma → llamar y consultar"},
+          {id:"t7a3",type:"call", icon:"🚕",text:"Taxis intermedias: si no llaman antes de 22:38 → llama tú"},
+        ]
+      },
+      { badge:"train-in", badgeLabel:"🚆 Tren llega", timeLabel:"22:52",
+        desc:"Tren proveniente de Ourense · pasajeros embarcan bus y taxis",
+        tasks:[
+          {id:"t7b1",type:"action",icon:"✅",text:"Recibir tren · identificar pasajeros A Coruña vs intermedias"},
+          {id:"t7b2",type:"action",icon:"🚌",text:"Dirigir pasajeros A Coruña → Bus"},
+          {id:"t7b3",type:"action",icon:"🚕",text:"Apartar pasajeros intermedias → Taxi"},
+          {id:"t7b4",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
+            waMsg:"Llegada tren 12646 a las 22:52 a Betanzos-Infesta · pasajeros embarcados en bus y taxi ✓"},
+        ]
+      }
+    ]
+  },
+  {
+    id:"t8", viaje:"12642 B", horario:"23:08 – 23:32", dir:"→ Ferrol",
+    blocks:[
+      { badge:"bus-in", badgeLabel:"🚌 Preparar Bus", timeLabel:"23:08",
+        desc:"Bus A Coruña + taxis deben llegar aprox 23:28 para tren a las 23:32 dirección Ferrol",
+        tasks:[
+          {id:"t8a1",type:"alert",icon:"⏰",text:"23:08 — Confirmar bus A Coruña en camino hacia Betanzos"},
+          {id:"t8a2",type:"call", icon:"📞",text:"Si no confirma → llamar y consultar"},
+          {id:"t8a3",type:"call", icon:"🚕",text:"Taxis intermedias: si no llaman antes de 23:15 → llama tú"},
+        ]
+      },
+      { badge:"train-out", badgeLabel:"🚆 Tren sale", timeLabel:"23:32",
+        desc:"Bus y taxis llegan · pasajeros embarcan tren dirección Ferrol · último servicio del turno",
+        tasks:[
+          {id:"t8b1",type:"action",icon:"✅",text:"Recibir pasajeros del bus y taxis · embarcar en tren dirección Ferrol"},
+          {id:"t8b2",type:"action",icon:"🚆",text:"Confirmar salida del tren"},
+          {id:"t8b3",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
+            waMsg:"Salida tren 12642 a las 23:32 desde Betanzos-Infesta dirección Ferrol ✓"},
+        ]
+      }
+    ]
+  },
+];
+
+let state = {};
+let currentIdx = 0;
+
+function loadState() {
+  try { const s = localStorage.getItem('betanzos_v3'); if(s) state = JSON.parse(s); } catch(e){}
+}
+function saveState() {
+  try { localStorage.setItem('betanzos_v3', JSON.stringify(state)); } catch(e){}
+}
+
+function allTasksOf(trip) { return trip.blocks.flatMap(b => b.tasks); }
+function tripDone(trip) {
+  const all = allTasksOf(trip);
+  return { done: all.filter(t => state[t.id]).length, total: all.length };
+}
+function totalTasks() { return TRIPS.reduce((a,t) => a + allTasksOf(t).length, 0); }
+function doneTasks()  { return Object.values(state).filter(Boolean).length; }
+
+function badgeClass(b) {
+  if(b==='train-in')  return 'badge-train-in';
+  if(b==='train-out') return 'badge-train-out';
+  return 'badge-bus-in';
+}
+
+function updateProgress() {
+  const total = totalTasks(), done = doneTasks();
+  const pct = total ? Math.round((done/total)*100) : 0;
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent = `${done} / ${total}`;
+}
+
+function updateTabDot(idx) {
+  const dot = document.getElementById('dot_'+TRIPS[idx].id);
+  if(!dot) return;
+  const {done, total} = tripDone(TRIPS[idx]);
+  dot.className = 'tab-dot' + (done===total && total>0 ? ' done-all' : done>0 ? ' done-some' : '');
+}
+
+function toggleTask(taskId) {
+  state[taskId] = !state[taskId];
+  saveState();
+  const el = document.getElementById('task_'+taskId);
+  if(el) {
+    el.classList.toggle('done', state[taskId]);
+    const chk = el.querySelector('.task-check');
+    if(chk) chk.textContent = state[taskId] ? '✓' : '';
+  }
+  updateProgress();
+  updateTabDot(currentIdx);
+}
+
+function copyWA(msg, btn) {
+  const doFallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = msg; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { document.execCommand('copy'); } catch(e){}
+    document.body.removeChild(ta);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(msg).catch(doFallback);
+  } else { doFallback(); }
+  btn.textContent = '✓ Copiado';
+  btn.classList.add('copied');
+  showToast('✓ Copiado');
+  setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 2200);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function navigate(dir) {
+  const next = currentIdx + dir;
+  if(next < 0 || next >= TRIPS.length) return;
+  showPanel(next);
+}
+
+function showPanel(idx) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  currentIdx = idx;
+  document.getElementById('panel_'+TRIPS[idx].id).classList.add('active');
+  document.getElementById('tab_'+TRIPS[idx].id).classList.add('active');
+  document.getElementById('tab_'+TRIPS[idx].id).scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  document.getElementById('prevBtn').disabled = (idx === 0);
+  document.getElementById('nextBtn').disabled = (idx === TRIPS.length-1);
+}
+
+function resetAll() {
+  if(!confirm('¿Reiniciar todo el turno? Se borrarán todas las marcas.')) return;
+  state = {}; saveState();
+  document.querySelectorAll('.task').forEach(el => {
+    el.classList.remove('done');
+    const chk = el.querySelector('.task-check');
+    if(chk) chk.textContent = '';
+  });
+  TRIPS.forEach((_,i) => updateTabDot(i));
+  updateProgress();
+}
+
+function render() {
+  const tabsEl = document.getElementById('tabs');
+  const panelsEl = document.getElementById('panels');
+
+  TRIPS.forEach((trip, idx) => {
+    // TAB
+    const tab = document.createElement('div');
+    tab.className = 'tab' + (idx===0?' active':'');
+    tab.id = 'tab_'+trip.id;
+    tab.onclick = () => showPanel(idx);
+    tab.innerHTML = `
+      <span class="tab-viaje">${trip.viaje}</span>
+      <span class="tab-horario">${trip.horario}</span>
+      <span class="tab-dir">${trip.dir}</span>
+      <div class="tab-dot" id="dot_${trip.id}"></div>`;
+    tabsEl.appendChild(tab);
+
+    // PANEL
+    const panel = document.createElement('div');
+    panel.className = 'panel'+(idx===0?' active':'');
+    panel.id = 'panel_'+trip.id;
+
+    let html = `
+      <div class="panel-heading">
+        <div class="panel-title">
+          <span>VIAJE</span>${trip.viaje}
+        </div>
+        <div class="panel-meta">
+          <div class="panel-horario">${trip.horario}</div>
+          <div class="panel-dir">${trip.dir}</div>
+        </div>
+      </div>`;
+
+    trip.blocks.forEach((block, bi) => {
+      if(bi>0) html += '<hr class="svc-divider">';
+      html += `
+        <div class="svc-block">
+          <div class="svc-label">
+            <span class="svc-badge ${badgeClass(block.badge)}">${block.badgeLabel}</span>
+            <span class="svc-time-label">${block.timeLabel}</span>
+          </div>
+          <div class="svc-desc">${block.desc}</div>
+          <div class="tasks">`;
+
+      block.tasks.forEach(task => {
+        const done = !!state[task.id];
+        let waHtml = '';
+        if(task.waMsg) {
+          const esc = task.waMsg.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          waHtml = `
+            <div class="wa-block" onclick="event.stopPropagation()">
+              <span class="wa-text">📱 ${task.waMsg}</span>
+              <button class="copy-btn" onclick="copyWA('${esc}',this)">Copiar</button>
+            </div>`;
+        }
+        html += `
+          <div class="task type-${task.type}${done?' done':''}" id="task_${task.id}" onclick="toggleTask('${task.id}')">
+            <div class="task-check">${done?'✓':''}</div>
+            <span class="task-icon">${task.icon}</span>
+            <div class="task-body">
+              <div class="task-text">${task.text}</div>
+              ${waHtml}
+            </div>
+          </div>`;
+      });
+
+      html += '</div></div>';
+    });
+
+    panel.innerHTML = html;
+    panelsEl.appendChild(panel);
+  });
+
+  updateProgress();
+  TRIPS.forEach((_,i) => updateTabDot(i));
+  document.getElementById('prevBtn').disabled = true;
+}
+
+function jumpToNow() {
+  const now = new Date();
+  const nowMin = now.getHours()*60 + now.getMinutes();
+  const starts = TRIPS.map(t => {
+    const [h,m] = t.horario.split(' – ')[0].split(':').map(Number);
+    return h*60+m;
+  });
+  let best = 0;
+  starts.forEach((sm,i) => { if(sm <= nowMin) best = i; });
+  showPanel(best);
+}
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+}
+
+loadState();
+render();
+jumpToNow();
+updateClock();
+setInterval(updateClock, 15000);
+</script>
+</body>
+</html>
