@@ -833,7 +833,7 @@ const TRIPS = [
           {id:"t1b2",type:"action",icon:"🚌",text:"Dirigir pasajeros A Coruña → Bus"},
           {id:"t1b3",type:"action",icon:"🚕",text:"Apartar pasajeros de intermedias → Taxi (NO subirlos al bus)"},
           {id:"t1b4",type:"wa",    icon:"📲",text:"Avisar al grupo de coordinadores",
-            waMsg:"Llegada tren 12683 a las 15:00 a Betanzos-Infesta · pasajeros embarcados en bus y taxi ✓"},
+            waMsg:"Salida bus 12683 hacia Coruña desde Betanzos-Infesta a las 15:00 ✓"},
         ]
       }
     ]
@@ -847,6 +847,8 @@ const TRIPS = [
           {id:"t2a1",type:"alert",icon:"⏰",text:"15:09 — Confirmar bus A Coruña en camino hacia Betanzos-Infesta"},
           {id:"t2a2",type:"call", icon:"📞",text:"Si no confirma → llamar y consultar. Si viene atrasado → avisar"},
           {id:"t2a3",type:"call", icon:"🚕",text:"Taxis intermedias: si no llaman antes de 15:15 → llama tú"},
+          {id:"t2a4",type:"wa",   icon:"📲",text:"Avisar llegada del bus",
+            waMsg:"Llegada bus 12684 a Betanzos-Infesta a las 15:29 ✓"},
         ]
       },
       { badge:"train-out", badgeLabel:"🚆 Tren sale", timeLabel:"15:33",
