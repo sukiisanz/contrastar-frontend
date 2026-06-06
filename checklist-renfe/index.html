@@ -27,6 +27,24 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
+  /* ── MODO DÍA ── */
+  body.day {
+    --bg:     #f0f0f0;
+    --bg2:    #ffffff;
+    --bg3:    #e4e4e4;
+    --border: #cccccc;
+    --border2:#b8b8b8;
+    --text:   #1a1a1a;
+    --muted:  #636363;
+  }
+  body.day .task:active { background: #d4d4d4; }
+  body.day .nav-btn:active { background: #d0d0d0; }
+  body.day .wa-block { background: rgba(0,120,60,0.06); border-color: rgba(0,120,60,0.22); }
+  body.day .wa-text { color: #1a7a3a; }
+  body.day .copy-btn { color: #1a7a3a; border-color: rgba(0,120,60,0.35); background: rgba(0,120,60,0.08); }
+  body.day .copy-btn:active, body.day .copy-btn.copied { background: rgba(0,120,60,0.22); color: #fff; }
+  body.day .turno-alert { background: rgba(0,0,0,0.45); }
+
   body {
     background: var(--bg);
     color: var(--text);
@@ -94,6 +112,23 @@
     text-transform: uppercase;
   }
 
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .theme-btn {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 2px 4px;
+    line-height: 1;
+    opacity: 0.65;
+    transition: opacity 0.15s;
+  }
+  .theme-btn:active { opacity: 1; }
+
   .clock {
     font-family: 'Oswald', sans-serif;
     font-size: 1.1rem;
@@ -101,6 +136,13 @@
     color: var(--renfe-gold);
     letter-spacing: 0.08em;
     text-align: right;
+  }
+
+  .tab-ops {
+    font-size: 0.62rem;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 0.02em;
   }
 
   .progress-row {
@@ -620,7 +662,10 @@
         <div class="renfe-logo">Renfe</div>
         <div class="header-station">Betanzos-Infesta</div>
       </div>
-      <div class="clock" id="clock">--:--</div>
+      <div class="header-right">
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Modo día/noche">☀️</button>
+        <div class="clock" id="clock">--:--</div>
+      </div>
     </div>
   </div>
   <div class="progress-row">
@@ -1051,10 +1096,16 @@ function render() {
     tab.className = 'tab' + (idx===0?' active':'');
     tab.id = 'tab_'+trip.id;
     tab.onclick = () => showPanel(idx);
+    const opsIcons = trip.blocks.map(b => {
+      if(b.badge === 'train-in')  return '🚆↓';
+      if(b.badge === 'train-out') return '🚆↑';
+      return '🚌';
+    }).join(' · ');
     tab.innerHTML = `
       <span class="tab-viaje">${trip.viaje}</span>
       <span class="tab-horario">${trip.horario}</span>
       <span class="tab-dir">${trip.dir}</span>
+      <span class="tab-ops">${opsIcons}</span>
       <div class="tab-dot" id="dot_${trip.id}"></div>`;
     tabsEl.appendChild(tab);
 
@@ -1190,8 +1241,23 @@ function updateClock() {
   }
 }
 
+function toggleTheme() {
+  const isDay = document.body.classList.toggle('day');
+  localStorage.setItem('betanzos_theme', isDay ? 'day' : 'night');
+  document.getElementById('themeBtn').textContent = isDay ? '🌙' : '☀️';
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem('betanzos_theme');
+  if(saved === 'day') {
+    document.body.classList.add('day');
+    document.getElementById('themeBtn').textContent = '🌙';
+  }
+}
+
 loadState();
 loadNotes();
+loadTheme();
 render();
 jumpToNow();
 checkTurnoInicio();
