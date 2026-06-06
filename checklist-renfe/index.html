@@ -424,6 +424,41 @@
     margin: 14px 0;
   }
 
+  /* ── TAXI CHIPS ── */
+  .taxi-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+  }
+  .taxi-chip {
+    padding: 3px 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border2);
+    font-size: 0.7rem;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--muted);
+    background: var(--bg);
+    transition: all 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+    white-space: nowrap;
+  }
+  .taxi-chip:active { opacity: 0.7; }
+  .taxi-chip.active {
+    background: rgba(111,163,212,0.18);
+    border-color: var(--blue-soft);
+    color: var(--blue-soft);
+  }
+  .taxi-chip.chip-none { font-style: italic; }
+  .taxi-chip.chip-none.active {
+    background: rgba(118,118,118,0.12);
+    border-color: var(--muted);
+    color: var(--renfe-silver);
+  }
+
   /* ── BOTTOM BAR ── */
   .bottom-bar {
     position: fixed;
@@ -738,6 +773,52 @@ function badgeClass(b) {
   return 'badge-bus-in';
 }
 
+const TAXI_STATIONS = ['Elviña', 'Burgo', 'Cambre', 'Cecebre'];
+
+function getTaxiState(taskId) {
+  const v = state['taxi_' + taskId];
+  if(v === 'none') return 'none';
+  return Array.isArray(v) ? v : [];
+}
+
+function toggleTaxiChip(taskId, station) {
+  const cur = getTaxiState(taskId);
+  if(station === 'none') {
+    state['taxi_' + taskId] = (cur === 'none') ? [] : 'none';
+  } else {
+    const arr = (cur === 'none' || !Array.isArray(cur)) ? [] : [...cur];
+    const i = arr.indexOf(station);
+    if(i >= 0) arr.splice(i, 1); else arr.push(station);
+    state['taxi_' + taskId] = arr;
+  }
+  const ns = state['taxi_' + taskId];
+  const hasAny = ns === 'none' || (Array.isArray(ns) && ns.length > 0);
+  if(hasAny && !state[taskId]) {
+    state[taskId] = true;
+    const el = document.getElementById('task_' + taskId);
+    if(el) {
+      el.classList.add('done');
+      const chk = el.querySelector('.task-check');
+      if(chk) chk.textContent = '✓';
+    }
+    updateProgress();
+    updateTabDot(currentIdx);
+  }
+  saveState();
+  refreshTaxiChips(taskId);
+}
+
+function refreshTaxiChips(taskId) {
+  const container = document.getElementById('chips_' + taskId);
+  if(!container) return;
+  const cur = getTaxiState(taskId);
+  container.querySelectorAll('.taxi-chip').forEach(chip => {
+    const s = chip.dataset.station;
+    const isActive = s === 'none' ? cur === 'none' : Array.isArray(cur) && cur.includes(s);
+    chip.classList.toggle('active', isActive);
+  });
+}
+
 function updateProgress() {
   const total = totalTasks(), done = doneTasks();
   const pct = total ? Math.round((done/total)*100) : 0;
@@ -838,6 +919,7 @@ function resetAll() {
     if(base) el.textContent = '📱 ' + base;
   });
   document.querySelectorAll('.trip-notes-area').forEach(el => { el.value = ''; });
+  document.querySelectorAll('.taxi-chip').forEach(el => el.classList.remove('active'));
   TRIPS.forEach((_,i) => updateTabDot(i));
   updateProgress();
 }
@@ -902,13 +984,27 @@ function render() {
               <button class="copy-btn" onclick="copyWA('${esc}','${task.id}',this)">Copiar</button>
             </div>`;
         }
+        let taxiHtml = '';
+        if(task.icon === '🚕') {
+          const cur = getTaxiState(task.id);
+          const chips = TAXI_STATIONS.map(s => {
+            const active = Array.isArray(cur) && cur.includes(s);
+            return `<span class="taxi-chip${active?' active':''}" data-station="${s}" onclick="event.stopPropagation();toggleTaxiChip('${task.id}','${s}')">${s}</span>`;
+          }).join('');
+          const noneActive = cur === 'none';
+          taxiHtml = `
+            <div class="taxi-chips" id="chips_${task.id}" onclick="event.stopPropagation()">
+              ${chips}
+              <span class="taxi-chip chip-none${noneActive?' active':''}" data-station="none" onclick="event.stopPropagation();toggleTaxiChip('${task.id}','none')">∅ Sin pasajero</span>
+            </div>`;
+        }
         html += `
           <div class="task type-${task.type}${done?' done':''}" id="task_${task.id}" onclick="toggleTask('${task.id}')">
             <div class="task-check">${done?'✓':''}</div>
             <span class="task-icon">${task.icon}</span>
             <div class="task-body">
               <div class="task-text">${task.text}</div>
-              ${waHtml}
+              ${waHtml}${taxiHtml}
             </div>
           </div>`;
       });
