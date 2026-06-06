@@ -832,6 +832,7 @@ const TRIPS = [
           {id:"t1b1",type:"action",icon:"✅",text:"Recibir tren · identificar pasajeros A Coruña vs intermedias"},
           {id:"t1b2",type:"action",icon:"🚌",text:"Dirigir pasajeros A Coruña → Bus"},
           {id:"t1b3",type:"action",icon:"🚕",text:"Apartar pasajeros de intermedias → Taxi (NO subirlos al bus)"},
+          {id:"t1b5",type:"alert", icon:"⚠️",text:"Avisar conductor del bus: no marchar hasta que suban TODOS los pasajeros"},
           {id:"t1b4",type:"wa",    icon:"📲",text:"Avisar al grupo de coordinadores",
             waMsg:"Salida bus 12683 hacia Coruña desde Betanzos-Infesta a las 15:00 ✓"},
         ]
@@ -855,6 +856,7 @@ const TRIPS = [
         desc:"Bus y taxis llegan · pasajeros embarcan tren dirección Ferrol",
         tasks:[
           {id:"t2b1",type:"action",icon:"✅",text:"Recibir pasajeros del bus y taxis · embarcar en tren dirección Ferrol"},
+          {id:"t2b4",type:"alert", icon:"⚠️",text:"Avisar maquinista/jefe de tren: no salir hasta que estén TODOS a bordo"},
           {id:"t2b2",type:"action",icon:"🚆",text:"Confirmar salida del tren"},
           {id:"t2b3",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
             waMsg:"Salida tren 12684 a las 15:33 desde Betanzos-Infesta dirección Ferrol ✓"},
@@ -879,6 +881,7 @@ const TRIPS = [
           {id:"t3b1",type:"action",icon:"✅",text:"Recibir tren · identificar pasajeros A Coruña vs intermedias"},
           {id:"t3b2",type:"action",icon:"🚌",text:"Dirigir pasajeros A Coruña → Bus"},
           {id:"t3b3",type:"action",icon:"🚕",text:"Apartar pasajeros intermedias → Taxi"},
+          {id:"t3b5",type:"alert", icon:"⚠️",text:"Avisar conductor del bus: no marchar hasta que suban TODOS los pasajeros"},
           {id:"t3b4",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
             waMsg:"Salida bus 12685 hacia Coruña desde Betanzos-Infesta a las 18:27 ✓"},
         ]
@@ -902,6 +905,7 @@ const TRIPS = [
         desc:"Bus y taxis llegan · pasajeros embarcan tren dirección Ferrol",
         tasks:[
           {id:"t4b1",type:"action",icon:"✅",text:"Recibir pasajeros del bus y taxis · embarcar en tren dirección Ferrol"},
+          {id:"t4b4",type:"alert", icon:"⚠️",text:"Avisar maquinista/jefe de tren: no salir hasta que estén TODOS a bordo"},
           {id:"t4b2",type:"action",icon:"🚆",text:"Confirmar salida del tren"},
           {id:"t4b3",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
             waMsg:"Salida tren 12690 a las 19:04 desde Betanzos-Infesta dirección Ferrol ✓"},
@@ -926,6 +930,7 @@ const TRIPS = [
         desc:"Bus y taxis llegan · pasajeros embarcan tren dirección Monforte",
         tasks:[
           {id:"t5b1",type:"action",icon:"✅",text:"Recibir pasajeros del bus y taxis · embarcar en tren dirección Monforte"},
+          {id:"t5b4",type:"alert", icon:"⚠️",text:"Avisar maquinista/jefe de tren: no salir hasta que estén TODOS a bordo"},
           {id:"t5b2",type:"action",icon:"🚆",text:"Confirmar salida del tren"},
           {id:"t5b3",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
             waMsg:"Salida tren 12642 a las 20:05 desde Betanzos-Infesta dirección Monforte ✓"},
@@ -950,6 +955,7 @@ const TRIPS = [
           {id:"t6b1",type:"action",icon:"✅",text:"Recibir tren · identificar pasajeros A Coruña vs intermedias"},
           {id:"t6b2",type:"action",icon:"🚌",text:"Dirigir pasajeros A Coruña → Bus"},
           {id:"t6b3",type:"action",icon:"🚕",text:"Apartar pasajeros intermedias → Taxi"},
+          {id:"t6b5",type:"alert", icon:"⚠️",text:"Avisar conductor del bus: no marchar hasta que suban TODOS los pasajeros"},
           {id:"t6b4",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
             waMsg:"Salida bus 12687 hacia Coruña desde Betanzos-Infesta a las 21:20 ✓"},
         ]
@@ -973,6 +979,7 @@ const TRIPS = [
           {id:"t7b1",type:"action",icon:"✅",text:"Recibir tren · identificar pasajeros A Coruña vs intermedias"},
           {id:"t7b2",type:"action",icon:"🚌",text:"Dirigir pasajeros A Coruña → Bus"},
           {id:"t7b3",type:"action",icon:"🚕",text:"Apartar pasajeros intermedias → Taxi"},
+          {id:"t7b5",type:"alert", icon:"⚠️",text:"Avisar conductor del bus: no marchar hasta que suban TODOS los pasajeros"},
           {id:"t7b4",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
             waMsg:"Salida bus 12646 hacia Coruña desde Betanzos-Infesta a las 22:52 ✓"},
         ]
@@ -996,6 +1003,7 @@ const TRIPS = [
         desc:"Bus y taxis llegan · pasajeros embarcan tren dirección Ferrol · último servicio del turno",
         tasks:[
           {id:"t8b1",type:"action",icon:"✅",text:"Recibir pasajeros del bus y taxis · embarcar en tren dirección Ferrol"},
+          {id:"t8b4",type:"alert", icon:"⚠️",text:"Avisar maquinista/jefe de tren: no salir hasta que estén TODOS a bordo"},
           {id:"t8b2",type:"action",icon:"🚆",text:"Confirmar salida del tren"},
           {id:"t8b3",type:"wa",   icon:"📲",text:"Avisar al grupo de coordinadores",
             waMsg:"Salida tren 12642 a las 23:32 desde Betanzos-Infesta dirección Ferrol ✓"},
